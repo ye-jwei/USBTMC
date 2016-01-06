@@ -1,0 +1,35 @@
+
+VOS_HANDLE USBTMC_slave_attach(VOS_HANDLE hUSB, unsigned char devUSBTMCSlave)
+{
+	common_ioctl_cb_t USBTMC_iocb;
+	VOS_HANDLE hUSBTMCSlave;
+
+	// open HID Keyboard driver
+	hUSBTMCSlave = vos_dev_open(devUSBTMCSlave);
+
+	// attach FT232 to USB Slave port
+	USBTMC_iocb.ioctl_code = VOS_IOCTL_USBTMCSLAVE_ATTACH;
+	USBTMC_iocb.set.data   = hUSB;
+	if (vos_dev_ioctl(hUSBTMCSlave, &USBTMC_iocb) != USBSLAVE_OK)
+	{
+		vos_dev_close(hUSBTMCSlave);
+		hUSBTMCSlave = NULL;
+	}
+
+	return hUSBTMCSlave;
+}
+
+void USBTMC_slave_detach(VOS_HANDLE hUSBTMCSlave)
+{
+	common_ioctl_cb_t USBTMC_iocb;
+
+	if (hUSBTMCSlave)
+	{
+		USBTMC_iocb.ioctl_code = VOS_IOCTL_USBTMCSLAVE_DETACH;
+
+		vos_dev_ioctl(hUSBTMCSlave, &USBTMC_iocb);
+		vos_dev_close(hUSBTMCSlave);
+	}
+}
+	
+	

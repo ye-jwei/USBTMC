@@ -1,0 +1,168 @@
+Future Technology Devices International Limited (c) 2007-2010, All Rights Reserved
+
+
+CPU_CORE =   VC2, CPU_RAM_SIZE= 16 KB, CPU_ROM_SIZE=256 KB
+
+Linker Version  = V1.0.1 Loader Version =  V1.0.1
+Wed Jan 06 15:41:28 2016
+
+
+=================================================================================================================
+
+SEGMENT_MAP    
+=================================================================================================================
+
+Start Address                  Segment Name                   Segment Size
+=================================================================================================================
+
+0003c0 .text                          000001205f
+01241f .dataFlash                     00000002dd
+000000 .dataRAM                       00000002dd
+0002dd .bss                           00000009d8
+000cb5 .HeapRAM                       0000002f4a
+
+=================================================================================================================
+
+SYMBOL_TABLE   
+=================================================================================================================
+
+SYM ADDRESS PUBLIC SYM NAME                SYM TYPE   MEM TYPE FILE NAME            SYM SIZE  
+NOTE:L=LABEL F=FUNCTION 0=FLASH and 1=RAM
+=================================================================================================================
+
+0043a main                           F              0 USBTMC_TO_USBBRI.obj 000a4
+004de usbslave_connect               F              0 USBTMC_TO_USBBRI.obj 0007d
+0055b usbslave_disconnect            F              0 USBTMC_TO_USBBRI.obj 00079
+005d4 open_drivers                   F              0 USBTMC_TO_USBBRI.obj 00024
+005f8 attach_drivers                 F              0 USBTMC_TO_USBBRI.obj 00001
+005f9 close_drivers                  F              0 USBTMC_TO_USBBRI.obj 00010
+00609 set_uart_baudrate              F              0 USBTMC_TO_USBBRI.obj 00077
+00680 write_uart                     F              0 USBTMC_TO_USBBRI.obj 0008f
+0070f firmware                       F              0 USBTMC_TO_USBBRI.obj 0006c
+0077b USBTMC_attach                  F              0 USBTMC_TO_USBBRI.obj 0001b
+00796 USBBRI_attach                  F              0 USBTMC_TO_USBBRI.obj 0001b
+002dd BRI_TO_TMC_bulk_buffer         L              1 USBTMC_TO_USBBRI.obj 00040
+0031d TMC_TO_BRI_bulk_buffer         L              1 USBTMC_TO_USBBRI.obj 00040
+0035d mark_array                     L              1 USBTMC_TO_USBBRI.obj 0001e
+0037b bulk_header                    L              1 USBTMC_TO_USBBRI.obj 0000c
+00387 TMC_requset_BRI_answer         L              1 USBTMC_TO_USBBRI.obj 00001
+00388 BRI_read_done                  L              1 USBTMC_TO_USBBRI.obj 00001
+00389 TMC_read_done                  L              1 USBTMC_TO_USBBRI.obj 00001
+0038a hUSBSLAVE_USBBRI               L              1 USBTMC_TO_USBBRI.obj 00002
+0038c hUSBSLAVE_USBTMC               L              1 USBTMC_TO_USBBRI.obj 00002
+0038e BRI_write_done                 L              1 USBTMC_TO_USBBRI.obj 00001
+0038f TMC_write_done                 L              1 USBTMC_TO_USBBRI.obj 00001
+00390 hUART                          L              1 USBTMC_TO_USBBRI.obj 00002
+00392 BRI_read_buffer                L              1 USBTMC_TO_USBBRI.obj 00400
+00792 TMC_read_buffer                L              1 USBTMC_TO_USBBRI.obj 00400
+00b92 BRI_TO_TMC_controul_buffer     L              1 USBTMC_TO_USBBRI.obj 00010
+00ba2 TMC_TO_BRI_controul_buffer     L              1 USBTMC_TO_USBBRI.obj 00010
+00bb2 tcbUSBBRI                      L              1 USBTMC_TO_USBBRI.obj 00002
+00bb4 tcbUSBTMC                      L              1 USBTMC_TO_USBBRI.obj 00002
+00bb6 hUSBSLAVE_1                    L              1 USBTMC_TO_USBBRI.obj 00002
+00bb8 hUSBSLAVE_2                    L              1 USBTMC_TO_USBBRI.obj 00002
+00bba tcbFIRMWARE                    L              1 USBTMC_TO_USBBRI.obj 00002
+07bf3 iomux_setup                    F              0 USBTMC_TO_FT232_iomux.obj 0019e
+07db2 USBTMC_function_init           F              0 USBTMC_interface.obj 00220
+07fd2 USBTMC_slave_attach            F              0 USBTMC_interface.obj 000a7
+08079 USBTMC_slave_detach            F              0 USBTMC_interface.obj 00055
+080ce USBTMC_ioctl                   F              0 USBTMC_interface.obj 000c2
+08190 USBTMC_disconnect              F              0 USBTMC_interface.obj 000f7
+08287 USBTMC_connect                 F              0 USBTMC_interface.obj 0088d
+08b14 USBTMC_read                    F              0 USBTMC_interface.obj 00044
+08b58 USBTMC_write                   F              0 USBTMC_interface.obj 00240
+08d98 USBTMC_bulk_read_thread        F              0 USBTMC_interface.obj 001fc
+08f94 USBTMC_bulk_write_thread       F              0 USBTMC_interface.obj 00948
+098dc USB_device_error_deal          F              0 USBTMC_interface.obj 000b7
+09993 USBTMC_send_setup_packet       F              0 USBTMC_interface.obj 00066
+099f9 USBTMC_queue_bulk_out_header   F              0 USBTMC_interface.obj 005f7
+09ff0 USBTMC_int_read_thread         F              0 USBTMC_interface.obj 001f9
+0a1e9 queue_bulk_in_data             F              0 USBTMC_interface.obj 0007a
+0a263 USBTMC_queue_bulk_in_header    F              0 USBTMC_interface.obj 00884
+0aae7 get_descriptor                 F              0 USBTMC_interface.obj 00249
+0ad30 controul_setup                 F              0 USBTMC_interface.obj 0021a
+0af4a standard_request               F              0 USBTMC_interface.obj 00202
+0b14c class_request                  F              0 USBTMC_interface.obj 0011a
+0b266 vendor_request                 F              0 USBTMC_interface.obj 00819
+0ba7f vendor_to_class                F              0 USBTMC_interface.obj 00001
+0ba80 wait_setup_packet              F              0 USBTMC_interface.obj 0014f
+0bbcf controul_transfer_in           F              0 USBTMC_interface.obj 001ff
+0bdce controul_transfer_out          F              0 USBTMC_interface.obj 001ff
+0bfcd bulk_read                      F              0 USBTMC_interface.obj 001c9
+0c196 bulk_write                     F              0 USBTMC_interface.obj 001c1
+0c357 int_read                       F              0 USBTMC_interface.obj 001c1
+0c518 int_write                      F              0 USBTMC_interface.obj 001c1
+0c6d9 setup_transfer_handshake       F              0 USBTMC_interface.obj 0015f
+0c838 set_endpoint_maxpacket_size    F              0 USBTMC_interface.obj 001ed
+0ca25 set_control_ep_halt            F              0 USBTMC_interface.obj 00096
+0cabb set_endpoint_stall             F              0 USBTMC_interface.obj 0009c
+0cb57 set_address                    F              0 USBTMC_interface.obj 000a9
+0cc00 get_interface                  F              0 USBTMC_interface.obj 0004a
+0cc4a set_interface                  F              0 USBTMC_interface.obj 00081
+0cccb get_configuration              F              0 USBTMC_interface.obj 0004d
+0cd18 set_configuration              F              0 USBTMC_interface.obj 000a9
+0cdc1 set_feature                    F              0 USBTMC_interface.obj 0009c
+0ce5d clear_feature                  F              0 USBTMC_interface.obj 000a5
+0cf02 get_ep_status                  F              0 USBTMC_interface.obj 000db
+0cfdd get_device_status              F              0 USBTMC_interface.obj 000d5
+0d0b2 class_requests_inititate_abort_bulk_out F              0 USBTMC_interface.obj 00567
+0d619 class_requests_check_abort_bulk_out_status F              0 USBTMC_interface.obj 00477
+0da90 class_requests_inititate_abort_bulk_in F              0 USBTMC_interface.obj 005bc
+0e04c class_requests_check_abort_bulk_in_status F              0 USBTMC_interface.obj 0064f
+0e69b class_requests_initiate_clear  F              0 USBTMC_interface.obj 0029d
+0e938 class_requests_check_clear_statue F              0 USBTMC_interface.obj 00337
+0ec6f class_requests_get_capablities F              0 USBTMC_interface.obj 006d2
+0f341 class_requests_indicator_pulse F              0 USBTMC_interface.obj 000e1
+00061 device_desc                    L              1 USBTMC_interface.obj 00012
+00073 config_desc                    L              1 USBTMC_interface.obj 00009
+0007c interface_desc                 L              1 USBTMC_interface.obj 00009
+00085 endpointIN_bulk_desc           L              1 USBTMC_interface.obj 00007
+0008c endpointOUT_bulk_desc          L              1 USBTMC_interface.obj 00007
+00093 endpointIN_interrupt_desc      L              1 USBTMC_interface.obj 00007
+0009a zero_string_desc               L              1 USBTMC_interface.obj 00004
+0009e str0_descriptor                L              1 USBTMC_interface.obj 00004
+000a2 str1_descriptor                L              1 USBTMC_interface.obj 0000a
+000ac str2_descriptor                L              1 USBTMC_interface.obj 0001a
+000c6 str3_descriptor                L              1 USBTMC_interface.obj 0000a
+0f426 USBBRI_function_init           F              0 USBBRI_interface.obj 00220
+0f646 USBBRI_slave_attach            F              0 USBBRI_interface.obj 000a7
+0f6ed USBBRI_slave_detach            F              0 USBBRI_interface.obj 00055
+0f742 USBBRI_ioctl                   F              0 USBBRI_interface.obj 000c2
+0f804 USBBRI_disconnect              F              0 USBBRI_interface.obj 000f7
+0f8fb USBBRI_connect                 F              0 USBBRI_interface.obj 0088f
+1018a USBBRI_read                    F              0 USBBRI_interface.obj 00044
+101ce USBBRI_write                   F              0 USBBRI_interface.obj 00240
+1040e USBBRI_bulk_read_thread        F              0 USBBRI_interface.obj 00078
+10486 USBBRI_bulk_write_thread       F              0 USBBRI_interface.obj 000c4
+1054a USBBRI_int_read_thread         F              0 USBBRI_interface.obj 002ac
+107f6 USBBRI_controul_setup          F              0 USBBRI_interface.obj 00142
+10938 USBBRI_standard_request        F              0 USBBRI_interface.obj 00202
+10b3a USBBRI_get_descriptor          F              0 USBBRI_interface.obj 00219
+10d53 USBBRI_class_request           F              0 USBBRI_interface.obj 00005
+10d58 USBBRI_vendor_request          F              0 USBBRI_interface.obj 002e4
+1103c USBBRI_wait_setup_packet       F              0 USBBRI_interface.obj 0014f
+1118b USBBRI_controul_transfer_in    F              0 USBBRI_interface.obj 001ff
+1138a USBBRI_controul_transfer_out   F              0 USBBRI_interface.obj 001ff
+11589 USBBRI_bulk_read               F              0 USBBRI_interface.obj 001c1
+1174a USBBRI_bulk_write              F              0 USBBRI_interface.obj 001c1
+1190b USBBRI_int_read                F              0 USBBRI_interface.obj 001c1
+11acc USBBRI_setup_transfer_handshake F              0 USBBRI_interface.obj 0015f
+11c2b USBBRI_set_endpoint_maxpacket_size F              0 USBBRI_interface.obj 001ed
+11e18 USBBRI_set_control_ep_halt     F              0 USBBRI_interface.obj 00096
+11eae USBBRI_set_address             F              0 USBBRI_interface.obj 000a9
+11f57 USBBRI_get_interface           F              0 USBBRI_interface.obj 0004a
+11fa1 USBBRI_set_interface           F              0 USBBRI_interface.obj 00081
+12022 USBBRI_get_configuration       F              0 USBBRI_interface.obj 0004d
+1206f USBBRI_set_configuration       F              0 USBBRI_interface.obj 000a9
+12118 USBBRI_set_feature             F              0 USBBRI_interface.obj 0009c
+121b4 USBBRI_clear_feature           F              0 USBBRI_interface.obj 0009c
+12250 USBBRI_get_ep_status           F              0 USBBRI_interface.obj 000fa
+1234a USBBRI_get_device_status       F              0 USBBRI_interface.obj 000d5
+00241 USBBRI_device_desc             L              1 USBBRI_interface.obj 00012
+00253 USBBRI_config_desc             L              1 USBBRI_interface.obj 00009
+0025c USBBRI_interface_desc          L              1 USBBRI_interface.obj 00009
+00265 USBBRI_endpointIN_bulk_desc    L              1 USBBRI_interface.obj 00007
+0026c USBBRI_endpointOUT_bulk_desc   L              1 USBBRI_interface.obj 00007
+00273 USBBRI_endpointIN_interrupt_desc L              1 USBBRI_interface.obj 00007
+0027a USBBRI_zero_string_desc        L              1 USBBRI_interface.obj 00004
+0027e USBBRI_string_desc             L              1 USBBRI_interface.obj 00003

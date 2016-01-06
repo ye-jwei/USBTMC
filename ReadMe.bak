@@ -1,0 +1,9 @@
+
+    实现将VNC2两个USB口一个配置成USBTMC（VID：1004）设备，另外一个配置成USBBRI（普通USB VID：8613）设备，且完成各自的枚举并且两个设备成功被电脑识别。
+
+
+在USBTMC里实现int_read与 bulk write，由USBTMC port实行数据传输。
+
+
+在USBTMC里添加class请求，未测试 2015/12/11
+    
