@@ -608,12 +608,12 @@ unsigned char USBBRI_vendor_request(USBBRI_context *ctx)
 			//bulk_read(ctx,&ctx->FT232_read_buffer[0],ctx->bulk_read_length);
 			// USBBRI_setup_transfer_handshake(ctx);
 			 break;
-			
+			/*
 		case VENDOR_INT_READ_ENABLE:
 			 ctx->int_read_enable=TRUE;
 			 USBBRI_setup_transfer_handshake(ctx);
 			 break;
-			
+			*/
 		case VENDOR_GET_EP_STATE:
 			 USBBRI_get_ep_status(ctx,devReq->wValue);
 			 break;

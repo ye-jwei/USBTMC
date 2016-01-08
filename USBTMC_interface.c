@@ -271,12 +271,13 @@ unsigned char USBTMC_write(char *xfer,unsigned short num_to_write,unsigned short
 				
 void USBTMC_bulk_read_thread(USBTMC_context *ctx)
 {
+	/*
 	unsigned char bulk_header[12] = {0};
 	unsigned int  write_length;
 	int count = 0,remainder = 0 ,i = 0;
 	int flag = 1,num = 0;
 	
-	while (1)
+	while (ctx->request_bulk_in_ready)
 	{
 		
 		if(ctx->request_bulk_in_ready == 1)
@@ -298,8 +299,18 @@ void USBTMC_bulk_read_thread(USBTMC_context *ctx)
 				int_read(ctx,&TMC_read_buffer[i*64],64);
 			}
 		}
+		else 
+		{
+			vos_memcpy(mark_array,"NO_bulk_in_request",18);
+			write_uart(hUART,mark_array,18);
+			vos_memset(mark_array,0,18);
+			
+			vos_delay_msecs(100);
+			continue;
+		}
+		ctx->request_bulk_in_ready = 0;
     }
-	return;
+	return;	*/	
 }
 				
 void USBTMC_bulk_write_thread(USBTMC_context *ctx)
@@ -313,110 +324,119 @@ void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 	int flag = 1;
 	int num = 0;
 	int count = 0,remainder = 0;
-	
+	unsigned char endpoint_status = get_ep_status(ctx,EP2_ID);
 	unsigned int header_length;
 	//vos_memset(BRI_read_buffer,0,1024);
 	
-	while (1)
+	while (ctx->attached)
 	{
-		real_length = real_length + bulk_write(ctx,&ctx->bulkout_buffer[0],64);
-		num++;
-			
-		if (num == 1)//flag = 1???bulk_write;
+		if(endpoint_status == 0)
 		{
-			vos_memcpy(bulk_header,ctx->bulkout_buffer,12);
-			
-			/*count the write_length and confire the number to transfer*/
-			write_length = USBTMC_queue_bulk_out_header(ctx,bulk_header);
-			
-			if(ctx->USBTMC_bulk_out_header.MsgID == DEV_DEP_MSG_OUT)
+			real_length = real_length + bulk_write(ctx,&ctx->bulkout_buffer[0],64);
+			num++;
+				
+			if (num == 1)//flag = 1???bulk_write;
 			{
-				/*device receive data from host*/
-				if((ctx->USBTMC_bulk_out_header.bTag >=1) && (ctx->USBTMC_bulk_out_header.bTag <=255) && 
-						(ctx->USBTMC_bulk_out_header.bTagInverse == (~ctx->USBTMC_bulk_out_header.bTag)))		
+				vos_memcpy(bulk_header,ctx->bulkout_buffer,12);
+				
+				/*count the write_length and confire the number to transfer*/
+				write_length = USBTMC_queue_bulk_out_header(ctx,bulk_header);
+				
+				if(ctx->USBTMC_bulk_out_header.MsgID == DEV_DEP_MSG_OUT)
+				{
+					/*device receive data from host*/
+					if((ctx->USBTMC_bulk_out_header.bTag >=1) && (ctx->USBTMC_bulk_out_header.bTag <=255) && 
+							(ctx->USBTMC_bulk_out_header.bTagInverse == (~ctx->USBTMC_bulk_out_header.bTag)))		
+					{
+						USB_device_error_deal(ctx,1);
+						num = -1;
+					}
+				}
+				else if(ctx->USBTMC_bulk_out_header.MsgID == REQUEST_DEV_DEP_MSG_IN)
+				{
+					/*tell device to prepare the data for host*/
+					if((ctx->USBTMC_bulk_out_header.bTag >=1) && (ctx->USBTMC_bulk_out_header.bTag <=255) && 
+							(ctx->USBTMC_bulk_out_header.bTagInverse == (~ctx->USBTMC_bulk_out_header.bTag)))		
+					{
+						USB_device_error_deal(ctx,1);
+						num = -1;
+					}
+					
+					vos_memcpy(mark_array,"request_bulk_in",16);
+					write_uart(hUART,mark_array,16);
+					vos_memset(mark_array,0,16);
+					
+					//write_uart(hUART,bulk_header,12);
+					ctx->request_bulk_in_ready = 1;
+					TMC_requset_BRI_answer = 1;
+					num = 0;
+					return ;
+				}
+				else 
 				{
 					USB_device_error_deal(ctx,1);
 					num = -1;
 				}
-			}
-			else if(ctx->USBTMC_bulk_out_header.MsgID == REQUEST_DEV_DEP_MSG_IN)
-			{
-				/*tell device to prepare the data for host*/
-				if((ctx->USBTMC_bulk_out_header.bTag >=1) && (ctx->USBTMC_bulk_out_header.bTag <=255) && 
-						(ctx->USBTMC_bulk_out_header.bTagInverse == (~ctx->USBTMC_bulk_out_header.bTag)))		
+				count = (write_length-52) / 64; //?¦Æ??52
+				remainder = (write_length-52) % 64;
+				
+				/*copy the 1st buffer*/
+				if(write_length <= 52)
 				{
-					USB_device_error_deal(ctx,1);
-					num = -1;
+					vos_memcpy(&BRI_read_buffer[0],&ctx->bulkout_buffer[12],write_length);
+					vos_memset(ctx->bulkout_buffer,0,64);
+				}
+				else 
+				{
+					vos_memcpy(&BRI_read_buffer[0],&ctx->bulkout_buffer[12],52);
+					vos_memset(ctx->bulkout_buffer,0,64);
 				}
 				
-				vos_memcpy(mark_array,"request_bulk_in",16);
-				write_uart(hUART,mark_array,16);
-				vos_memset(mark_array,0,16);
+				flag = 0;
+			}
+			else 
+			{
+				vos_memcpy(&BRI_read_buffer[(num-2)*64+52],&ctx->bulkout_buffer[0],64);
+				//vos_memset(ctx->bulkout_buffer,0,64);
+			}
+			
+			if(num == ((write_length+12)/64+1))
+			//if((real_length - 12) == write_length)
+			{
+				//vos_memcpy(&BRI_read_buffer[write_length],aligment_data,aligment_length - write_length);
+				if((real_length -12) != write_length)
+				{
+					USB_device_error_deal(ctx,2);
+					num = -1;
+				}
+				else 
+				{
+					num = 0;
+				}
 				
-				//write_uart(hUART,bulk_header,12);
-				ctx->request_bulk_in_ready = 1;
-				TMC_requset_BRI_answer = 1;
-				num = 0;
-				return ;
+				write_uart(hUART,BRI_read_buffer,write_length);
+				TMC_write_done = 1;//tell the device that host write is done;
+				
+				vos_memcpy(mark_array,"bulk_out_done",13);
+				write_uart(hUART,mark_array,13);
+				vos_memset(mark_array,0,13);
+				real_length = 0;
+				break;
 			}
-			else 
+			if(num == -1)
 			{
-				USB_device_error_deal(ctx,1);
-				num = -1;
+				vos_memcpy(mark_array,"device_error",12);
+				write_uart(hUART,mark_array,12);
+				vos_memset(mark_array,0,12);
 			}
-			count = (write_length-52) / 64; //?¦Æ??52
-			remainder = (write_length-52) % 64;
-			
-			/*copy the 1st buffer*/
-			if(write_length <= 52)
-			{
-				vos_memcpy(&BRI_read_buffer[0],&ctx->bulkout_buffer[12],write_length);
-				vos_memset(ctx->bulkout_buffer,0,64);
-			}
-			else 
-			{
-				vos_memcpy(&BRI_read_buffer[0],&ctx->bulkout_buffer[12],52);
-				vos_memset(ctx->bulkout_buffer,0,64);
-			}
-			
-			flag = 0;
 		}
 		else 
 		{
-			vos_memcpy(&BRI_read_buffer[(num-2)*64+52],&ctx->bulkout_buffer[0],64);
-			//vos_memset(ctx->bulkout_buffer,0,64);
+			vos_memcpy(mark_array,"int_endpoint_is_stall",21);
+			write_uart(hUART,mark_array,21);
+			vos_memset(mark_array,0,21);
 		}
-		
-		if(num == ((write_length+12)/64+1))
-		//if((real_length - 12) == write_length)
-		{
-			//vos_memcpy(&BRI_read_buffer[write_length],aligment_data,aligment_length - write_length);
-			if((real_length -12) != write_length)
-			{
-				USB_device_error_deal(ctx,2);
-				num = -1;
-			}
-			else 
-			{
-				num = 0;
-			}
-			
-			write_uart(hUART,BRI_read_buffer,write_length);
-			TMC_write_done = 1;//tell the device that host write is done;
-			
-			vos_memcpy(mark_array,"bulk_out_done",30);
-			write_uart(hUART,mark_array,30);
-			vos_memset(mark_array,0,30);
-			real_length = 0;
-			break;
-		}
-		if(num == -1)
-		{
-			vos_memcpy(mark_array,"device_error",30);
-			write_uart(hUART,mark_array,12);
-			vos_memset(mark_array,30,0);
-		}
-    }
+	}
   return;			
 }
 
@@ -459,10 +479,10 @@ unsigned int USBTMC_queue_bulk_out_header(USBTMC_context *ctx,unsigned char bulk
 	ctx->USBTMC_bulk_out_header.unused 				  = bulk_header[10]+(bulk_header[11]<<8);
 	
 	
-	vos_memcpy(mark_array,"bulk_header",30);
-	write_uart(hUART,mark_array,30);
+	vos_memcpy(mark_array,"bulk_header",11);
+	write_uart(hUART,mark_array,11);
 	write_uart(hUART,bulk_header,12);
-	vos_memset(mark_array,0,30);
+	vos_memset(mark_array,0,11);
 	return ctx->USBTMC_bulk_out_header.TransferSize;
 }
 
@@ -475,28 +495,47 @@ void  USBTMC_int_read_thread(USBTMC_context *ctx)
 	unsigned int  write_length;
 	int count = 0,remainder = 0 ,i = 0;
 	int flag = 1,num = 0;
+	unsigned char endpoint_status = get_ep_status(ctx,EP3_ID);
 	
-	while (1)
+	while (ctx->request_bulk_in_ready)
 	{
-		
-		if(ctx->request_bulk_in_ready == 1)
-		{	
-			if(i == 0)
-			{
-				write_length = USBTMC_queue_bulk_in_header(ctx,bulk_header);
-				queue_bulk_in_data(ctx,write_length);
-				vos_memcpy(TMC_read_buffer,bulk_header,12);
+		if(endpoint_status == 0)
+		{
+			if(ctx->request_bulk_in_ready == 1)
+			{	
+				if(i == 0)
+				{
+					write_length = USBTMC_queue_bulk_in_header(ctx,bulk_header);
+					queue_bulk_in_data(ctx,write_length);
+					vos_memcpy(TMC_read_buffer,bulk_header,12);
+					
+					count     = (roundup(write_length, 4) + 12) / 64;
+					remainder = (roundup(write_length, 4) + 12) % 64;
+					
+					write_uart(hUART,TMC_read_buffer,write_length+12);
+				}
 				
-				count     = (roundup(write_length, 4) + 12) / 64;
-				remainder = (roundup(write_length, 4) + 12) % 64;
-				
-				write_uart(hUART,TMC_read_buffer,write_length+12);
+				for(i = 0;i <= count;i++)
+				{
+					int_read(ctx,&TMC_read_buffer[i*64],64);
+				}
 			}
-			
-			for(i = 0;i <= count;i++)
+			else 
 			{
-				int_read(ctx,&TMC_read_buffer[i*64],64);
+				vos_memcpy(mark_array,"NO_bulk_in_request",18);
+				write_uart(hUART,mark_array,18);
+				vos_memset(mark_array,0,18);
+				
+				vos_delay_msecs(100);
+				continue;
 			}
+			ctx->request_bulk_in_ready = 0;
+		}
+		else 
+		{
+			vos_memcpy(mark_array,"int_endpoint_is_stall",21);
+			write_uart(hUART,mark_array,21);
+			vos_memset(mark_array,0,21);
 		}
     }
 	return;		
@@ -505,12 +544,9 @@ void  USBTMC_int_read_thread(USBTMC_context *ctx)
 void queue_bulk_in_data(USBTMC_context *ctx,unsigned int length)
 {
 	int i;
-	unsigned char queue_data_done[15] = {'q','u','e','u','e','_','d','a','t','a','_','d','o','n','e'};
 	
 	for(i = 0; i < length;i++)
 		TMC_read_buffer[i+12] = i;
-		
-	//write_uart(hUART,queue_data_done,15);
 
 	return ;
 }
@@ -840,15 +876,14 @@ unsigned char vendor_request(USBTMC_context *ctx)
 			ep_id = devReq->wValue &0x0ff;
 			set_endpoint_stall(ctx,ep_id);
 			
-			vos_memcpy(mark_array,"set_endpoint_stall",30);
-			write_uart(hUART,mark_array,30);
-			vos_memset(mark_array,0,30);
+			vos_memcpy(mark_array,"set_endpoint_stall",18);
+			write_uart(hUART,mark_array,18);
+			vos_memset(mark_array,0,18);
 			break;
 			
 			
 						
 		case VENDOR_CLASS_TEST_ABORT_BULK_OUT:
-			
 			
 			//packet[0] = devReq->wValue >> 8;
 			packet[1] = devReq->wValue & 0x0ff;
@@ -873,14 +908,17 @@ unsigned char vendor_request(USBTMC_context *ctx)
 			packet[7] = 0x0;
 			
 			//write_uart(hUART,array,25);
-			vos_memcpy(mark_array,"class_request_test",30);
+			vos_memcpy(mark_array,"class_request_test",18);
 			//controul_transfer_in(ctx,packet,9);
-			write_uart(hUART,mark_array,30);
-			vos_memset(mark_array,0,30);
+			write_uart(hUART,mark_array,18);
+			vos_memset(mark_array,0,18);
 			USBTMC_send_setup_packet(packet,ctx);
 
-	
-
+			break;
+			
+		case VENDOR_GET_BULK_STATUS:
+			
+			get_bulk_status(ctx,(devReq->wValue & 0x0ff));
 			break;
 			
 			
@@ -895,9 +933,67 @@ unsigned char vendor_request(USBTMC_context *ctx)
 }
 
 	
-void vendor_to_class(USBTMC_context *ctx)	//change vendor request to class request 
+void get_bulk_status(USBTMC_context *ctx,unsigned int bulk_flag)	//get bulk_status 
 {
+	unsigned char bulk_header[12];
+	int j;
+	
+	if(bulk_flag == 1)//get bulk_out status
+	{
+		vos_memcpy(mark_array,"get_bulk_out_status:",20);
+		write_uart(hUART,mark_array,20);
+		vos_memset(mark_array,0,20);
 		
+		bulk_header[0] = ctx->USBTMC_bulk_out_header.MsgID;
+		bulk_header[1] = ctx->USBTMC_bulk_out_header.bTag;
+		bulk_header[2] = ctx->USBTMC_bulk_out_header.bTagInverse;
+		bulk_header[3] = ctx->USBTMC_bulk_out_header.Reserved;
+		
+		for(j = 0;j < 4 ;j++)
+			bulk_header[j+4] = (unsigned char)(ctx->USBTMC_bulk_out_header.TransferSize >> j*8 );
+								
+		bulk_header[8]  = ctx->USBTMC_bulk_out_header.bmTransfer_Attributes;
+		bulk_header[9]  = ctx->USBTMC_bulk_out_header.TermChar;
+		bulk_header[10] = ctx->USBTMC_bulk_out_header.unused;
+		bulk_header[11] = ctx->USBTMC_bulk_out_header.unused >> 8;
+		
+		vos_memcpy(mark_array,"get_bulk_out_header:",20);
+		write_uart(hUART,mark_array,20);
+		vos_memset(mark_array,0,20);
+		write_uart(hUART,bulk_header,sizeof(bulk_header));
+		controul_transfer_in(ctx,bulk_header,sizeof(bulk_header));
+
+	}
+	else if(bulk_flag == 2)
+	{
+		vos_memcpy(mark_array,"get_bulk_in_status:",19);
+		write_uart(hUART,mark_array,19);
+		vos_memset(mark_array,0,19);
+		
+		bulk_header[0] = ctx->USBTMC_bulk_in_header.MsgID;
+		bulk_header[1] = ctx->USBTMC_bulk_in_header.bTag;
+		bulk_header[2] = ctx->USBTMC_bulk_in_header.bTagInverse;
+		bulk_header[3] = ctx->USBTMC_bulk_in_header.Reserved;
+		
+		for(j = 0;j < 4 ;j++)
+			bulk_header[j+4] = (unsigned char)(ctx->USBTMC_bulk_in_header.TransferSize >> j*8 );
+								
+		bulk_header[8]  = ctx->USBTMC_bulk_in_header.bmTransfer_Attributes;
+		bulk_header[9]  = ctx->USBTMC_bulk_in_header.TermChar;
+		bulk_header[10] = ctx->USBTMC_bulk_in_header.unused;
+		bulk_header[11] = ctx->USBTMC_bulk_in_header.unused >> 8;
+		
+		
+		/*get bulk header*/
+		vos_memcpy(mark_array,"get_bulk_in_header:",19);
+		write_uart(hUART,mark_array,19);
+		vos_memset(mark_array,0,19);
+		//write_uart(hUART,ctx->USBTMC_bulk_in_header,sizeof(USBTMC_bulk_header));
+		write_uart(hUART,bulk_header,sizeof(bulk_header));
+		controul_transfer_in(ctx,bulk_header,sizeof(bulk_header));
+	}
+	
+	return ;
 	
 }
 
@@ -957,7 +1053,7 @@ int controul_transfer_out(USBTMC_context *ctx,unsigned char* pbuffer,unsigned sh
 int bulk_read(USBTMC_context *ctx,unsigned char* pbuffer,unsigned short transfer_len)
 {
 	usbslave_ioctl_cb_t iocb;
-	clear_feature(ctx,EP1_ID);
+	//clear_feature(ctx,EP1_ID);
 	iocb.ioctl_code = VOS_IOCTL_USBSLAVE_TRANSFER;
     iocb.handle = ctx->bulkin_ep;
     iocb.request.setup_or_bulk_transfer.buffer = pbuffer;
@@ -1152,8 +1248,7 @@ void set_feature(USBTMC_context *ctx, unsigned char ep_id)
 void clear_feature(USBTMC_context *ctx, unsigned char ep_id)
 {
 	usbslave_ioctl_cb_t iocb;
-	unsigned char clear_bulk_out[14] = {'c','l','e','a','r','_','b','u','l','k','_','o','u','t'};
-    
+	
 	iocb.ioctl_code = VOS_IOCTL_USBSLAVE_ENDPOINT_CLEAR;
     iocb.ep = ep_id;
     vos_dev_ioctl(ctx->handle, &iocb);
@@ -1191,6 +1286,38 @@ unsigned char get_device_status(USBTMC_context *ctx)
 	
 }
 
+void memset_bulk_header(USBTMC_context *ctx,unsigned int bulk_flag)
+{
+	unsigned char bulk_header[12] = {0};
+	if(bulk_flag == 2)
+	{
+		ctx->USBTMC_bulk_out_header.MsgID = 0;
+		ctx->USBTMC_bulk_out_header.bTag  = 0;
+		ctx->USBTMC_bulk_out_header.bTagInverse = 0;
+		ctx->USBTMC_bulk_out_header.Reserved = 0;
+		ctx->USBTMC_bulk_out_header.TransferSize = 0;
+								
+		ctx->USBTMC_bulk_out_header.bmTransfer_Attributes = 0;
+		ctx->USBTMC_bulk_out_header.TermChar = 0;
+		ctx->USBTMC_bulk_out_header.unused = 0;
+		ctx->USBTMC_bulk_out_header.unused  = 0;
+	}
+	else if(bulk_flag == 1)
+	{
+		ctx->USBTMC_bulk_in_header.MsgID = 0;
+		ctx->USBTMC_bulk_in_header.bTag  = 0;
+		ctx->USBTMC_bulk_in_header.bTagInverse = 0;
+		ctx->USBTMC_bulk_in_header.Reserved = 0;
+		ctx->USBTMC_bulk_in_header.TransferSize = 0;
+								
+		ctx->USBTMC_bulk_in_header.bmTransfer_Attributes = 0;
+		ctx->USBTMC_bulk_in_header.TermChar = 0;
+		ctx->USBTMC_bulk_in_header.unused = 0;
+		ctx->USBTMC_bulk_in_header.unused  = 0;
+	}
+	
+	return;
+}
 	
 
 
@@ -1289,9 +1416,9 @@ wLength			0x0008. Number of bytes to transfer per the USB 2.0 specification, sec
 	ctx->response_packet[2] = 0;
 	ctx->response_packet[3] = 0;
 	
-	vos_memcpy(mark_array,"check_abort_bulk_out_status",30);
-	write_uart(hUART,mark_array,30);
-	vos_memset(mark_array,0,30);
+	vos_memcpy(mark_array,"check_abort_bulk_out_status",27);
+	write_uart(hUART,mark_array,27);
+	vos_memset(mark_array,0,27);
 	
 	controul_transfer_in(ctx,ctx->response_packet,3);
 }
@@ -1404,9 +1531,9 @@ wLength 0x0008. Number of bytes to transfer per the USB 2.0 specification, secti
 	ctx->response_packet[3] = 0;
 	
 		
-	vos_memcpy(mark_array,"check_abort_bulk_in_status",30);
-	write_uart(hUART,mark_array,30);
-	vos_memset(mark_array,0,30);
+	vos_memcpy(mark_array,"check_abort_bulk_in_status",26);
+	write_uart(hUART,mark_array,26);
+	vos_memset(mark_array,0,26);
 	
 	controul_transfer_in(ctx,ctx->response_packet,3);
 }
@@ -1420,6 +1547,7 @@ wValue 0x0000
 wIndex Must specify interface number per the USB 2.0 specification, section 9.3.4.
 wLength 0x0001. Number of bytes to transfer per the USB 2.0 specification, section 9.3.5.*/
 	unsigned char tmp;
+	unsigned char bulk_header[12] = {0};
 	
 	ctx->response_packet[0] = USBTMC_STATUS_SUCCESS;
 	
@@ -1429,6 +1557,7 @@ wLength 0x0001. Number of bytes to transfer per the USB 2.0 specification, secti
 	clear_feature(ctx,EP2_ID);
 	tmp = get_ep_status(ctx,EP2_ID);
 	vos_memset(ctx->bulkout_buffer,0,64);
+
 	if(tmp == 0)
 		ctx->bulkout_fifo_status = 1;
 	
@@ -1438,14 +1567,22 @@ wLength 0x0001. Number of bytes to transfer per the USB 2.0 specification, secti
 	clear_feature(ctx,EP1_ID);
 	vos_memset(ctx->bulkin_buffer,0,64);
 	tmp = get_ep_status(ctx,EP1_ID);
+	
 	if(tmp == 0)
 		ctx->bulkin_fifo_status = 1;
 	
+	memset_bulk_header(ctx,1);
+	memset_bulk_header(ctx,2);
 	
-		
-	vos_memcpy(mark_array,"initiate_clear",30);
-	write_uart(hUART,mark_array,30);
-	vos_memset(mark_array,0,30);
+	vos_memcpy(mark_array,"show_endpoint_status_&_fifo",27);
+	write_uart(hUART,mark_array,27);
+	vos_memset(mark_array,0,27);
+	write_uart(hUART,&tmp,1);
+	write_uart(hUART,&ctx->bulkout_fifo_status,1);
+	
+	vos_memcpy(mark_array,"initiate_clear",14);
+	write_uart(hUART,mark_array,14);
+	vos_memset(mark_array,0,14);
 	controul_transfer_in(ctx,ctx->response_packet,1);
 }
 
@@ -1476,9 +1613,9 @@ wLength 0x0002. Number of bytes to transfer per the USB 2.0 specification, secti
 	
 	
 			
-	vos_memcpy(mark_array,"check_clear_statue",30);
-	write_uart(hUART,mark_array,30);
-	vos_memset(mark_array,0,30);
+	vos_memcpy(mark_array,"check_clear_statue",18);
+	write_uart(hUART,mark_array,18);
+	vos_memset(mark_array,0,18);
 	controul_transfer_in(ctx,ctx->response_packet,2);
 }
 
@@ -1514,9 +1651,9 @@ wLength 0x0018. Number of bytes to transfer per the USB 2.0 specification, secti
 	ctx->response_packet[17] = 0;
 	
 	
-		vos_memcpy(mark_array,"get_capablities",30);
-	write_uart(hUART,mark_array,30);
-	vos_memset(mark_array,0,30);
+		vos_memcpy(mark_array,"get_capablities",14);
+	write_uart(hUART,mark_array,14);
+	vos_memset(mark_array,0,14);
 	controul_transfer_in(ctx,ctx->response_packet,18);
 }
 
@@ -1531,8 +1668,8 @@ wIndex Must specify interface number per the USB 2.0 specification, section 9.3.
 wLength 0x0001. Number of bytes to transfer per the USB 2.0 specification, section 9.3.5.*/
 	ctx->response_packet[0] = USBTMC_STATUS_SUCCESS;
 	
-	vos_memcpy(mark_array,"indicator_pulse",30);
-	write_uart(hUART,mark_array,30);
-	vos_memset(mark_array,0,30);
+	vos_memcpy(mark_array,"indicator_pulse",15);
+	write_uart(hUART,mark_array,15);
+	vos_memset(mark_array,0,15);
 	controul_transfer_in(ctx,ctx->response_packet,1);
 }

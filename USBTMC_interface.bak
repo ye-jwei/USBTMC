@@ -25,11 +25,12 @@
 #define  VENDOR_CONTROUL_WRITE   			0xB3  //for test controul out transfer
 
 
-#define  VENDOR_GET_EP_STATE     			0xB8
+#define  VENDOR_GET_EP_STATE     			0xB7
 #define  VENDOR_SET_STALL					0xB5
 #define  VENDOR_CLEAR_FEATURE 				0xB6
 
 #define  VENDOR_CLASS_TEST_ABORT_BULK_OUT   0xB0
+#define  VENDOR_GET_BULK_STATUS 			0xB1
 
 void firmware();
 void USBTMC_attach();
@@ -235,5 +236,5 @@ unsigned char   USB_device_behavior(USBTMC_context *ctx);
 unsigned int    USBTMC_queue_bulk_in_header(USBTMC_context *ctx,unsigned char bulk_header[]);	
 	
 void 			queue_bulk_in_data(USBTMC_context *ctx,unsigned int length);
-
+void get_bulk_status(USBTMC_context *ctx,unsigned int bulk_flag);
 #endif

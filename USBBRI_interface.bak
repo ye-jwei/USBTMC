@@ -23,9 +23,8 @@
 #define  VENDOR_CONTROUL_WRITE   0xB3  //for test controul out transfer
 #define  VENDOR_BULK_READ_ENABLE   0xB4  //for test bulk in transfer
 #define  VENDOR_BULK_WRITE_ENABLE   0xB5  //for test bulk out transfer
-#define  VENDOR_INT_READ_ENABLE   0xB6
-#define  VENDOR_INT_WRITE_ENABLE  0xB7
-#define  VENDOR_GET_EP_STATE     0xB8
+
+#define  VENDOR_GET_EP_STATE     0xB7
 
 
 #if 0

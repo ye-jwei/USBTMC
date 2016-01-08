@@ -873,9 +873,9 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"write_uart"	
 .RETURN "short"	16	0	0	0	0	0	0	
-.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	169	
-.PARAMETER	"puart_buffer"	16 "char"	0	1	0	0	0	1	169	
-.PARAMETER	"len"	16 "short"	0	0	0	0	0	0	169	
+.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	168	
+.PARAMETER	"puart_buffer"	16 "char"	0	1	0	0	0	1	168	
+.PARAMETER	"len"	16 "short"	0	0	0	0	0	0	168	
 .FUNC_END	"write_uart"
 
 .FUNCTION	"vos_dma_get_fifo_data_register"	
@@ -946,7 +946,7 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"USBBRI_get_descriptor_B"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	191	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	190	
 .FUNC_END	"USBBRI_get_descriptor_B"
 
 .FUNCTION	"vos_iomux_define_bidi"	
@@ -1026,7 +1026,7 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"USBBRI_int_write_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	220	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	219	
 .FUNC_END	"USBBRI_int_write_thread"
 
 .FUNCTION	"fat_fileCopy"	
@@ -1037,7 +1037,7 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"USBBRI_bulkwrite_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	216	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	215	
 .FUNC_END	"USBBRI_bulkwrite_thread"
 
 .VARIABLE	"BRI_read_done"	8	"char"	0	0	-2	0	0	0	23	extern
@@ -1331,9 +1331,9 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"USBBRI_int_write"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	214	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	214	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	214	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	213	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	213	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	213	
 .FUNC_END	"USBBRI_int_write"
 
 .FUNCTION	"vos_power_down"	
@@ -1603,12 +1603,12 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"usbslave_connect"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	154	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	153	
 .FUNC_END	"usbslave_connect"
 
 .FUNCTION	"ft232_slave_detach"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"hSlaveFT232"	16 "short"	0	0	0	0	0	0	158	
+.PARAMETER	"hSlaveFT232"	16 "short"	0	0	0	0	0	0	157	
 .FUNC_END	"ft232_slave_detach"
 
 .FUNCTION	"vos_dma_retained_configure"	
@@ -1620,8 +1620,8 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"ft232_slave_attach"	
 .RETURN "short"	16	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	157	
-.PARAMETER	"devSlaveFT232"	8 "char"	0	0	0	0	0	0	157	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	156	
+.PARAMETER	"devSlaveFT232"	8 "char"	0	0	0	0	0	0	156	
 .FUNC_END	"ft232_slave_attach"
 
 .FUNCTION	"fat_dirDirIsEmpty"	
@@ -1701,7 +1701,7 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"set_uart_baudrate"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	167	
+.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	166	
 .FUNC_END	"set_uart_baudrate"
 
 .FUNCTION	"strncpy"	extern
@@ -1868,7 +1868,7 @@ Str@3	.ASCIIZ	"USBBRI_INT_READ_thread"
 
 .FUNCTION	"usbslave_disconnect"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	155	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	154	
 .FUNC_END	"usbslave_disconnect"
 
 
@@ -5337,9 +5337,9 @@ USBBRI_vendor_request:
 .VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	18	0	0	1	558	
 .VARIABLE	"bReq"	8	"char"	0	0	27	0	0	0	560	
 .FUNCTION	"USBBRI_vendor_request"	
-.RETURN "char"	8	0	0	101	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	102	0	0	1	556	
-SP_DEC	$98
+.RETURN "char"	8	0	0	95	0	0	0	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	96	0	0	1	556	
+SP_DEC	$92
 .LINE	559
 LD8	%ecx	$0
 SP_WR8	%ecx	$0
@@ -5359,7 +5359,7 @@ SP_WR32	%ecx	$6
 SP_STORE	%ecx
 ADD16	%ecx	$10
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$96
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$12
@@ -5433,7 +5433,7 @@ JUMP	@IC106
 SP_STORE	%ecx
 ADD16	%ecx	$37
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$96
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$39
@@ -5451,7 +5451,7 @@ LD8	(%ecx)	$1
 SP_STORE	%ecx
 ADD16	%ecx	$43
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$96
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$45
@@ -5477,7 +5477,7 @@ JUMP	@IC106
 SP_STORE	%ecx
 ADD16	%ecx	$49
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$96
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$51
@@ -5505,7 +5505,7 @@ SP_RD16	%eax	$2
 PUSH16	%eax
 SP_RD16	%eax	$61
 PUSH16	%eax
-SP_RD16	%eax	$106
+SP_RD16	%eax	$100
 PUSH16	%eax
 SP_DEC	$4
 CALL	USBBRI_controul_transfer_out
@@ -5518,7 +5518,7 @@ SP_WR32	%ecx	$6
 SP_STORE	%ecx
 ADD16	%ecx	$65
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$96
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$67
@@ -5538,7 +5538,7 @@ CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
 ADD16	%ecx	$71
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$96
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$73
@@ -5559,7 +5559,7 @@ JUMP	@IC106
 SP_STORE	%ecx
 ADD16	%ecx	$77
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$96
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$79
@@ -5574,7 +5574,7 @@ ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$81
 LD8	(%ecx)	$1
 .LINE	597
-SP_RD16	%eax	$102
+SP_RD16	%eax	$96
 PUSH16	%eax
 CALL	USBBRI_setup_transfer_handshake
 SP_INC	$2
@@ -5583,11 +5583,11 @@ JUMP	@IC106
 @IC115:	
 JUMP	@IC106
 @IC117:	
-.LINE	613
+.LINE	618
 SP_STORE	%ecx
 ADD16	%ecx	$83
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$18
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$85
@@ -5597,52 +5597,26 @@ SP_STORE	%ecx
 ADD16	%ecx	$87
 SP_STORE	%eax
 ADD16	%eax	$85
-LD16	%ebx	$214
-ADD16	(%ecx)	(%eax)	%ebx
-SP_RD16	%ecx	$87
-LD8	(%ecx)	$1
-.LINE	614
-SP_RD16	%eax	$102
-PUSH16	%eax
-CALL	USBBRI_setup_transfer_handshake
-SP_INC	$2
-.LINE	571
-JUMP	@IC106
-@IC119:	
-.LINE	618
-SP_STORE	%ecx
-ADD16	%ecx	$89
-SP_STORE	%eax
-ADD16	%eax	$18
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$91
-SP_RD16	%eax	$89
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$93
-SP_STORE	%eax
-ADD16	%eax	$91
 LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$95
-SP_RD16	%eax	$93
+ADD16	%ecx	$89
+SP_RD16	%eax	$87
 CPY16	(%ecx)	(%eax)
-SP_RD16	%eax	$95
+SP_RD16	%eax	$89
 PUSH8	%eax
-SP_RD16	%eax	$103
+SP_RD16	%eax	$97
 PUSH16	%eax
 SP_DEC	$1
 CALL	USBBRI_get_ep_status
 POP8	%eax
-SP_WR8	%eax	$100
+SP_WR8	%eax	$94
 SP_INC	$3
 .LINE	571
 JUMP	@IC106
-@IC121:	
+@IC119:	
 .LINE	623
-SP_RD16	%eax	$102
+SP_RD16	%eax	$96
 PUSH16	%eax
 CALL	USBBRI_setup_transfer_handshake
 SP_INC	$2
@@ -5670,22 +5644,18 @@ CMP8	%ecx	$181
 JZ	@IC115
 @IC118:	
 SP_RD8	%ecx	$27
-CMP8	%ecx	$182
+CMP8	%ecx	$183
 JZ	@IC117
 @IC120:	
-SP_RD8	%ecx	$27
-CMP8	%ecx	$184
-JZ	@IC119
-@IC122:	
-JUMP	@IC121
+JUMP	@IC119
 @IC106:	
 .LINE	628
 SP_STORE	%eax
 ADD16	%eax	$0
 SP_STORE	%ecx
-ADD16	%ecx	$101
+ADD16	%ecx	$95
 CPY8	(%ecx)	(%eax)
-SP_INC	$98
+SP_INC	$92
 RTS	
 .FUNC_END	"USBBRI_vendor_request"
 
@@ -7026,8 +6996,8 @@ SP_STORE	%eax
 ADD16	%eax	$70
 CPY8	(%ecx)	(%eax)
 .LINE	742
-JUMP	@IC125
-@IC124:	
+JUMP	@IC123
+@IC122:	
 .LINE	745
 SP_STORE	%ecx
 ADD16	%ecx	$22
@@ -7052,8 +7022,8 @@ LD32	(%ecx)	$0
 LD8	%ecx	$8
 SP_WR8	%ecx	$0
 .LINE	742
-JUMP	@IC123
-@IC126:	
+JUMP	@IC121
+@IC124:	
 .LINE	750
 SP_STORE	%ecx
 ADD16	%ecx	$28
@@ -7078,8 +7048,8 @@ LD32	(%ecx)	$536870912
 LD8	%ecx	$16
 SP_WR8	%ecx	$0
 .LINE	742
-JUMP	@IC123
-@IC128:	
+JUMP	@IC121
+@IC126:	
 .LINE	755
 SP_STORE	%ecx
 ADD16	%ecx	$34
@@ -7104,8 +7074,8 @@ LD32	(%ecx)	$1073741824
 LD8	%ecx	$32
 SP_WR8	%ecx	$0
 .LINE	742
-JUMP	@IC123
-@IC130:	
+JUMP	@IC121
+@IC128:	
 .LINE	760
 SP_STORE	%ecx
 ADD16	%ecx	$40
@@ -7130,8 +7100,8 @@ LD32	(%ecx)	$1610612736
 LD8	%ecx	$64
 SP_WR8	%ecx	$0
 .LINE	742
-JUMP	@IC123
-@IC132:	
+JUMP	@IC121
+@IC130:	
 .LINE	765
 SP_STORE	%ecx
 ADD16	%ecx	$46
@@ -7156,26 +7126,26 @@ LD32	(%ecx)	$1610612736
 LD8	%ecx	$64
 SP_WR8	%ecx	$0
 .LINE	742
-JUMP	@IC123
-@IC125:	
+JUMP	@IC121
+@IC123:	
 SP_RD8	%ecx	$69
 CMP8	%ecx	$8
+JZ	@IC122
+@IC125:	
+SP_RD8	%ecx	$69
+CMP8	%ecx	$16
 JZ	@IC124
 @IC127:	
 SP_RD8	%ecx	$69
-CMP8	%ecx	$16
+CMP8	%ecx	$32
 JZ	@IC126
 @IC129:	
 SP_RD8	%ecx	$69
-CMP8	%ecx	$32
+CMP8	%ecx	$64
 JZ	@IC128
 @IC131:	
-SP_RD8	%ecx	$69
-CMP8	%ecx	$64
-JZ	@IC130
-@IC133:	
-JUMP	@IC132
-@IC123:	
+JUMP	@IC130
+@IC121:	
 .LINE	770
 SP_STORE	%ecx
 ADD16	%ecx	$52
