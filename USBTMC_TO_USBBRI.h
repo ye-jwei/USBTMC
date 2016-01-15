@@ -35,5 +35,5 @@
 
 /* FTDI:SXH Externs */
 /* FTDI:EXH */
-
+void global_array_init();
 #endif 

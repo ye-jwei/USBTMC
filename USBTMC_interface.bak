@@ -13,7 +13,7 @@
 #include "errno.h"
 #include "stdlib.h"
 #include "string.h"
-//#include "USBTMC_define.h"
+#include "USBTMC_define.h"
 
 
 #define CONTROUL_SETUP_MEMORY_SIZE  2048
@@ -25,32 +25,17 @@
 #define  VENDOR_CONTROUL_WRITE   			0xB3  //for test controul out transfer
 
 
-#define  VENDOR_GET_EP_STATE     			0xB7
-#define  VENDOR_SET_STALL					0xB5
-#define  VENDOR_CLEAR_FEATURE 				0xB6
 
-#define  VENDOR_CLASS_TEST_ABORT_BULK_OUT   0xB0
-#define  VENDOR_GET_BULK_STATUS 			0xB1
+#define  VENDOR_SET_STALL					0xA5
+#define  VENDOR_CLEAR_FEATURE 				0xA6
+#define  VENDOR_GET_EP_STATE     			0xA7
+
+#define  VENDOR_CLASS_TEST_ABORT_BULK_OUT   0xC0
+#define  VENDOR_GET_BULK_STATUS 			0xC1
 
 void firmware();
 void USBTMC_attach();
 void FT232_attach();
-
-// USBSLAVE IOCTL definitions
-
-typedef struct _USBTMC_bulk_header
-{
-	unsigned char  MsgID;
-	unsigned char  bTag;
-	unsigned char  bTagInverse;
-	unsigned char  Reserved;
-	unsigned int   TransferSize;
-	unsigned char  bmTransfer_Attributes;
-	unsigned char  TermChar;
-	unsigned short unused;
-	
-}USBTMC_bulk_header;
-		
 
 typedef struct _USBTMC_context
 {
@@ -98,8 +83,8 @@ typedef struct _USBTMC_context
 	unsigned char  int_write_enable;
 	
 	unsigned char  class_request_enable;
-	USBTMC_bulk_header USBTMC_bulk_out_header;
-	USBTMC_bulk_header USBTMC_bulk_in_header;
+	Bulk_header    USBTMC_bulk_out_header;
+	Bulk_header    USBTMC_bulk_in_header;
 	unsigned char bulk_out_header[12];
 	unsigned char bulk_in_header[12];
 	

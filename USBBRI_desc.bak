@@ -24,9 +24,9 @@ usb_deviceDescriptor_t  USBBRI_device_desc=
 	0x04B4,      //unsigned short idVendor;
 	0x8613,      //unsigned short idProduct;
 	0x0400,      //unsigned short bcdDevice;
-	0,//1,           //unsigned char  iManufacturer;
-	0,//2,           //unsigned char  iProduct;
-	0,//3,           //unsigned char  iSerialNumber;
+	1,           //unsigned char  iManufacturer;
+	2,           //unsigned char  iProduct;
+	3,           //unsigned char  iSerialNumber;
 	1            //unsigned char  bNumConfigurations;	
 };
 
@@ -104,19 +104,31 @@ usb_deviceStringDescriptorZero_t  USBBRI_zero_string_desc=
 	// unsigned short wLANGID...;
 	// unsigned short wLANGIDn;
 };
-	
-usb_deviceStringDescriptor_t  USBBRI_string_desc =
-{ 
-	0x03,      //unsigned char bLength;
-	USB_DESCRIPTOR_TYPE_STRING,//unsigned char bDescriptorType;
-	0x04 //unsigned char bString;
-	// unsigned char chString[0];0x54, 
-	// unsigned char chString[...];0x4d,  
-	// unsigned char chString[n];0x49
+
+	// English (US)
+unsigned char USBBRI_str0_descriptor[4] = {
+	0x04, 0x03, 0x09, 0x04
+};
+// "FTDI"
+unsigned char USBBRI_str1_descriptor[10] = {
+	0x0a, 0x03, 
+	0x46, 0x00, 0x54, 0x00, 0x44, 0x00, 0x49, 0x00
 };
 
+// "UESTC-USBBRI"
+unsigned char USBBRI_str2_descriptor[26] = {
+	0x1a, 0x03, 
+	0x55, 0x00, 0x45, 0x00, 0x53, 0x00,	0x54, 0x00,	0x43, 0x00,//UESTC
+	0x2d, 0x00,//-
+	0x55, 0x00,	0x53, 0x00,	0x42, 0x00,	0x42, 0x00,	0x52, 0x00,	0x49, 0x00//USBBRI
+};
 
-
+// "0001"
+unsigned char USBBRI_str3_descriptor[10] = {
+	0x0a, 0x03, 
+	0x30, 0x00,	0x30, 0x00,	0x30, 0x00,0x31,0x00//0001
+	//0x0,0x0,0x0,0x1
+};
 
 
 #endif /*  _USBSLAVE_DESC_H_*/

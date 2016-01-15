@@ -15,20 +15,20 @@
 extern unsigned char TMC_TO_BRI_controul_buffer[16];
 extern unsigned char BRI_TO_TMC_controul_buffer[16];
 extern unsigned char mark_array[30];
-	
-extern unsigned char TMC_TO_BRI_bulk_buffer[64];
-extern unsigned char BRI_TO_TMC_bulk_buffer[64];
 
-extern unsigned char BRI_read_buffer[1024];
-extern unsigned char TMC_read_buffer[1024];
+extern unsigned char BRI_buffer[1024];
+extern unsigned char TMC_buffer[1024];
 extern unsigned char bulk_header[12];
 
-extern unsigned char TMC_write_done;
-extern unsigned char BRI_write_done;
-extern unsigned char TMC_read_done;
-extern unsigned char BRI_read_done;
+extern unsigned char TMC_bulk_write_done;
+extern unsigned char BRI_bulk_write_done;
+extern unsigned char TMC_bulk_read_done;
+extern unsigned char BRI_bulk_read_done;
 
-extern unsigned char TMC_requset_BRI_answer;
+extern unsigned int  TMC_read_length;
+extern unsigned int  BRI_read_length;
+extern unsigned char BRI_request_read_enable;
+extern unsigned char TMC_request_read_enable;
 
 extern VOS_HANDLE hUART;
 
@@ -206,13 +206,14 @@ unsigned char USBTMC_connect(VOS_HANDLE handle, USBTMC_context *ctx)
 		ctx->attached = 1;
 		
 		ctx->bulk_OUT_enable = TRUE;
-		
-		ctx->tcb_controul_thread = vos_create_thread_ex(31, CONTROUL_SETUP_MEMORY_SIZE,controul_setup, "USBTMC_setup_thread",2, ctx);
+		//while(1)
+		//{
+			ctx->tcb_controul_thread = vos_create_thread_ex(31, CONTROUL_SETUP_MEMORY_SIZE,controul_setup, "USBTMC_setup_thread",2, ctx);
 	   
-	    ctx->tcb_bulkOUT_thread = vos_create_thread_ex(30, FT232WRITE_MEMORY_SIZE,USBTMC_bulk_write_thread, "USBTMC_BULK_write_thread",2, ctx);
-		ctx->tcb_bulkIN_thread = vos_create_thread_ex(30, FT232WRITE_MEMORY_SIZE,USBTMC_bulk_read_thread, "USBTMC_BULK_READ_thread",2, ctx);
+	    ctx->tcb_bulkOUT_thread  = vos_create_thread_ex(30, FT232WRITE_MEMORY_SIZE,USBTMC_bulk_write_thread, "USBTMC_BULK_write_thread",2, ctx);
+		ctx->tcb_bulkIN_thread   = vos_create_thread_ex(30, FT232WRITE_MEMORY_SIZE,USBTMC_bulk_read_thread, "USBTMC_BULK_READ_thread",2, ctx);
 		ctx->tcb_int_read_thread = vos_create_thread_ex(30, FT232WRITE_MEMORY_SIZE,USBTMC_int_read_thread, "USBTMC_INT_READ_thread",2, ctx);
-		
+	//}
 	}
 	
   return status;
@@ -315,8 +316,6 @@ void USBTMC_bulk_read_thread(USBTMC_context *ctx)
 				
 void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 {
-	
-	//unsigned short write_length;
 	unsigned int write_length,aligment_length,real_length = 0;
 
 	int tmp=0;
@@ -326,7 +325,6 @@ void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 	int count = 0,remainder = 0;
 	unsigned char endpoint_status = get_ep_status(ctx,EP2_ID);
 	unsigned int header_length;
-	//vos_memset(BRI_read_buffer,0,1024);
 	
 	while (ctx->attached)
 	{
@@ -337,7 +335,7 @@ void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 			{
 				vos_memcpy(ctx->bulk_header,ctx->bulkout_buffer,12);
 				
-				/*count the write_length and confire the number to transfer*/
+				/*count the write_length and confire the numb0er to transfer*/
 				write_length = USBTMC_queue_bulk_out_header(ctx,ctx->bulk_header);
 				
 				if(ctx->USBTMC_bulk_out_header.MsgID == DEV_DEP_MSG_OUT)
@@ -368,8 +366,8 @@ void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 					write_uart(hUART,mark_array,13);
 					vos_memset(mark_array,0,13);
 					ctx->request_bulk_in_ready = 1;
-					TMC_requset_BRI_answer = 1;
-					
+					//TMC_requset_BRI_answer = 1;
+					BRI_request_read_enable = 1;
 					num = 0;
 					return ;
 				}
@@ -384,12 +382,12 @@ void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 				/*copy the 1st buffer*/
 				if(write_length <= 52)
 				{
-					vos_memcpy(&BRI_read_buffer[0],&ctx->bulkout_buffer[12],write_length);
+					vos_memcpy(&TMC_buffer[0],&ctx->bulkout_buffer[12],write_length);
 					vos_memset(ctx->bulkout_buffer,0,64);
 				}
 				else 
 				{
-					vos_memcpy(&BRI_read_buffer[0],&ctx->bulkout_buffer[12],52);
+					vos_memcpy(&TMC_buffer[0],&ctx->bulkout_buffer[12],52);
 					vos_memset(ctx->bulkout_buffer,0,64);
 				}
 				
@@ -397,8 +395,7 @@ void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 			}
 			else 
 			{
-				vos_memcpy(&BRI_read_buffer[(num-2)*64+52],&ctx->bulkout_buffer[0],64);
-				//vos_memset(ctx->bulkout_buffer,0,64);
+				vos_memcpy(&TMC_buffer[(num-2)*64+52],&ctx->bulkout_buffer[0],64);
 			}
 			
 			if(num == ((write_length+12)/64+1))
@@ -415,20 +412,21 @@ void USBTMC_bulk_write_thread(USBTMC_context *ctx)
 					num = 0;
 				}
 				
-				write_uart(hUART,BRI_read_buffer,write_length);
-				TMC_write_done = 1;//tell the device that host write is done;
+				write_uart(hUART,TMC_buffer,write_length);
+			//	TMC_write_done = 1;//tell the device that host write is done;
 				
 				vos_memcpy(mark_array,"bulk_out_done",13);
 				write_uart(hUART,mark_array,13);
 				vos_memset(mark_array,0,13);
 				real_length = 0;
-				break;
+				return;
 			}
 			if(num == -1)
 			{
 				vos_memcpy(mark_array,"device_error",12);
 				write_uart(hUART,mark_array,12);
 				vos_memset(mark_array,0,12);
+				return;
 			}
 
 	}
@@ -441,7 +439,7 @@ void USB_device_error_deal(USBTMC_context *ctx,int error_byte)
 	if(error_byte == 1)
 	{
 		vos_memset(ctx->bulkout_buffer,0,64);
-		vos_memset(BRI_read_buffer,0,1024);
+		vos_memset(TMC_buffer,0,1024);
 		set_endpoint_stall(ctx,EP2_ID);
 	}
 	/*after transfer,transferzize is wrong*/
@@ -488,14 +486,14 @@ void  USBTMC_int_read_thread(USBTMC_context *ctx)
 	
 	while (ctx->attached)//ctx->request_bulk_in_ready)
 	{
-		if(ctx->request_bulk_in_ready == 1)
+		if(TMC_request_read_enable == 1)
 		{	
 			if(i == 0)
 			{
-				write_length = USBTMC_queue_bulk_in_header(ctx,bulk_header);
-				queue_bulk_in_data(ctx,write_length);
+				write_length = TMC_read_length;//USBTMC_queue_bulk_in_header(ctx,bulk_header);
+				//queue_bulk_in_data(ctx,write_length);
 					
-				vos_memcpy(TMC_read_buffer,bulk_header,12);
+				vos_memcpy(BRI_buffer,bulk_header,12);
 					
 				count     = (roundup(write_length, 4) + 12) / 64;
 				remainder = (roundup(write_length, 4) + 12) % 64;
@@ -504,12 +502,12 @@ void  USBTMC_int_read_thread(USBTMC_context *ctx)
 				write_uart(hUART,mark_array,15);
 				vos_memset(mark_array,0,15);
 					
-				write_uart(hUART,TMC_read_buffer,write_length+12);
+				write_uart(hUART,BRI_buffer,write_length+12);
 			}
 				
 			for(i = 0;i <= count;i++)
 			{
-				int_read(ctx,&TMC_read_buffer[i*64],64);
+				int_read(ctx,&BRI_buffer[i*64],64);
 			}
 		}
     }
@@ -521,7 +519,7 @@ void queue_bulk_in_data(USBTMC_context *ctx,unsigned int length)
 	int i;
 	
 	for(i = 0; i < length;i++)
-		TMC_read_buffer[i+12] = i;
+		//TMC_read_buffer[i+12] = i;
 		
 	vos_memcpy(mark_array,"queue_bulk_in_data",18);
 	write_uart(hUART,mark_array,18);
@@ -660,7 +658,11 @@ void controul_setup(USBTMC_context *ctx)
 		// in this case, the attached flag should be set to 0
 		if (!ctx->attached)
 			break;
-		write_uart(hUART,ctx->setup_packet,9);
+		
+		//vos_memcpy(mark_array,"USBTMC_ENUM:",11);
+		//write_uart(hUART,mark_array,11);
+		//vos_memset(mark_array,0,11);
+		//write_uart(hUART,ctx->setup_packet,9);
 		
 		bmRequestType = ctx->setup_packet[0] & 0x60;
 		if(ctx->class_request_enable == 1)
@@ -808,14 +810,13 @@ unsigned char vendor_request(USBTMC_context *ctx)
     switch (bReq)
     {					
 		case VENDOR_CONTROUL_READ:
-			 //ctx->controul_read_done=1;
 			 ctx->read_length=length;
-			 controul_transfer_in(ctx,ctx->read_buffer,length);
+			 controul_transfer_in(ctx,BRI_TO_TMC_controul_buffer,length);
 			 //real_transfer=0;
 		     break;
 						
 		case VENDOR_CONTROUL_WRITE:
-			 real_transfer=controul_transfer_out(ctx,ctx->read_buffer,length);
+			 controul_transfer_out(ctx,TMC_TO_BRI_controul_buffer,length);
 			 //write_uart(hUART,ctx->read_buffer,length);
 			 //ctx->write_length=length;
 			// ctx->controul_write_done=1;
@@ -1039,7 +1040,7 @@ int bulk_write(USBTMC_context *ctx,unsigned char* pbuffer,unsigned short transfe
     iocb.request.setup_or_bulk_transfer.buffer = pbuffer;
     iocb.request.setup_or_bulk_transfer.size = (int16)transfer_len;
     vos_dev_ioctl(ctx->handle,&iocb);
-	
+	//clear_feature(ctx,EP2_ID);
 	return (iocb.request.setup_or_bulk_transfer.bytes_transferred);
 }	
 

@@ -332,6 +332,24 @@
    <member name="bInterval" offset="48" size="8"
     basetype="CHAR" baseattr="unsigned,"/>
   </struct>
+  <struct name="_Bulk_header" line="9" file="USBTMC_define.h">
+   <member name="MsgID" offset="0" size="8"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <member name="bTag" offset="8" size="8"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <member name="bTagInverse" offset="16" size="8"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <member name="Reserved" offset="24" size="8"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <member name="TransferSize" offset="32" size="32"
+    basetype="INT" baseattr="unsigned,"/>
+   <member name="bmTransfer_Attributes" offset="64" size="8"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <member name="TermChar" offset="72" size="8"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <member name="unused" offset="80" size="16"
+    basetype="SHORT" baseattr="unsigned,"/>
+  </struct>
   <struct name="_vos_semaphore_list_t" line="150" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\vos.h">
    <member name="next" offset="0" size="16"
     basename="_vos_semaphore_list_t" basetype="STRUCT" baseattr="ptr,"/>
@@ -500,7 +518,7 @@
    <member name="wLANGID0" offset="16" size="16"
     basetype="SHORT" baseattr="unsigned,"/>
   </struct>
-  <struct name="_USBTMC_context" line="55" file="USBTMC_interface.h">
+  <struct name="_USBTMC_context" line="40" file="USBTMC_interface.h">
    <member name="handle" offset="0" size="16"
     basetype="SHORT" baseattr="unsigned,"/>
    <member name="hSlaveFT232" offset="16" size="16"
@@ -566,9 +584,9 @@
    <member name="class_request_enable" offset="1736" size="8"
     basetype="CHAR" baseattr="unsigned,"/>
    <member name="USBTMC_bulk_out_header" offset="1744" size="96"
-    basename="_USBTMC_bulk_header" basetype="STRUCT" baseattr=""/>
+    basename="_Bulk_header" basetype="STRUCT" baseattr=""/>
    <member name="USBTMC_bulk_in_header" offset="1840" size="96"
-    basename="_USBTMC_bulk_header" basetype="STRUCT" baseattr=""/>
+    basename="_Bulk_header" basetype="STRUCT" baseattr=""/>
    <member name="bulk_out_header" offset="1936" size="96"
     basetype="CHAR" baseattr="unsigned," basearray="12,"/>
    <member name="bulk_in_header" offset="2032" size="96"
@@ -634,7 +652,7 @@
    <value name="GPIO_INTERRUPT_NOT_ENABLED" const="6"/>
    <value name="GPIO_ERROR" const="7"/>
   </enum>
-  <enum name="USBSLAV_USBTMC_STATUS" line="134" file="USBTMC_interface.h">
+  <enum name="USBSLAV_USBTMC_STATUS" line="119" file="USBTMC_interface.h">
    <value name="USBTMC_OK" const="0"/>
    <value name="USBTMC_INVALID_PARAMETER" const="1"/>
    <value name="USBTMC_ERROR" const="2"/>
@@ -694,24 +712,6 @@
     basetype="CHAR" baseattr="unsigned,"/>
    <member name="afull_trigger" offset="72" size="8"
     basetype="CHAR" baseattr="unsigned,"/>
-  </struct>
-  <struct name="_USBTMC_bulk_header" line="41" file="USBTMC_interface.h">
-   <member name="MsgID" offset="0" size="8"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <member name="bTag" offset="8" size="8"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <member name="bTagInverse" offset="16" size="8"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <member name="Reserved" offset="24" size="8"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <member name="TransferSize" offset="32" size="32"
-    basetype="INT" baseattr="unsigned,"/>
-   <member name="bmTransfer_Attributes" offset="64" size="8"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <member name="TermChar" offset="72" size="8"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <member name="unused" offset="80" size="16"
-    basetype="SHORT" baseattr="unsigned,"/>
   </struct>
   <enum name="FAT_STATUS" line="28" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\FAT.h">
    <value name="FAT_OK" const="0"/>
@@ -783,7 +783,7 @@
    <value name="usbsEvBusInactive" const="8"/>
    <value name="usbsEvPowerInterruption" const="9"/>
   </enum>
-  <enum name="__anon_enum_type_5" line="131" file="USBTMC_interface.h">
+  <enum name="__anon_enum_type_5" line="116" file="USBTMC_interface.h">
    <value name="EP1_ID" const="1"/>
    <value name="EP2_ID" const="2"/>
    <value name="EP3_ID" const="3"/>
@@ -894,6 +894,8 @@
    basename="_vos_gpio_t" basetype="STRUCT" baseattr=""/>
   <typedef name="usb_deviceEndpointDescriptor_t" line="303" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\USB.h"
    basename="_usb_deviceEndpointDescriptor_t" basetype="STRUCT" baseattr=""/>
+  <typedef name="Bulk_header" line="20" file="USBTMC_define.h"
+   basename="_Bulk_header" basetype="STRUCT" baseattr=""/>
   <typedef name="vos_semaphore_list_t" line="156" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\vos.h"
    basename="_vos_semaphore_list_t" basetype="STRUCT" baseattr=""/>
   <typedef name="fatdrv_ioctl_cb_dir_t" line="149" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\FAT.h"
@@ -929,7 +931,7 @@
    basename="_vos_system_data_area_t" basetype="STRUCT" baseattr=""/>
   <typedef name="usb_deviceStringDescriptorZero_t" line="333" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\USB.h"
    basename="_usb_deviceStringDescriptorZero_t" basetype="STRUCT" baseattr=""/>
-  <typedef name="USBTMC_context" line="116" file="USBTMC_interface.h"
+  <typedef name="USBTMC_context" line="101" file="USBTMC_interface.h"
    basename="_USBTMC_context" basetype="STRUCT" baseattr=""/>
   <proto name="PF_IO" line="39" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\vos.h"
    basetype="CHAR" baseattr="signed,">
@@ -980,8 +982,6 @@
    basetype="SHORT" baseattr="signed,"/>
   <typedef name="vos_dma_config_t" line="55" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\dma.h"
    basename="_vos_dma_config_t" basetype="STRUCT" baseattr=""/>
-  <typedef name="USBTMC_bulk_header" line="52" file="USBTMC_interface.h"
-   basename="_USBTMC_bulk_header" basetype="STRUCT" baseattr=""/>
   <typedef name="usb_interfaceAssociationDescriptor_t" line="322" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\USB.h"
    basename="_usb_interfaceAssociationDescriptor_t" basetype="STRUCT" baseattr=""/>
   <typedef name="common_ioctl_cb_t" line="74" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\ioctl.h"
@@ -1003,118 +1003,22 @@
    basename="_usb_hubDescriptor_t" basetype="STRUCT" baseattr=""/>
   <typedef name="usb_hubPortStatus_t" line="434" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\USB.h"
    basename="_usb_hubPortStatus_t" basetype="STRUCT" baseattr=""/>
-  <proto name="class_requests_initiate_clear" line="1541" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="class_requests_initiate_clear" line="1510" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="1541" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1510" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="USB_device_error_deal" line="443" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="USB_device_error_deal" line="433" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="443" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="433" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="error_byte" line="443" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="error_byte" line="433" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="INT" baseattr="signed,"/>
   </proto>
-  <proto name="bulk_write" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="INT" baseattr="signed,">
-   <var name="ctx" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="pbuffer" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="transfer_len" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="SHORT" baseattr="unsigned,"/>
-  </proto>
-  <proto name="USBTMC_ioctl" line="110" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="cb" line="110" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_common_ioctl_cb_t" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="ctx" line="110" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="USBTMC_int_read_thread" line="492" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="492" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="class_requests_inititate_abort_bulk_out" line="1328" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1328" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="USBTMC_write" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="xfer" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="signed,ptr,"/>
-   <var name="num_to_write" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="SHORT" baseattr="unsigned,"/>
-   <var name="num_written" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="SHORT" baseattr="unsigned,ptr,"/>
-   <var name="ctx" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="class_requests_get_capablities" line="1623" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1623" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="controul_transfer_in" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="INT" baseattr="signed,">
-   <var name="ctx" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="pbuffer" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="transfer_len" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="SHORT" baseattr="unsigned,"/>
-  </proto>
-  <proto name="set_address" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="addr" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-  </proto>
-  <proto name="class_requests_indicator_pulse" line="1661" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1661" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="set_feature" line="1231" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1231" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="ep_id" line="1231" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-  </proto>
-  <proto name="USBTMC_bulk_read_thread" line="272" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="272" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="controul_transfer_out" line="1030" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="bulk_write" line="1030" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="INT" baseattr="signed,">
    <var name="ctx" line="1030" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
@@ -1126,297 +1030,393 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <proto name="class_requests_check_abort_bulk_in_status" line="1498" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1498" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="USBTMC_ioctl" line="107" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="cb" line="107" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_common_ioctl_cb_t" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="ctx" line="107" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="USBTMC_connect" line="151" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="USBTMC_int_read_thread" line="477" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="477" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="class_requests_inititate_abort_bulk_out" line="1297" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1297" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="USBTMC_write" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="CHAR" baseattr="unsigned,">
-   <var name="handle" line="151" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="xfer" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="signed,ptr,"/>
+   <var name="num_to_write" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
-   <var name="ctx" line="151" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="num_written" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="SHORT" baseattr="unsigned,ptr,"/>
+   <var name="ctx" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="USBTMC_bulk_write_thread" line="316" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="class_requests_get_capablities" line="1592" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="316" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1592" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="USBTMC_send_setup_packet" line="460" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="packet" line="460" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="controul_transfer_in" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="INT" baseattr="signed,">
+   <var name="ctx" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="pbuffer" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="ctx" line="460" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="get_interface" line="1186" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="1186" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="clear_feature" line="1243" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1243" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="ep_id" line="1243" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-  </proto>
-  <proto name="set_interface" line="1196" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="1196" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="get_ep_status" line="1254" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="1254" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="ep_id" line="1254" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-  </proto>
-  <proto name="class_request" line="760" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="760" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="class_requests_check_abort_bulk_out_status" line="1391" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1391" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="class_requests_check_clear_statue" line="1590" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1590" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="get_descriptor" line="601" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="601" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="vendor_request" line="815" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="815" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="setup_transfer_handshake" line="1101" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1101" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="controul_setup" line="677" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="677" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="get_bulk_status" line="932" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="932" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="bulk_flag" line="932" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="INT" baseattr="unsigned,"/>
-  </proto>
-  <proto name="USBTMC_disconnect" line="136" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="136" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="USBTMC_queue_bulk_in_header" line="565" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="INT" baseattr="unsigned,">
-   <var name="ctx" line="565" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="bulk_header" line="565" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,ptr,"/>
-  </proto>
-  <proto name="standard_request" line="715" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="715" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="USBTMC_queue_bulk_out_header" line="468" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="INT" baseattr="unsigned,">
-   <var name="ctx" line="468" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="bulk_header" line="468" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,ptr,"/>
-  </proto>
-  <proto name="USBTMC_slave_detach" line="95" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="hUSBTMCSlave" line="95" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="transfer_len" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <proto name="get_device_status" line="1269" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="1269" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="get_configuration" line="1207" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="1207" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="wait_setup_packet" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="set_address" line="1145" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
+   <var name="ctx" line="1145" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="addr" line="1145" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="class_requests_indicator_pulse" line="1630" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1630" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="set_feature" line="1200" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1200" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="ep_id" line="1200" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="USBTMC_bulk_read_thread" line="270" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="270" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="controul_transfer_out" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="INT" baseattr="signed,">
    <var name="ctx" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </proto>
-  <proto name="USBTMC_slave_attach" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="SHORT" baseattr="unsigned,">
-   <var name="hUSB" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="SHORT" baseattr="unsigned,"/>
-   <var name="devUSBTMCSlave" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <var name="hFT232" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="SHORT" baseattr="unsigned,"/>
-  </proto>
-  <proto name="set_configuration" line="1218" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="1218" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="config" line="1218" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-  </proto>
-  <proto name="set_endpoint_maxpacket_size" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="set_maxsize" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-   <var name="set_handle" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-  </proto>
-  <proto name="int_read" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="INT" baseattr="signed,">
-   <var name="ctx" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="pbuffer" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="pbuffer" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="transfer_len" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="transfer_len" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <proto name="memset_bulk_header" line="1284" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="class_requests_check_abort_bulk_in_status" line="1467" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="1284" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1467" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="bulk_flag" line="1284" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="INT" baseattr="unsigned,"/>
   </proto>
-  <proto name="queue_bulk_in_data" line="555" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="VOID" baseattr="">
-   <var name="ctx" line="555" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="USBTMC_connect" line="148" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="handle" line="148" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="SHORT" baseattr="unsigned,"/>
+   <var name="ctx" line="148" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="length" line="555" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="INT" baseattr="unsigned,"/>
   </proto>
-  <proto name="set_endpoint_stall" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="USBTMC_bulk_write_thread" line="314" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
+   <var name="ctx" line="314" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="USBTMC_send_setup_packet" line="450" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="packet" line="450" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,ptr,"/>
+   <var name="ctx" line="450" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="get_interface" line="1155" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="ctx" line="1155" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="clear_feature" line="1212" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1212" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="ep_id" line="1212" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="set_interface" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
    <var name="ctx" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="ep_id" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
   </proto>
-  <proto name="USBTMC_function_init" line="36" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="get_ep_status" line="1223" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="CHAR" baseattr="unsigned,">
-   <var name="vos_dev_num" line="36" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-    type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,"/>
-  </proto>
-  <proto name="bulk_read" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   basetype="INT" baseattr="signed,">
-   <var name="ctx" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1223" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="pbuffer" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ep_id" line="1223" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="class_request" line="730" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="ctx" line="730" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="class_requests_check_abort_bulk_out_status" line="1360" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1360" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="class_requests_check_clear_statue" line="1559" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1559" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="get_descriptor" line="568" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="ctx" line="568" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="vendor_request" line="785" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="ctx" line="785" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="setup_transfer_handshake" line="1070" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1070" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="controul_setup" line="644" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="644" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="get_bulk_status" line="901" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="901" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="bulk_flag" line="901" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="INT" baseattr="unsigned,"/>
+  </proto>
+  <proto name="USBTMC_disconnect" line="133" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="133" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="USBTMC_queue_bulk_in_header" line="527" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="INT" baseattr="unsigned,">
+   <var name="ctx" line="527" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="bulk_header" line="527" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="transfer_len" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  </proto>
+  <proto name="standard_request" line="685" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="ctx" line="685" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="USBTMC_queue_bulk_out_header" line="458" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="INT" baseattr="unsigned,">
+   <var name="ctx" line="458" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="bulk_header" line="458" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,ptr,"/>
+  </proto>
+  <proto name="USBTMC_slave_detach" line="92" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="hUSBTMCSlave" line="92" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <proto name="USBTMC_read" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="get_device_status" line="1238" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="CHAR" baseattr="unsigned,">
-   <var name="xfer" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1238" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
-    basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="num_to_read" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="get_configuration" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="ctx" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="wait_setup_packet" line="968" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="968" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+  </proto>
+  <proto name="USBTMC_slave_attach" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="SHORT" baseattr="unsigned,">
+   <var name="hUSB" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
-   <var name="num_read" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="devUSBTMCSlave" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <var name="hFT232" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="SHORT" baseattr="unsigned,"/>
+  </proto>
+  <proto name="set_configuration" line="1187" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1187" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="config" line="1187" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="set_endpoint_maxpacket_size" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="ctx" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="set_maxsize" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+   <var name="set_handle" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="int_read" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="INT" baseattr="signed,">
+   <var name="ctx" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="pbuffer" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,ptr,"/>
+   <var name="transfer_len" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="SHORT" baseattr="unsigned,"/>
+  </proto>
+  <proto name="memset_bulk_header" line="1253" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1253" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="bulk_flag" line="1253" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="INT" baseattr="unsigned,"/>
+  </proto>
+  <proto name="queue_bulk_in_data" line="514" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="514" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="length" line="514" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="INT" baseattr="unsigned,"/>
+  </proto>
+  <proto name="set_endpoint_stall" line="1134" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="VOID" baseattr="">
+   <var name="ctx" line="1134" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="ep_id" line="1134" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="USBTMC_function_init" line="33" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="vos_dev_num" line="33" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,"/>
+  </proto>
+  <proto name="bulk_read" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="INT" baseattr="signed,">
+   <var name="ctx" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+   <var name="pbuffer" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,ptr,"/>
+   <var name="transfer_len" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="SHORT" baseattr="unsigned,"/>
+  </proto>
+  <proto name="USBTMC_read" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   basetype="CHAR" baseattr="unsigned,">
+   <var name="xfer" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="CHAR" baseattr="unsigned,ptr,"/>
+   <var name="num_to_read" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    type="AUTO" storage="AUTO VAR" attr="param,"
+    basetype="SHORT" baseattr="unsigned,"/>
+   <var name="num_read" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,ptr,"/>
-   <var name="ctx" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="class_requests_inititate_abort_bulk_in" line="1425" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="class_requests_inititate_abort_bulk_in" line="1394" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="1425" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1394" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="int_write" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="int_write" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="INT" baseattr="signed,">
-   <var name="ctx" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-   <var name="pbuffer" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="pbuffer" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="transfer_len" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="transfer_len" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <proto name="set_control_ep_halt" line="1154" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <proto name="set_control_ep_halt" line="1123" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="1154" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   <var name="ctx" line="1123" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
@@ -1429,15 +1429,9 @@
   <proto name="vos_start_scheduler" line="53" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\vos.h"
    basetype="VOID" baseattr="">
   </proto>
-  <proto name="FT232_attach" line="150" file="USBTMC_interface.h"
+  <proto name="FT232_attach" line="135" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
   </proto>
-  <var name="BRI_TO_TMC_bulk_buffer" line="20" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   type="AUTO" storage="EXTERN" attr="global,"
-   basetype="CHAR" baseattr="unsigned," basearray="64,"/>
-  <var name="TMC_TO_BRI_bulk_buffer" line="19" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   type="AUTO" storage="EXTERN" attr="global,"
-   basetype="CHAR" baseattr="unsigned," basearray="64,"/>
   <proto name="vos_gpio_write_port" line="125" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\gpioctrl.h"
    basetype="CHAR" baseattr="unsigned,">
    <var name="portId" line="125" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\gpioctrl.h"
@@ -1516,15 +1510,15 @@
   <proto name="vos_get_package_type" line="217" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\vos.h"
    basetype="CHAR" baseattr="unsigned,">
   </proto>
-  <proto name="write_uart" line="169" file="USBTMC_interface.h"
+  <proto name="write_uart" line="154" file="USBTMC_interface.h"
    basetype="SHORT" baseattr="unsigned,">
-   <var name="huart" line="169" file="USBTMC_interface.h"
+   <var name="huart" line="154" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
-   <var name="puart_buffer" line="169" file="USBTMC_interface.h"
+   <var name="puart_buffer" line="154" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <var name="len" line="169" file="USBTMC_interface.h"
+   <var name="len" line="154" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
@@ -1564,10 +1558,10 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,"/>
   </proto>
-  <var name="bulk_header" line="24" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <var name="bulk_header" line="21" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    type="AUTO" storage="EXTERN" attr="global,"
    basetype="CHAR" baseattr="unsigned," basearray="12,"/>
-  <var name="TMC_requset_BRI_answer" line="31" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <var name="TMC_requset_BRI_answer" line="28" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    type="AUTO" storage="EXTERN" attr="global,"
    basetype="CHAR" baseattr="unsigned,"/>
   <proto name="stdinAttach" line="43" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\C\include\stdio.h"
@@ -1597,7 +1591,7 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,"/>
   </proto>
-  <proto name="USBTMC_attach" line="151" file="USBTMC_interface.h"
+  <proto name="USBTMC_attach" line="136" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
   </proto>
   <proto name="vos_iocell_get_config" line="228" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\iomux.h"
@@ -1681,7 +1675,7 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,"/>
   </proto>
-  <proto name="iomux_setup" line="146" file="USBTMC_interface.h"
+  <proto name="iomux_setup" line="131" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
   </proto>
   <proto name="fat_fileSeek" line="229" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\FAT.h"
@@ -1744,24 +1738,18 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_file_context_t" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="USBTMC_int_write_thread" line="220" file="USBTMC_interface.h"
+  <proto name="USBTMC_int_write_thread" line="205" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="220" file="USBTMC_interface.h"
+   <var name="ctx" line="205" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <var name="BRI_read_done" line="29" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   type="AUTO" storage="EXTERN" attr="global,"
-   basetype="CHAR" baseattr="unsigned,"/>
   <proto name="vos_enable_interrupts" line="72" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\devman.h"
    basetype="VOID" baseattr="">
    <var name="mask" line="72" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\devman.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="INT" baseattr="unsigned,"/>
   </proto>
-  <var name="TMC_read_done" line="28" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   type="AUTO" storage="EXTERN" attr="global,"
-   basetype="CHAR" baseattr="unsigned,"/>
   <proto name="fat_capacity" line="216" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\FAT.h"
    basetype="CHAR" baseattr="unsigned,">
    <var name="fat_ctx" line="216" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\FAT.h"
@@ -1822,7 +1810,7 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="VOID" baseattr="ptr,"/>
   </proto>
-  <proto name="open_drivers" line="160" file="USBTMC_interface.h"
+  <proto name="open_drivers" line="145" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
   </proto>
   <proto name="vos_dma_get_fifo_count" line="84" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\dma.h"
@@ -1942,9 +1930,6 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <var name="BRI_write_done" line="27" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   type="AUTO" storage="EXTERN" attr="global,"
-   basetype="CHAR" baseattr="unsigned,"/>
   <proto name="vos_wdt_clear" line="245" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\vos.h"
    basetype="VOID" baseattr="">
   </proto>
@@ -1960,10 +1945,7 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="VOID" baseattr="ptr,"/>
   </proto>
-  <var name="TMC_write_done" line="26" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-   type="AUTO" storage="EXTERN" attr="global,"
-   basetype="CHAR" baseattr="unsigned,"/>
-  <proto name="close_drivers" line="162" file="USBTMC_interface.h"
+  <proto name="close_drivers" line="147" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
   </proto>
   <proto name="usbslave_init" line="130" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\USBSlave.h"
@@ -2041,7 +2023,7 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_file_context_t" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <var name="hUART" line="33" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <var name="hUART" line="30" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    type="AUTO" storage="EXTERN" attr="global,"
    basetype="SHORT" baseattr="unsigned,"/>
   <proto name="itoa" line="33" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\C\include\stdlib.h"
@@ -2086,13 +2068,13 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="const,signed,ptr,"/>
   </proto>
-  <var name="BRI_read_buffer" line="22" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <var name="BRI_read_buffer" line="19" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    type="AUTO" storage="EXTERN" attr="global,"
    basetype="CHAR" baseattr="unsigned," basearray="1024,"/>
   <proto name="vos_reset_vnc2" line="235" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\vos.h"
    basetype="VOID" baseattr="">
   </proto>
-  <var name="TMC_read_buffer" line="23" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <var name="TMC_read_buffer" line="20" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    type="AUTO" storage="EXTERN" attr="global,"
    basetype="CHAR" baseattr="unsigned," basearray="1024,"/>
   <proto name="vos_heap_space" line="30" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\memmgmt.h"
@@ -2125,7 +2107,7 @@
   <var name="TMC_TO_BRI_controul_buffer" line="15" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
    type="AUTO" storage="EXTERN" attr="global,"
    basetype="CHAR" baseattr="unsigned," basearray="16,"/>
-  <proto name="attach_drivers" line="161" file="USBTMC_interface.h"
+  <proto name="attach_drivers" line="146" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
   </proto>
   <proto name="fat_getVolumeID" line="220" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\drivers\include\FAT.h"
@@ -2395,9 +2377,9 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_file_context_t" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="get_descriptor_B" line="191" file="USBTMC_interface.h"
+  <proto name="get_descriptor_B" line="176" file="USBTMC_interface.h"
    basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="191" file="USBTMC_interface.h"
+   <var name="ctx" line="176" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
@@ -2527,21 +2509,21 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="INT" baseattr="signed,"/>
   </proto>
-  <proto name="usbslave_connect" line="154" file="USBTMC_interface.h"
+  <proto name="usbslave_connect" line="139" file="USBTMC_interface.h"
    basetype="CHAR" baseattr="unsigned,">
-   <var name="hUSB" line="154" file="USBTMC_interface.h"
+   <var name="hUSB" line="139" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <proto name="bulkwrite_thread" line="216" file="USBTMC_interface.h"
+  <proto name="bulkwrite_thread" line="201" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
-   <var name="ctx" line="216" file="USBTMC_interface.h"
+   <var name="ctx" line="201" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="ft232_slave_detach" line="158" file="USBTMC_interface.h"
+  <proto name="ft232_slave_detach" line="143" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
-   <var name="hSlaveFT232" line="158" file="USBTMC_interface.h"
+   <var name="hSlaveFT232" line="143" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
@@ -2557,12 +2539,12 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
-  <proto name="ft232_slave_attach" line="157" file="USBTMC_interface.h"
+  <proto name="ft232_slave_attach" line="142" file="USBTMC_interface.h"
    basetype="SHORT" baseattr="unsigned,">
-   <var name="hUSB" line="157" file="USBTMC_interface.h"
+   <var name="hUSB" line="142" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
-   <var name="devSlaveFT232" line="157" file="USBTMC_interface.h"
+   <var name="devSlaveFT232" line="142" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,"/>
   </proto>
@@ -2581,6 +2563,12 @@
   <proto name="getchar" line="68" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\C\include\stdio.h"
    basetype="INT" baseattr="signed,">
   </proto>
+  <var name="BRI_bulk_read_done" line="26" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   type="AUTO" storage="EXTERN" attr="global,"
+   basetype="CHAR" baseattr="unsigned,"/>
+  <var name="TMC_bulk_read_done" line="25" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   type="AUTO" storage="EXTERN" attr="global,"
+   basetype="CHAR" baseattr="unsigned,"/>
   <proto name="putchar" line="69" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\C\include\stdio.h"
    basetype="INT" baseattr="signed,">
    <var name="__unknown" line="69" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\C\include\stdio.h"
@@ -2674,9 +2662,9 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_vos_dma_config_t" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="set_uart_baudrate" line="167" file="USBTMC_interface.h"
+  <proto name="set_uart_baudrate" line="152" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
-   <var name="huart" line="167" file="USBTMC_interface.h"
+   <var name="huart" line="152" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
@@ -2776,12 +2764,12 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="VOID" baseattr="ptr,"/>
   </proto>
-  <proto name="firmware" line="149" file="USBTMC_interface.h"
+  <proto name="firmware" line="134" file="USBTMC_interface.h"
    basetype="VOID" baseattr="">
   </proto>
-  <proto name="USB_device_behavior" line="237" file="USBTMC_interface.h"
+  <proto name="USB_device_behavior" line="222" file="USBTMC_interface.h"
    basetype="CHAR" baseattr="unsigned,">
-   <var name="ctx" line="237" file="USBTMC_interface.h"
+   <var name="ctx" line="222" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
@@ -2797,6 +2785,12 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="CHAR" baseattr="unsigned,"/>
   </proto>
+  <var name="BRI_bulk_write_done" line="24" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   type="AUTO" storage="EXTERN" attr="global,"
+   basetype="CHAR" baseattr="unsigned,"/>
+  <var name="TMC_bulk_write_done" line="23" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+   type="AUTO" storage="EXTERN" attr="global,"
+   basetype="CHAR" baseattr="unsigned,"/>
   <proto name="vos_gpio_read_port" line="121" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\gpioctrl.h"
    basetype="CHAR" baseattr="unsigned,">
    <var name="portId" line="121" file="C:\Documents and Settings\All Users\Application Data\FTDI\Vinculum II Toolchain\Firmware\kernel\include\gpioctrl.h"
@@ -2902,9 +2896,9 @@
     type="AUTO" storage="AUTO VAR" attr="param,"
     basename="_file_context_t" basetype="STRUCT" baseattr="ptr,"/>
   </proto>
-  <proto name="usbslave_disconnect" line="155" file="USBTMC_interface.h"
+  <proto name="usbslave_disconnect" line="140" file="USBTMC_interface.h"
    basetype="CHAR" baseattr="unsigned,">
-   <var name="hUSB" line="155" file="USBTMC_interface.h"
+   <var name="hUSB" line="140" file="USBTMC_interface.h"
     type="AUTO" storage="AUTO VAR" attr="param,"
     basetype="SHORT" baseattr="unsigned,"/>
   </proto>
@@ -2941,513 +2935,544 @@
   <var name="zero_string_desc" line="97" file="USBTMC_desc.h"
    type="AUTO" storage="AUTO VAR" attr="global,"
    basename="_usb_deviceStringDescriptorZero_t" basetype="STRUCT" baseattr=""/>
- <function name="USBTMC_function_init" line="36" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_function_init" line="33" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="37" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="39" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="34" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="36" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="vos_dev_num" line="36" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="vos_dev_num" line="33" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="USBTMC_cb" line="38" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="USBTMC_cb" line="35" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_vos_driver_t" basetype="STRUCT" baseattr="ptr,"/>
-   <block line="46" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="43" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_slave_attach" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_slave_attach" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="SHORT" baseattr="unsigned,">
-  <block line="75" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="devUSBTMCSlave" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="72" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="devUSBTMCSlave" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="USBTMC_iocb" line="76" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="USBTMC_iocb" line="73" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_common_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="hUSB" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="hUSB" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="hFT232" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="hFT232" line="71" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="hUSBTMCSlave" line="77" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="hUSBTMCSlave" line="74" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-   <block line="86" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="83" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_slave_detach" line="95" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_slave_detach" line="92" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="96" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="USBTMC_iocb" line="97" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="93" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="USBTMC_iocb" line="94" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_common_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="hUSBTMCSlave" line="95" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="hUSBTMCSlave" line="92" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-   <block line="99" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="96" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_ioctl" line="110" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_ioctl" line="107" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="111" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="cb" line="110" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="108" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="cb" line="107" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_common_ioctl_cb_t" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="ctx" line="110" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="107" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="status" line="112" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="109" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-   <block line="115" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="112" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_disconnect" line="136" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_disconnect" line="133" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="137" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="136" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="134" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="133" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="usbs_iocb" line="138" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="usbs_iocb" line="135" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
   </block>
  </function>
- <function name="USBTMC_connect" line="151" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_connect" line="148" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="152" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="151" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="149" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="148" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="153" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="150" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="status" line="154" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="151" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="handle" line="151" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="handle" line="148" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-   <block line="158" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="155" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_read" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_read" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="223" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="num_read" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="221" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="num_read" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,ptr,"/>
-    <var name="num_to_read" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="num_to_read" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ctx" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="xfer" line="222" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="xfer" line="220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,ptr,"/>
-   <block line="226" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="224" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_write" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_write" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="236" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="234" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="num_to_write" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="num_to_write" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="iocb" line="237" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_common_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="bytesTransferred" line="238" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bytesTransferred" line="236" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="xfer" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="xfer" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="signed,ptr,"/>
-    <var name="num_written" line="235" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="num_written" line="233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,ptr,"/>
-   <block line="247" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="245" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
-   <block line="262" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="260" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_bulk_read_thread" line="272" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_bulk_read_thread" line="270" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="314" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-  </block>
- </function>
- <function name="USBTMC_bulk_write_thread" line="316" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="VOID" baseattr="">
-  <block line="317" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="real_length" line="320" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basetype="INT" baseattr="unsigned,"/>
-    <var name="header_length" line="328" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basetype="INT" baseattr="unsigned,"/>
-    <var name="write_length" line="320" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basetype="INT" baseattr="unsigned,"/>
-    <var name="ctx" line="316" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="271" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="270" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="num" line="325" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  </block>
+ </function>
+ <function name="USBTMC_bulk_write_thread" line="314" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="VOID" baseattr="">
+  <block line="315" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="real_length" line="316" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basetype="INT" baseattr="unsigned,"/>
+    <var name="header_length" line="324" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basetype="INT" baseattr="unsigned,"/>
+    <var name="write_length" line="316" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basetype="INT" baseattr="unsigned,"/>
+    <var name="ctx" line="314" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+    <var name="num" line="321" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="tmp" line="322" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="tmp" line="318" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="flag" line="324" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="flag" line="320" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="endpoint_status" line="327" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="endpoint_status" line="323" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="count" line="326" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="count" line="322" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="i" line="323" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="i" line="319" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="j" line="323" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="j" line="319" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="aligment_length" line="320" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="aligment_length" line="316" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="unsigned,"/>
-    <var name="remainder" line="326" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="remainder" line="322" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-   <block line="332" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <block line="334" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="327" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <block line="332" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
      <block line="339" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-      <block line="346" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-       <block line="348" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-       </block>
-      </block>
-      <block line="385" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-      </block>
-      <block line="390" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+      <block line="341" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
       </block>
      </block>
-     <block line="398" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+     <block line="381" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
      </block>
-     <block line="403" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-      <block line="408" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-      </block>
-      <block line="413" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-      </block>
-     </block>
-     <block line="426" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+     <block line="386" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
      </block>
     </block>
-    <block line="434" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <block line="394" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    </block>
+    <block line="398" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+     <block line="403" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+     </block>
+     <block line="408" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+     </block>
+    </block>
+    <block line="421" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     </block>
    </block>
   </block>
  </function>
- <function name="USB_device_error_deal" line="443" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USB_device_error_deal" line="433" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="444" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="443" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="434" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="433" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="error_byte" line="443" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="error_byte" line="433" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="INT" baseattr="signed,"/>
-   <block line="447" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="437" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="USBTMC_send_setup_packet" line="460" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_send_setup_packet" line="450" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="461" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="460" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="451" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="450" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="packet" line="460" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="packet" line="450" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,ptr,"/>
   </block>
  </function>
- <function name="USBTMC_queue_bulk_out_header" line="468" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_queue_bulk_out_header" line="458" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="INT" baseattr="unsigned,">
-  <block line="469" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="468" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="459" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="458" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="bulk_header" line="468" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bulk_header" line="458" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,ptr,"/>
   </block>
  </function>
- <function name="USBTMC_int_read_thread" line="492" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_int_read_thread" line="477" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="493" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="write_length" line="496" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="478" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="write_length" line="480" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="unsigned,"/>
-    <var name="ctx" line="492" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="477" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="num" line="498" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="num" line="482" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="flag" line="498" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="flag" line="482" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="i" line="497" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="i" line="481" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="count" line="497" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="count" line="481" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="bulk_header" line="495" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bulk_header" line="479" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned," basearray="12,"/>
-    <var name="remainder" line="497" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="remainder" line="481" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-   <block line="502" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <block line="510" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-     <block line="511" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="485" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <block line="486" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+     <block line="488" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
      </block>
-     <block line="528" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+     <block line="506" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
      </block>
-    </block>
-    <block line="533" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     </block>
    </block>
   </block>
  </function>
- <function name="queue_bulk_in_data" line="555" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="queue_bulk_in_data" line="514" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="556" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="length" line="555" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="515" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="length" line="514" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="INT" baseattr="unsigned,"/>
-    <var name="ctx" line="555" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="514" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="i" line="557" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="i" line="516" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
   </block>
  </function>
- <function name="USBTMC_queue_bulk_in_header" line="565" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="USBTMC_queue_bulk_in_header" line="527" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="INT" baseattr="unsigned,">
-  <block line="566" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="565" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="528" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="527" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="i" line="567" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="i" line="529" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="j" line="567" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="j" line="529" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="bulk_header" line="565" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bulk_header" line="527" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,ptr,"/>
   </block>
  </function>
- <function name="get_descriptor" line="601" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="get_descriptor" line="568" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="602" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="src" line="610" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="569" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="src" line="577" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,ptr,"/>
-    <var name="ctx" line="601" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="568" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="siz" line="608" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="siz" line="575" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ul_siz" line="608" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ul_siz" line="575" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="wLength" line="607" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="wLength" line="574" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="hValue" line="605" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="hValue" line="572" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="devReq" line="604" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="devReq" line="571" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usb_deviceRequest_t" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="lValue" line="606" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="lValue" line="573" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-   <block line="620" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <block line="640" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="587" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <block line="607" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     </block>
    </block>
   </block>
  </function>
- <function name="controul_setup" line="677" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="controul_setup" line="644" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="678" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="677" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="645" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="644" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="bmRequestType" line="680" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bmRequestType" line="647" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="iocb" line="679" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="646" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="status" line="681" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="648" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-   <block line="684" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <block line="698" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="651" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <block line="668" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     </block>
    </block>
   </block>
  </function>
- <function name="standard_request" line="715" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="standard_request" line="685" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="716" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="bReq" line="719" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="686" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="bReq" line="689" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="ctx" line="715" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="685" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="status" line="717" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="687" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="devReq" line="718" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="devReq" line="688" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usb_deviceRequest_t" basetype="STRUCT" baseattr="ptr,"/>
-   <block line="725" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="695" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="class_request" line="760" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_request" line="730" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="761" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="bReq" line="764" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="731" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="bReq" line="734" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="ctx" line="760" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="730" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="status" line="762" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="732" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="devReq" line="763" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="devReq" line="733" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usb_deviceRequest_t" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="class_test" line="765" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="class_test" line="735" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned," basearray="11,"/>
-   <block line="770" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="740" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="vendor_request" line="815" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="vendor_request" line="785" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="816" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ep_id" line="820" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="786" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ep_id" line="790" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="length" line="822" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="length" line="792" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ep2_state" line="825" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ep2_state" line="795" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="number" line="823" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="number" line="793" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="bReq" line="819" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bReq" line="789" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="ctx" line="815" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="785" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iswriting" line="821" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iswriting" line="791" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="status" line="818" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="788" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="devReq" line="817" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="devReq" line="787" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usb_deviceRequest_t" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="real_transfer" line="824" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="real_transfer" line="794" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-    <var name="packet" line="827" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="packet" line="797" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned," basearray="9,"/>
-   <block line="837" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <block line="888" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="807" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <block line="857" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     </block>
-    <block line="896" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <block line="865" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     </block>
    </block>
   </block>
  </function>
- <function name="get_bulk_status" line="932" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="get_bulk_status" line="901" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="933" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="932" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="902" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="901" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="bulk_flag" line="932" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bulk_flag" line="901" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="INT" baseattr="unsigned,"/>
-    <var name="j" line="935" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="j" line="904" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="signed,"/>
-   <block line="938" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="907" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="wait_setup_packet" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="wait_setup_packet" line="968" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
+  <block line="969" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="968" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+    <var name="iocb" line="970" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
+  </block>
+ </function>
+ <function name="controul_transfer_in" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="INT" baseattr="signed,">
+  <block line="982" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="transfer_len" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basetype="SHORT" baseattr="unsigned,"/>
+    <var name="ctx" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+    <var name="iocb" line="983" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
+    <var name="pbuffer" line="981" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basetype="CHAR" baseattr="unsigned,ptr,"/>
+  </block>
+ </function>
+ <function name="controul_transfer_out" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="INT" baseattr="signed,">
   <block line="1000" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="transfer_len" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basetype="SHORT" baseattr="unsigned,"/>
     <var name="ctx" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
     <var name="iocb" line="1001" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-  </block>
- </function>
- <function name="controul_transfer_in" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="INT" baseattr="signed,">
-  <block line="1013" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="transfer_len" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ctx" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1014" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="pbuffer" line="1012" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="pbuffer" line="999" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,ptr,"/>
   </block>
  </function>
- <function name="controul_transfer_out" line="1030" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="bulk_read" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="INT" baseattr="signed,">
+  <block line="1018" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="transfer_len" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basetype="SHORT" baseattr="unsigned,"/>
+    <var name="ctx" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+    <var name="iocb" line="1019" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
+    <var name="pbuffer" line="1017" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basetype="CHAR" baseattr="unsigned,ptr,"/>
+  </block>
+ </function>
+ <function name="bulk_write" line="1030" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="INT" baseattr="signed,">
   <block line="1031" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     <var name="transfer_len" line="1030" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
@@ -3464,387 +3489,353 @@
      basetype="CHAR" baseattr="unsigned,ptr,"/>
   </block>
  </function>
- <function name="bulk_read" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="int_read" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="INT" baseattr="signed,">
-  <block line="1049" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="transfer_len" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1044" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="transfer_len" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ctx" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1050" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1045" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="pbuffer" line="1048" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="pbuffer" line="1043" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,ptr,"/>
   </block>
  </function>
- <function name="bulk_write" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="int_write" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="INT" baseattr="signed,">
-  <block line="1062" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="transfer_len" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1058" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="transfer_len" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ctx" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1063" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1059" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="pbuffer" line="1061" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="pbuffer" line="1057" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,ptr,"/>
   </block>
  </function>
- <function name="int_read" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="INT" baseattr="signed,">
-  <block line="1075" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="transfer_len" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ctx" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1076" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="pbuffer" line="1074" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basetype="CHAR" baseattr="unsigned,ptr,"/>
-  </block>
- </function>
- <function name="int_write" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="INT" baseattr="signed,">
-  <block line="1089" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="transfer_len" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basetype="SHORT" baseattr="unsigned,"/>
-    <var name="ctx" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1090" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="pbuffer" line="1088" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basetype="CHAR" baseattr="unsigned,ptr,"/>
-  </block>
- </function>
- <function name="setup_transfer_handshake" line="1101" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="setup_transfer_handshake" line="1070" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1102" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1101" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1071" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1070" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1103" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1072" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
   </block>
  </function>
- <function name="set_endpoint_maxpacket_size" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="set_endpoint_maxpacket_size" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="1115" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1084" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="set_handle" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="set_handle" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="iocb" line="1117" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1086" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="set_maxsize" line="1114" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="set_maxsize" line="1083" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="record" line="1116" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="record" line="1085" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-   <block line="1122" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1091" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="set_control_ep_halt" line="1154" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="set_control_ep_halt" line="1123" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1155" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1154" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1124" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1123" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1156" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1125" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
   </block>
  </function>
- <function name="set_endpoint_stall" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="set_endpoint_stall" line="1134" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1166" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ep_id" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1135" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ep_id" line="1134" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
+     basetype="CHAR" baseattr="unsigned,"/>
+    <var name="ctx" line="1134" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+    <var name="iocb" line="1136" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
+  </block>
+ </function>
+ <function name="set_address" line="1145" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="VOID" baseattr="">
+  <block line="1146" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1145" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+    <var name="addr" line="1145" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basetype="CHAR" baseattr="unsigned,"/>
+    <var name="iocb" line="1147" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
+  </block>
+ </function>
+ <function name="get_interface" line="1155" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="CHAR" baseattr="unsigned,">
+  <block line="1156" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1155" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr="param,"
+     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
+    <var name="interface_value" line="1157" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
+     basetype="CHAR" baseattr="unsigned,"/>
+  </block>
+ </function>
+ <function name="set_interface" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="CHAR" baseattr="unsigned,">
+  <block line="1166" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="set_value" line="1167" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+     type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
     <var name="ctx" line="1165" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1167" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
   </block>
  </function>
- <function name="set_address" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="VOID" baseattr="">
+ <function name="get_configuration" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+  basetype="CHAR" baseattr="unsigned,">
   <block line="1177" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
     <var name="ctx" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="addr" line="1176" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basetype="CHAR" baseattr="unsigned,"/>
-    <var name="iocb" line="1178" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-  </block>
- </function>
- <function name="get_interface" line="1186" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="CHAR" baseattr="unsigned,">
-  <block line="1187" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1186" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="interface_value" line="1188" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="config_value" line="1178" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
   </block>
  </function>
- <function name="set_interface" line="1196" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="CHAR" baseattr="unsigned,">
-  <block line="1197" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="set_value" line="1198" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basetype="CHAR" baseattr="unsigned,"/>
-    <var name="ctx" line="1196" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-  </block>
- </function>
- <function name="get_configuration" line="1207" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
-  basetype="CHAR" baseattr="unsigned,">
-  <block line="1208" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1207" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr="param,"
-     basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="config_value" line="1209" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
-     type="AUTO" storage="AUTO VAR" attr=""
-     basetype="CHAR" baseattr="unsigned,"/>
-  </block>
- </function>
- <function name="set_configuration" line="1218" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="set_configuration" line="1187" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1219" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1218" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1188" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1187" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1220" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1189" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="config" line="1218" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="config" line="1187" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
   </block>
  </function>
- <function name="set_feature" line="1231" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="set_feature" line="1200" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1232" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ep_id" line="1231" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1201" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ep_id" line="1200" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="ctx" line="1231" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="1200" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1233" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1202" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
   </block>
  </function>
- <function name="clear_feature" line="1243" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="clear_feature" line="1212" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1244" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ep_id" line="1243" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1213" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ep_id" line="1212" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="ctx" line="1243" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="1212" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1245" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1214" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
   </block>
  </function>
- <function name="get_ep_status" line="1254" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="get_ep_status" line="1223" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="1255" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ep_id" line="1254" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1224" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ep_id" line="1223" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="ctx" line="1254" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="1223" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1257" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1226" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="state" line="1256" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="state" line="1225" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
   </block>
  </function>
- <function name="get_device_status" line="1269" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="get_device_status" line="1238" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="CHAR" baseattr="unsigned,">
-  <block line="1270" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1269" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1239" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1238" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="iocb" line="1272" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="iocb" line="1241" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usbslave_ioctl_cb_t" basetype="STRUCT" baseattr=""/>
-    <var name="state" line="1271" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="state" line="1240" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
   </block>
  </function>
- <function name="memset_bulk_header" line="1284" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="memset_bulk_header" line="1253" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1285" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1284" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1254" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1253" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="bulk_flag" line="1284" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bulk_flag" line="1253" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basetype="INT" baseattr="unsigned,"/>
-    <var name="bulk_header" line="1286" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bulk_header" line="1255" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned," basearray="12,"/>
-   <block line="1288" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1257" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="class_requests_inititate_abort_bulk_out" line="1328" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_inititate_abort_bulk_out" line="1297" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1329" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1328" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1298" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1297" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="status" line="1339" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="1308" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="devReq" line="1340" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="devReq" line="1309" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usb_deviceRequest_t" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="wValue" line="1341" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="wValue" line="1310" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-   <block line="1352" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1321" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="class_requests_check_abort_bulk_out_status" line="1391" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_check_abort_bulk_out_status" line="1360" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1392" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="response_packet" line="1402" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1361" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="response_packet" line="1371" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned," basearray="5,"/>
-    <var name="ctx" line="1391" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="1360" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="TransferSize" line="1403" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="TransferSize" line="1372" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="unsigned,"/>
-   <block line="1408" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1377" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="class_requests_inititate_abort_bulk_in" line="1425" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_inititate_abort_bulk_in" line="1394" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1426" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1425" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1395" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1394" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="tmp" line="1439" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="tmp" line="1408" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="status" line="1436" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="status" line="1405" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="devReq" line="1437" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="devReq" line="1406" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basename="_usb_deviceRequest_t" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="wValue" line="1438" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="wValue" line="1407" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="SHORT" baseattr="unsigned,"/>
-   <block line="1453" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1422" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="class_requests_check_abort_bulk_in_status" line="1498" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_check_abort_bulk_in_status" line="1467" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1499" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="response_packet" line="1506" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1468" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="response_packet" line="1475" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned," basearray="5,"/>
-    <var name="ctx" line="1498" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="ctx" line="1467" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="tmp" line="1507" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="tmp" line="1476" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="TransferSize" line="1508" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="TransferSize" line="1477" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="INT" baseattr="unsigned,"/>
-   <block line="1510" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1479" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
-   <block line="1519" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1488" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="class_requests_initiate_clear" line="1541" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_initiate_clear" line="1510" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1542" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1541" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1511" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1510" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="tmp" line="1549" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="tmp" line="1518" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-    <var name="bulk_header" line="1550" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="bulk_header" line="1519" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned," basearray="12,"/>
   </block>
  </function>
- <function name="class_requests_check_clear_statue" line="1590" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_check_clear_statue" line="1559" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1591" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1590" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1560" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1559" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
-    <var name="tmp" line="1597" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+    <var name="tmp" line="1566" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr=""
      basetype="CHAR" baseattr="unsigned,"/>
-   <block line="1598" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1567" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
-   <block line="1607" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+   <block line="1576" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
    </block>
   </block>
  </function>
- <function name="class_requests_get_capablities" line="1623" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_get_capablities" line="1592" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1624" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1623" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1593" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1592" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </block>
  </function>
- <function name="class_requests_indicator_pulse" line="1661" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
+ <function name="class_requests_indicator_pulse" line="1630" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c" 
   basetype="VOID" baseattr="">
-  <block line="1662" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
-    <var name="ctx" line="1661" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
+  <block line="1631" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c">
+    <var name="ctx" line="1630" file="E:\VNC2\git\usbtmc-usbslave1.0\USBTMC_interface.c"
      type="AUTO" storage="AUTO VAR" attr="param,"
      basename="_USBTMC_context" basetype="STRUCT" baseattr="ptr,"/>
   </block>

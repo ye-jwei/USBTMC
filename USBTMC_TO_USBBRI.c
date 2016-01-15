@@ -34,17 +34,26 @@ VOS_HANDLE hUART; // UART Interface Driver
 
 unsigned char TMC_TO_BRI_controul_buffer[16];
 unsigned char BRI_TO_TMC_controul_buffer[16];
-unsigned char mark_array[30];
-unsigned char TMC_TO_BRI_bulk_buffer[64];
-unsigned char BRI_TO_TMC_bulk_buffer[64];
-unsigned char BRI_read_buffer[1024];
-unsigned char TMC_read_buffer[1024];
-unsigned char bulk_header[12];
 
-unsigned char TMC_write_done;
-unsigned char BRI_write_done;
-unsigned char TMC_read_done;
-unsigned char BRI_read_done;
+unsigned char mark_array[30];
+
+unsigned char TMC_to_BRI_buffer[1024];
+unsigned char BRI_buffer[1024];
+unsigned char TMC_buffer[1024];
+
+unsigned int  TMC_read_length;
+unsigned int  BRI_read_length;
+
+unsigned char TMC_bulk_write_done;
+unsigned char BRI_bulk_write_done;
+unsigned char TMC_bulk_read_done;
+unsigned char BRI_bulk_read_done;
+
+unsigned char TMC_request_read_enable;
+unsigned char BRI_request_read_enable;
+//unsigned char TMC_control_read_enable;
+//unsigned char TMC_control_read_enable;
+
 
 unsigned char TMC_requset_BRI_answer;
 
@@ -68,7 +77,8 @@ void main(void)
 	/* FTDI:EKI */
 
 	iomux_setup();
-
+	
+	global_array_init();
 	/* FTDI:SDI Driver Initialisation */
 	// Initialise USB Slave Port 0
 	usbslave_init(0, VOS_DEV_USBSLAVE_1);
@@ -92,6 +102,28 @@ void main(void)
 
 main_loop:
 	goto main_loop;
+}
+
+void global_array_init()
+{
+	vos_memset(TMC_TO_BRI_controul_buffer,0,16);
+	vos_memset(BRI_TO_TMC_controul_buffer,0,16);
+
+	vos_memset(mark_array,0,31);
+
+	vos_memset(BRI_buffer,0,1024);
+	vos_memset(TMC_buffer,0,1024);
+
+	TMC_read_length = 0;
+	BRI_read_length = 0;
+
+	TMC_bulk_write_done = 0;
+	BRI_bulk_write_done = 0;
+	TMC_bulk_read_done  = 0;
+	BRI_bulk_read_done  = 0;
+
+	TMC_request_read_enable = 0;
+	BRI_request_read_enable = 0;
 }
 
 /* FTDI:SSP Support Functions */
@@ -187,9 +219,9 @@ void firmware()
 	vos_delay_msecs(1500);
 	
 	//write_uart(hUART,&print,1);
-	tcbUSBTMC = vos_create_thread_ex(20,2048,USBTMC_attach,"USBTMC",0);
-	tcbUSBBRI = vos_create_thread_ex(20,2048,USBBRI_attach,"USBBRI",0);
 
+	tcbUSBBRI = vos_create_thread_ex(30,2048,USBBRI_attach,"USBBRI_attach",0);
+	tcbUSBTMC = vos_create_thread_ex(30,2048,USBTMC_attach,"USBTMC_attach",0);
 }
 
 

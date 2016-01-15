@@ -5,38 +5,34 @@
 .WEAK	"%eax"
 .WEAK	"%ebx"
 .WEAK	"%ecx"
-BRI_TO_TMC_bulk_buffer	.DB	64	?
-.GLOBAL	  DO_NOT_EXPORT "BRI_TO_TMC_bulk_buffer"
-TMC_TO_BRI_bulk_buffer	.DB	64	?
-.GLOBAL	  DO_NOT_EXPORT "TMC_TO_BRI_bulk_buffer"
 mark_array	.DB	30	?
 .GLOBAL	  DO_NOT_EXPORT "mark_array"
-bulk_header	.DB	12	?
-.GLOBAL	  DO_NOT_EXPORT "bulk_header"
 TMC_requset_BRI_answer	.DB	1	?
 .GLOBAL	  DO_NOT_EXPORT "TMC_requset_BRI_answer"
-BRI_read_done	.DB	1	?
-.GLOBAL	  DO_NOT_EXPORT "BRI_read_done"
-TMC_read_done	.DB	1	?
-.GLOBAL	  DO_NOT_EXPORT "TMC_read_done"
 hUSBSLAVE_USBBRI	.DW	1	?
 .GLOBAL	  DO_NOT_EXPORT "hUSBSLAVE_USBBRI"
 hUSBSLAVE_USBTMC	.DW	1	?
 .GLOBAL	  DO_NOT_EXPORT "hUSBSLAVE_USBTMC"
-BRI_write_done	.DB	1	?
-.GLOBAL	  DO_NOT_EXPORT "BRI_write_done"
-TMC_write_done	.DB	1	?
-.GLOBAL	  DO_NOT_EXPORT "TMC_write_done"
+BRI_request_read_enable	.DB	1	?
+.GLOBAL	  DO_NOT_EXPORT "BRI_request_read_enable"
+TMC_request_read_enable	.DB	1	?
+.GLOBAL	  DO_NOT_EXPORT "TMC_request_read_enable"
 hUART	.DW	1	?
 .GLOBAL	  DO_NOT_EXPORT "hUART"
-BRI_read_buffer	.DB	1024	?
-.GLOBAL	  DO_NOT_EXPORT "BRI_read_buffer"
-TMC_read_buffer	.DB	1024	?
-.GLOBAL	  DO_NOT_EXPORT "TMC_read_buffer"
+BRI_read_length	.DD	1	?
+.GLOBAL	  DO_NOT_EXPORT "BRI_read_length"
+TMC_read_length	.DD	1	?
+.GLOBAL	  DO_NOT_EXPORT "TMC_read_length"
 BRI_TO_TMC_controul_buffer	.DB	16	?
 .GLOBAL	  DO_NOT_EXPORT "BRI_TO_TMC_controul_buffer"
 TMC_TO_BRI_controul_buffer	.DB	16	?
 .GLOBAL	  DO_NOT_EXPORT "TMC_TO_BRI_controul_buffer"
+TMC_to_BRI_buffer	.DB	1024	?
+.GLOBAL	  DO_NOT_EXPORT "TMC_to_BRI_buffer"
+BRI_bulk_read_done	.DB	1	?
+.GLOBAL	  DO_NOT_EXPORT "BRI_bulk_read_done"
+TMC_bulk_read_done	.DB	1	?
+.GLOBAL	  DO_NOT_EXPORT "TMC_bulk_read_done"
 tcbUSBBRI	.DW	1	?
 .GLOBAL	  DO_NOT_EXPORT "tcbUSBBRI"
 tcbUSBTMC	.DW	1	?
@@ -45,11 +41,19 @@ hUSBSLAVE_1	.DW	1	?
 .GLOBAL	  DO_NOT_EXPORT "hUSBSLAVE_1"
 hUSBSLAVE_2	.DW	1	?
 .GLOBAL	  DO_NOT_EXPORT "hUSBSLAVE_2"
+BRI_bulk_write_done	.DB	1	?
+.GLOBAL	  DO_NOT_EXPORT "BRI_bulk_write_done"
+TMC_bulk_write_done	.DB	1	?
+.GLOBAL	  DO_NOT_EXPORT "TMC_bulk_write_done"
 tcbFIRMWARE	.DW	1	?
 .GLOBAL	  DO_NOT_EXPORT "tcbFIRMWARE"
+BRI_buffer	.DB	1024	?
+.GLOBAL	  DO_NOT_EXPORT "BRI_buffer"
+TMC_buffer	.DB	1024	?
+.GLOBAL	  DO_NOT_EXPORT "TMC_buffer"
 Str@0	.ASCIIZ	"Application"
-Str@1	.ASCIIZ	"USBTMC"
-Str@2	.ASCIIZ	"USBBRI"
+Str@1	.ASCIIZ	"USBBRI_attach"
+Str@2	.ASCIIZ	"USBTMC_attach"
 
 
 .ENUM	"IOMUX_SIGNALS"
@@ -313,6 +317,17 @@ Str@2	.ASCIIZ	"USBBRI"
 .STRUCTMEM	"bInterval"	"char"	8	0	0	0	0	0	0	
 .STRUCT_END	"_usb_deviceEndpointDescriptor_t"
 
+.STRUCT	"_Bulk_header"	96
+.STRUCTMEM	"MsgID"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"bTag"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"bTagInverse"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"Reserved"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"TransferSize"	"int"	32	0	0	0	0	0	0	
+.STRUCTMEM	"bmTransfer_Attributes"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"TermChar"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"unused"	"short"	16	0	0	0	0	0	0	
+.STRUCT_END	"_Bulk_header"
+
 .STRUCT	"_vos_semaphore_list_t"	56
 .STRUCTMEM	"next"	"_vos_semaphore_list_t"	16	0	1	0	0	0	1	
 .STRUCTMEM	"siz"	"char"	8	1	0	0	0	0	0	
@@ -423,31 +438,26 @@ Str@2	.ASCIIZ	"USBBRI"
 .STRUCTMEM	"wLANGID0"	"short"	16	0	0	0	0	0	0	
 .STRUCT_END	"_usb_deviceStringDescriptorZero_t"
 
-.STRUCT	"_USBBRI_context"	1728
+.STRUCT	"_USBBRI_context"	2280
 .STRUCTMEM	"handle"	"short"	16	0	0	0	0	0	0	
 .STRUCTMEM	"hSlaveFT232"	"short"	16	0	0	0	0	0	0	
-.STRUCTMEM	"hSlaveUSBTMC"	"short"	16	0	0	0	0	0	0	
+.STRUCTMEM	"hSlaveUSBBRI"	"short"	16	0	0	0	0	0	0	
 .STRUCTMEM	"attached"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"in_ep0"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"out_ep0"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"bulkin_ep"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"bulkout_ep"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"int_in_ep"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"int_out_ep"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"setup_packet"	"char"	72	0	0	0	1	1	0	
 .STRUCTMEM	"read_buffer"	"char"	128	0	0	0	1	1	0	
 .STRUCTMEM	"write_buffer"	"char"	128	0	0	0	1	1	0	
 .STRUCTMEM	"bulkin_buffer"	"char"	512	0	0	0	1	1	0	
 .STRUCTMEM	"bulkout_buffer"	"char"	512	0	0	0	1	1	0	
+.STRUCTMEM	"bulk_header"	"char"	96	0	0	0	1	1	0	
 .STRUCTMEM	"tcb_controul_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
-.STRUCTMEM	"tcb_FT232write_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
-.STRUCTMEM	"tcb_FT232read_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
 .STRUCTMEM	"tcb_bulkIN_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
 .STRUCTMEM	"tcb_bulkOUT_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
 .STRUCTMEM	"tcb_int_read_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
-.STRUCTMEM	"tcb_int_write_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
-.STRUCTMEM	"tcb_FT232_bulk_write_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
-.STRUCTMEM	"tcb_FT232_bulk_read_thread"	"_vos_tcb_t"	16	0	1	0	0	0	1	
 .STRUCTMEM	"write_length"	"short"	16	0	0	0	0	0	0	
 .STRUCTMEM	"read_length"	"short"	16	0	0	0	0	0	0	
 .STRUCTMEM	"bulk_read_length"	"short"	16	0	0	0	0	0	0	
@@ -460,6 +470,18 @@ Str@2	.ASCIIZ	"USBBRI"
 .STRUCTMEM	"bulk_OUT_enable"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"int_read_enable"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"int_write_enable"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"class_request_enable"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"USBBRI_bulk_out_header"	"_Bulk_header"	96	0	0	0	0	0	0	
+.STRUCTMEM	"USBBRI_bulk_in_header"	"_Bulk_header"	96	0	0	0	0	0	0	
+.STRUCTMEM	"bulk_out_header"	"char"	96	0	0	0	1	1	0	
+.STRUCTMEM	"bulk_in_header"	"char"	96	0	0	0	1	1	0	
+.STRUCTMEM	"response_packet"	"char"	104	0	0	0	1	1	0	
+.STRUCTMEM	"abort_out"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"abort_in"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"bulkout_fifo_status"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"bulkin_fifo_status"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"request_bulk_in_ready"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"MsgID_is_error"	"char"	8	0	0	0	0	0	0	
 .STRUCT_END	"_USBBRI_context"
 
 .STRUCT	"_USBTMC_context"	2280
@@ -495,8 +517,8 @@ Str@2	.ASCIIZ	"USBBRI"
 .STRUCTMEM	"int_read_enable"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"int_write_enable"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"class_request_enable"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"USBTMC_bulk_out_header"	"_USBTMC_bulk_header"	96	0	0	0	0	0	0	
-.STRUCTMEM	"USBTMC_bulk_in_header"	"_USBTMC_bulk_header"	96	0	0	0	0	0	0	
+.STRUCTMEM	"USBTMC_bulk_out_header"	"_Bulk_header"	96	0	0	0	0	0	0	
+.STRUCTMEM	"USBTMC_bulk_in_header"	"_Bulk_header"	96	0	0	0	0	0	0	
 .STRUCTMEM	"bulk_out_header"	"char"	96	0	0	0	1	1	0	
 .STRUCTMEM	"bulk_in_header"	"char"	96	0	0	0	1	1	0	
 .STRUCTMEM	"response_packet"	"char"	104	0	0	0	1	1	0	
@@ -547,6 +569,12 @@ Str@2	.ASCIIZ	"USBBRI"
 .ENUMERATOR	"GPIO_ERROR"	7
 .ENUM_END	"gpioctrl_status"
 
+.ENUM	"USBSLAV_USBBRI_STATUS"
+.ENUMERATOR	"USBBRI_OK"	0
+.ENUMERATOR	"USBBRI_INVALID_PARAMETER"	1
+.ENUMERATOR	"USBBRI_ERROR"	2
+.ENUM_END	"USBSLAV_USBBRI_STATUS"
+
 .ENUM	"USBSLAV_USBTMC_STATUS"
 .ENUMERATOR	"USBTMC_OK"	0
 .ENUMERATOR	"USBTMC_INVALID_PARAMETER"	1
@@ -588,17 +616,6 @@ Str@2	.ASCIIZ	"USBBRI"
 .STRUCTMEM	"flow_control"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"afull_trigger"	"char"	8	0	0	0	0	0	0	
 .STRUCT_END	"_vos_dma_config_t"
-
-.STRUCT	"_USBTMC_bulk_header"	96
-.STRUCTMEM	"MsgID"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"bTag"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"bTagInverse"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"Reserved"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"TransferSize"	"int"	32	0	0	0	0	0	0	
-.STRUCTMEM	"bmTransfer_Attributes"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"TermChar"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"unused"	"short"	16	0	0	0	0	0	0	
-.STRUCT_END	"_USBTMC_bulk_header"
 
 .ENUM	"FAT_STATUS"
 .ENUMERATOR	"FAT_OK"	0
@@ -766,31 +783,34 @@ Str@2	.ASCIIZ	"USBBRI"
 .STRUCTMEM	"bString"	"char"	8	0	0	0	0	0	0	
 .STRUCT_END	"_usb_deviceStringDescriptor_t"
 
-.VARIABLE	"BRI_TO_TMC_bulk_buffer"	512	"char"	0	0	-1	1	1	0	39	
-.VARIABLE	"TMC_TO_BRI_bulk_buffer"	512	"char"	0	0	-1	1	1	0	38	
-.VARIABLE	"mark_array"	240	"char"	0	0	-1	1	1	0	37	
-.VARIABLE	"bulk_header"	96	"char"	0	0	-1	1	1	0	42	
-.VARIABLE	"TMC_requset_BRI_answer"	8	"char"	0	0	-1	0	0	0	49	
-.VARIABLE	"BRI_read_done"	8	"char"	0	0	-1	0	0	0	47	
-.VARIABLE	"TMC_read_done"	8	"char"	0	0	-1	0	0	0	46	
+.VARIABLE	"mark_array"	240	"char"	0	0	-1	1	1	0	38	
+.VARIABLE	"TMC_requset_BRI_answer"	8	"char"	0	0	-1	0	0	0	58	
 .VARIABLE	"hUSBSLAVE_USBBRI"	16	"short"	0	0	-1	0	0	0	31	
 .VARIABLE	"hUSBSLAVE_USBTMC"	16	"short"	0	0	-1	0	0	0	30	
-.VARIABLE	"BRI_write_done"	8	"char"	0	0	-1	0	0	0	45	
-.VARIABLE	"TMC_write_done"	8	"char"	0	0	-1	0	0	0	44	
+.VARIABLE	"BRI_request_read_enable"	8	"char"	0	0	-1	0	0	0	53	
+.VARIABLE	"TMC_request_read_enable"	8	"char"	0	0	-1	0	0	0	52	
 .VARIABLE	"hUART"	16	"short"	0	0	-1	0	0	0	32	
-.VARIABLE	"BRI_read_buffer"	8192	"char"	0	0	-1	1	1	0	40	
-.VARIABLE	"TMC_read_buffer"	8192	"char"	0	0	-1	1	1	0	41	
+.VARIABLE	"BRI_read_length"	32	"int"	0	0	-1	0	0	0	45	
+.VARIABLE	"TMC_read_length"	32	"int"	0	0	-1	0	0	0	44	
 .VARIABLE	"BRI_TO_TMC_controul_buffer"	128	"char"	0	0	-1	1	1	0	36	
 .VARIABLE	"TMC_TO_BRI_controul_buffer"	128	"char"	0	0	-1	1	1	0	35	
+.VARIABLE	"TMC_to_BRI_buffer"	8192	"char"	0	0	-1	1	1	0	40	
+.VARIABLE	"BRI_bulk_read_done"	8	"char"	0	0	-1	0	0	0	50	
+.VARIABLE	"TMC_bulk_read_done"	8	"char"	0	0	-1	0	0	0	49	
 .VARIABLE	"tcbUSBBRI"	16	"_vos_tcb_t"	0	1	-1	0	0	1	22	
 .VARIABLE	"tcbUSBTMC"	16	"_vos_tcb_t"	0	1	-1	0	0	1	21	
 .VARIABLE	"hUSBSLAVE_1"	16	"short"	0	0	-1	0	0	0	28	
 .VARIABLE	"hUSBSLAVE_2"	16	"short"	0	0	-1	0	0	0	29	
+.VARIABLE	"BRI_bulk_write_done"	8	"char"	0	0	-1	0	0	0	48	
+.VARIABLE	"TMC_bulk_write_done"	8	"char"	0	0	-1	0	0	0	47	
 .VARIABLE	"tcbFIRMWARE"	16	"_vos_tcb_t"	0	1	-1	0	0	1	20	
+.VARIABLE	"BRI_buffer"	8192	"char"	0	0	-1	1	1	0	41	
+.VARIABLE	"TMC_buffer"	8192	"char"	0	0	-1	1	1	0	42	
 .TYPEDEF	"_fatdrv_ioctl_cb_fs_t"	"fatdrv_ioctl_cb_fs_t"
 .TYPEDEF	"char"	"usbslave_ep_handle_t"
 .TYPEDEF	"_vos_gpio_t"	"vos_gpio_t"
 .TYPEDEF	"_usb_deviceEndpointDescriptor_t"	"usb_deviceEndpointDescriptor_t"
+.TYPEDEF	"_Bulk_header"	"Bulk_header"
 .TYPEDEF	"_vos_semaphore_list_t"	"vos_semaphore_list_t"
 .TYPEDEF	"_fatdrv_ioctl_cb_dir_t"	"fatdrv_ioctl_cb_dir_t"
 .TYPEDEF	"char"	"PF"
@@ -825,7 +845,6 @@ Str@2	.ASCIIZ	"USBBRI"
 .TYPEDEF	"char"	"PF_IOCTL"
 .TYPEDEF	"short"	"size_t"
 .TYPEDEF	"_vos_dma_config_t"	"vos_dma_config_t"
-.TYPEDEF	"_USBTMC_bulk_header"	"USBTMC_bulk_header"
 .TYPEDEF	"_usb_interfaceAssociationDescriptor_t"	"usb_interfaceAssociationDescriptor_t"
 .TYPEDEF	"_common_ioctl_cb_t"	"common_ioctl_cb_t"
 .TYPEDEF	"_usb_hub_selector_t"	"usb_hub_selector_t"
@@ -847,7 +866,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_get_descriptor"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	189	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	184	
 .FUNC_END	"USBBRI_get_descriptor"
 
 .FUNCTION	"FT232_attach"	
@@ -856,7 +875,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"class_requests_initiate_clear"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	231	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	216	
 .FUNC_END	"class_requests_initiate_clear"
 
 .FUNCTION	"vos_gpio_write_port"	
@@ -872,17 +891,17 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_vendor_request"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	181	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	176	
 .FUNC_END	"USBBRI_vendor_request"
 
 .FUNCTION	"USBBRI_setup_transfer_handshake"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	208	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	203	
 .FUNC_END	"USBBRI_setup_transfer_handshake"
 
 .FUNCTION	"USBBRI_controul_setup"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	178	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	173	
 .FUNC_END	"USBBRI_controul_setup"
 
 .FUNCTION	"vos_malloc"	
@@ -892,15 +911,15 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USB_device_error_deal"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	236	
-.PARAMETER	"error_byte"	32 "int"	1	0	0	0	0	0	236	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	221	
+.PARAMETER	"error_byte"	32 "int"	1	0	0	0	0	0	221	
 .FUNC_END	"USB_device_error_deal"
 
 .FUNCTION	"bulk_write"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	212	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	212	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	212	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	197	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	197	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	197	
 .FUNC_END	"bulk_write"
 
 .FUNCTION	"vos_create_thread_ex"	
@@ -914,8 +933,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_ioctl"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"cb"	16 "_common_ioctl_cb_t"	0	1	0	0	0	1	185	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	185	
+.PARAMETER	"cb"	16 "_common_ioctl_cb_t"	0	1	0	0	0	1	180	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	180	
 .FUNC_END	"USBBRI_ioctl"
 
 .FUNCTION	"vos_memcpy"	
@@ -938,7 +957,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_int_read_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	218	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	213	
 .FUNC_END	"USBBRI_int_read_thread"
 
 .FUNCTION	"vos_gpio_disable_int"	
@@ -952,8 +971,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBTMC_ioctl"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"cb"	16 "_common_ioctl_cb_t"	0	1	0	0	0	1	186	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	186	
+.PARAMETER	"cb"	16 "_common_ioctl_cb_t"	0	1	0	0	0	1	171	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	171	
 .FUNC_END	"USBTMC_ioctl"
 
 .FUNCTION	"vos_dma_get_fifo_data_register"	
@@ -963,7 +982,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBTMC_int_read_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	219	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	204	
 .FUNC_END	"USBTMC_int_read_thread"
 
 .FUNCTION	"fat_dirTableFindFirst"	
@@ -974,23 +993,23 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_write"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	184	
-.PARAMETER	"num_to_write"	16 "short"	0	0	0	0	0	0	184	
-.PARAMETER	"num_written"	16 "short"	0	1	0	0	0	1	184	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	184	
+.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	179	
+.PARAMETER	"num_to_write"	16 "short"	0	0	0	0	0	0	179	
+.PARAMETER	"num_written"	16 "short"	0	1	0	0	0	1	179	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	179	
 .FUNC_END	"USBBRI_write"
 
 .FUNCTION	"class_requests_inititate_abort_bulk_out"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	227	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	212	
 .FUNC_END	"class_requests_inititate_abort_bulk_out"
 
 .FUNCTION	"USBTMC_write"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	185	
-.PARAMETER	"num_to_write"	16 "short"	0	0	0	0	0	0	185	
-.PARAMETER	"num_written"	16 "short"	0	1	0	0	0	1	185	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	185	
+.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	170	
+.PARAMETER	"num_to_write"	16 "short"	0	0	0	0	0	0	170	
+.PARAMETER	"num_written"	16 "short"	0	1	0	0	0	1	170	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	170	
 .FUNC_END	"USBTMC_write"
 
 .FUNCTION	"vos_signal_semaphore"	
@@ -1011,14 +1030,14 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"class_requests_get_capablities"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	233	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	218	
 .FUNC_END	"class_requests_get_capablities"
 
 .FUNCTION	"controul_transfer_in"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	207	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	207	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	207	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	192	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	192	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	192	
 .FUNC_END	"controul_transfer_in"
 
 .FUNCTION	"stdinAttach"	
@@ -1039,19 +1058,19 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"set_address"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	189	
-.PARAMETER	"addr"	8 "char"	0	0	0	0	0	0	189	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	174	
+.PARAMETER	"addr"	8 "char"	0	0	0	0	0	0	174	
 .FUNC_END	"set_address"
 
 .FUNCTION	"class_requests_indicator_pulse"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	234	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	219	
 .FUNC_END	"class_requests_indicator_pulse"
 
 .FUNCTION	"set_feature"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	203	
-.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	203	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	188	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	188	
 .FUNC_END	"set_feature"
 
 .FUNCTION	"fatdrv_init"	
@@ -1070,12 +1089,12 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_get_descriptor_B"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	190	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	185	
 .FUNC_END	"USBBRI_get_descriptor_B"
 
 .FUNCTION	"USBBRI_bulk_read_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	216	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	211	
 .FUNC_END	"USBBRI_bulk_read_thread"
 
 .FUNCTION	"vos_iomux_define_bidi"	
@@ -1087,7 +1106,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBTMC_bulk_read_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	217	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	202	
 .FUNC_END	"USBTMC_bulk_read_thread"
 
 .FUNCTION	"vos_gpio_set_all_mode"	
@@ -1160,7 +1179,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_int_write_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	219	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	214	
 .FUNC_END	"USBBRI_int_write_thread"
 
 .FUNCTION	"fat_fileCopy"	
@@ -1171,12 +1190,12 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_bulkwrite_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	215	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	210	
 .FUNC_END	"USBBRI_bulkwrite_thread"
 
 .FUNCTION	"USBTMC_int_write_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	220	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	205	
 .FUNC_END	"USBTMC_int_write_thread"
 
 .FUNCTION	"vos_enable_interrupts"	
@@ -1186,7 +1205,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_standard_request"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	179	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	174	
 .FUNC_END	"USBBRI_standard_request"
 
 .FUNCTION	"fat_capacity"	
@@ -1203,9 +1222,9 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"controul_transfer_out"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	208	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	208	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	208	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	193	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	193	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	193	
 .FUNC_END	"controul_transfer_out"
 
 .FUNCTION	"vos_dev_read"	
@@ -1239,19 +1258,25 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"class_requests_check_abort_bulk_in_status"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	230	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	215	
 .FUNC_END	"class_requests_check_abort_bulk_in_status"
 
 .FUNCTION	"USBBRI_connect"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"handle"	16 "short"	0	0	0	0	0	0	175	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	175	
+.PARAMETER	"handle"	16 "short"	0	0	0	0	0	0	170	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	170	
 .FUNC_END	"USBBRI_connect"
 
 .FUNCTION	"vos_dma_get_fifo_count"	
 .RETURN "short"	16	0	0	0	0	0	0	
 .PARAMETER	"h"	16 "short"	0	0	0	0	0	0	84	
 .FUNC_END	"vos_dma_get_fifo_count"
+
+.FUNCTION	"USBBRI_device_error_deal"	
+.RETURN "void"	0	0	0	0	0	0	0	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	218	
+.PARAMETER	"error_byte"	32 "int"	1	0	0	0	0	0	218	
+.FUNC_END	"USBBRI_device_error_deal"
 
 .FUNCTION	"fat_getFSType"	
 .RETURN "char"	8	0	0	0	0	0	0	
@@ -1260,8 +1285,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBTMC_connect"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"handle"	16 "short"	0	0	0	0	0	0	176	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	176	
+.PARAMETER	"handle"	16 "short"	0	0	0	0	0	0	161	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	161	
 .FUNC_END	"USBTMC_connect"
 
 .FUNCTION	"vos_reset_kernel_clock"	
@@ -1283,7 +1308,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_bulk_write_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	217	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	212	
 .FUNC_END	"USBBRI_bulk_write_thread"
 
 .FUNCTION	"abs"	
@@ -1293,7 +1318,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_get_device_status"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	199	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	194	
 .FUNC_END	"USBBRI_get_device_status"
 
 .FUNCTION	"fat_dirIsRoot"	
@@ -1309,7 +1334,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBTMC_bulk_write_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	218	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	203	
 .FUNC_END	"USBTMC_bulk_write_thread"
 
 .FUNCTION	"fat_fileFlush"	
@@ -1319,18 +1344,18 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_get_configuration"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	195	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	190	
 .FUNC_END	"USBBRI_get_configuration"
 
 .FUNCTION	"USBTMC_send_setup_packet"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"packet"	16 "char"	0	1	0	0	0	1	223	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	223	
+.PARAMETER	"packet"	16 "char"	0	1	0	0	0	1	208	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	208	
 .FUNC_END	"USBTMC_send_setup_packet"
 
 .FUNCTION	"USBBRI_wait_setup_packet"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	205	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	200	
 .FUNC_END	"USBBRI_wait_setup_packet"
 
 .FUNCTION	"vos_iomux_define_input"	
@@ -1350,8 +1375,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_set_configuration"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	196	
-.PARAMETER	"config"	8 "char"	0	0	0	0	0	0	196	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	191	
+.PARAMETER	"config"	8 "char"	0	0	0	0	0	0	191	
 .FUNC_END	"USBBRI_set_configuration"
 
 .FUNCTION	"vos_disable_interrupts"	
@@ -1361,18 +1386,18 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"get_interface"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	193	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	178	
 .FUNC_END	"get_interface"
 
 .FUNCTION	"clear_feature"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	204	
-.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	204	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	189	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	189	
 .FUNC_END	"clear_feature"
 
 .FUNCTION	"set_interface"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	194	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	179	
 .FUNC_END	"set_interface"
 
 .FUNCTION	"fat_dirEntryIsDirectory"	
@@ -1386,9 +1411,9 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_set_endpoint_maxpacket_size"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	169	
-.PARAMETER	"set_maxsize"	8 "char"	0	0	0	0	0	0	169	
-.PARAMETER	"set_handle"	8 "char"	0	0	0	0	0	0	169	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	164	
+.PARAMETER	"set_maxsize"	8 "char"	0	0	0	0	0	0	164	
+.PARAMETER	"set_handle"	8 "char"	0	0	0	0	0	0	164	
 .FUNC_END	"USBBRI_set_endpoint_maxpacket_size"
 
 .FUNCTION	"vos_dma_reset"	
@@ -1403,9 +1428,9 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_int_read"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	212	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	212	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	212	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	207	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	207	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	207	
 .FUNC_END	"USBBRI_int_read"
 
 .FUNCTION	"vos_wdt_clear"	
@@ -1424,8 +1449,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"get_ep_status"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	199	
-.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	199	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	184	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	184	
 .FUNC_END	"get_ep_status"
 
 .FUNCTION	"usbslave_init"	
@@ -1436,7 +1461,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"class_request"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	181	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	166	
 .FUNC_END	"class_request"
 
 .FUNCTION	"vos_dev_write"	
@@ -1447,9 +1472,15 @@ Str@2	.ASCIIZ	"USBBRI"
 .PARAMETER	"num_written"	16 "short"	0	1	0	0	0	1	55	
 .FUNC_END	"vos_dev_write"
 
+.FUNCTION	"USBBRI_queue_bulk_in_data"	
+.RETURN "void"	0	0	0	0	0	0	0	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	220	
+.PARAMETER	"length"	32 "int"	0	0	0	0	0	0	220	
+.FUNC_END	"USBBRI_queue_bulk_in_data"
+
 .FUNCTION	"class_requests_check_abort_bulk_out_status"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	228	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	213	
 .FUNC_END	"class_requests_check_abort_bulk_out_status"
 
 .FUNCTION	"fat_fileDelete"	
@@ -1495,7 +1526,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"class_requests_check_clear_statue"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	232	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	217	
 .FUNC_END	"class_requests_check_clear_statue"
 
 .FUNCTION	"itoa"	
@@ -1527,6 +1558,12 @@ Str@2	.ASCIIZ	"USBBRI"
 .PARAMETER	"nptr"	16 "char"	1	1	0	0	0	1	29	const
 .FUNC_END	"atol"
 
+.FUNCTION	"USBBRI_set_endpoint_stall"	
+.RETURN "void"	0	0	0	0	0	0	0	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	219	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	219	
+.FUNC_END	"USBBRI_set_endpoint_stall"
+
 .FUNCTION	"vos_reset_vnc2"	
 .RETURN "void"	0	0	0	0	0	0	0	
 .FUNC_END	"vos_reset_vnc2"
@@ -1550,14 +1587,14 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_bulk_read"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	210	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	210	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	210	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	205	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	205	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	205	
 .FUNC_END	"USBBRI_bulk_read"
 
 .FUNCTION	"get_descriptor"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	190	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	175	
 .FUNC_END	"get_descriptor"
 
 .FUNCTION	"fat_getVolumeID"	
@@ -1578,19 +1615,19 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"vendor_request"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	182	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	167	
 .FUNC_END	"vendor_request"
 
 .FUNCTION	"USBBRI_int_write"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	213	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	213	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	213	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	208	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	208	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	208	
 .FUNC_END	"USBBRI_int_write"
 
 .FUNCTION	"setup_transfer_handshake"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	209	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	194	
 .FUNC_END	"setup_transfer_handshake"
 
 .FUNCTION	"vos_power_down"	
@@ -1619,7 +1656,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"controul_setup"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	179	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	164	
 .FUNC_END	"controul_setup"
 
 .FUNCTION	"vos_gpio_wait_on_any_int"	
@@ -1634,7 +1671,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_set_control_ep_halt"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	201	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	196	
 .FUNC_END	"USBBRI_set_control_ep_halt"
 
 .FUNCTION	"fseek"	
@@ -1745,31 +1782,37 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_disconnect"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	176	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	171	
 .FUNC_END	"USBBRI_disconnect"
 
 .FUNCTION	"get_bulk_status"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	241	
-.PARAMETER	"bulk_flag"	32 "int"	0	0	0	0	0	0	241	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	226	
+.PARAMETER	"bulk_flag"	32 "int"	0	0	0	0	0	0	226	
 .FUNC_END	"get_bulk_status"
+
+.FUNCTION	"USBBRI_queue_bulk_in_header"	
+.RETURN "int"	32	0	0	0	0	0	0	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	217	
+.PARAMETER	"bulk_header"	16 "char"	0	1	0	0	0	1	217	
+.FUNC_END	"USBBRI_queue_bulk_in_header"
 
 .FUNCTION	"USBTMC_disconnect"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	177	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	162	
 .FUNC_END	"USBTMC_disconnect"
 
 .FUNCTION	"USBTMC_queue_bulk_in_header"	
 .RETURN "int"	32	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	238	
-.PARAMETER	"bulk_header"	16 "char"	0	1	0	0	0	1	238	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	223	
+.PARAMETER	"bulk_header"	16 "char"	0	1	0	0	0	1	223	
 .FUNC_END	"USBTMC_queue_bulk_in_header"
 
 .FUNCTION	"USBBRI_bulk_write"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	211	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	211	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	211	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	206	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	206	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	206	
 .FUNC_END	"USBBRI_bulk_write"
 
 .FUNCTION	"vos_gpio_wait_on_all_ints"	
@@ -1812,7 +1855,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"get_descriptor_B"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	191	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	176	
 .FUNC_END	"get_descriptor_B"
 
 .FUNCTION	"fat_fileTruncate"	
@@ -1880,9 +1923,9 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_controul_transfer_in"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	206	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	206	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	206	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	201	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	201	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	201	
 .FUNC_END	"USBBRI_controul_transfer_in"
 
 .FUNCTION	"strlen"	extern
@@ -1911,12 +1954,12 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"bulkwrite_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	216	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	201	
 .FUNC_END	"bulkwrite_thread"
 
 .FUNCTION	"ft232_slave_detach"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"hSlaveFT232"	16 "short"	0	0	0	0	0	0	157	
+.PARAMETER	"hSlaveFT232"	16 "short"	0	0	0	0	0	0	152	
 .FUNC_END	"ft232_slave_detach"
 
 .FUNCTION	"vos_dma_retained_configure"	
@@ -1928,25 +1971,25 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_set_address"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	188	
-.PARAMETER	"addr"	8 "char"	0	0	0	0	0	0	188	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	183	
+.PARAMETER	"addr"	8 "char"	0	0	0	0	0	0	183	
 .FUNC_END	"USBBRI_set_address"
 
 .FUNCTION	"standard_request"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	180	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	165	
 .FUNC_END	"standard_request"
 
 .FUNCTION	"USBBRI_set_feature"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	202	
-.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	202	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	197	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	197	
 .FUNC_END	"USBBRI_set_feature"
 
 .FUNCTION	"ft232_slave_attach"	
 .RETURN "short"	16	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	156	
-.PARAMETER	"devSlaveFT232"	8 "char"	0	0	0	0	0	0	156	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	151	
+.PARAMETER	"devSlaveFT232"	8 "char"	0	0	0	0	0	0	151	
 .FUNC_END	"ft232_slave_attach"
 
 .FUNCTION	"fat_dirDirIsEmpty"	
@@ -1959,10 +2002,16 @@ Str@2	.ASCIIZ	"USBBRI"
 .PARAMETER	"m"	16 "_vos_mutex_t"	0	1	0	0	0	1	134	
 .FUNC_END	"vos_unlock_mutex"
 
+.FUNCTION	"USBBRI_queue_bulk_out_header"	
+.RETURN "int"	32	0	0	0	0	0	0	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	216	
+.PARAMETER	"bulk_header"	16 "char"	0	1	0	0	0	1	216	
+.FUNC_END	"USBBRI_queue_bulk_out_header"
+
 .FUNCTION	"USBTMC_queue_bulk_out_header"	
 .RETURN "int"	32	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	222	
-.PARAMETER	"bulk_header"	16 "char"	0	1	0	0	0	1	222	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	207	
+.PARAMETER	"bulk_header"	16 "char"	0	1	0	0	0	1	207	
 .FUNC_END	"USBTMC_queue_bulk_out_header"
 
 .FUNCTION	"getchar"	
@@ -2026,7 +2075,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_slave_detach"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"hUSBTMCSlave"	16 "short"	0	0	0	0	0	0	173	
+.PARAMETER	"hUSBBRISlave"	16 "short"	0	0	0	0	0	0	168	
 .FUNC_END	"USBBRI_slave_detach"
 
 .FUNCTION	"vos_dma_configure"	
@@ -2037,12 +2086,12 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBTMC_slave_detach"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"hUSBTMCSlave"	16 "short"	0	0	0	0	0	0	174	
+.PARAMETER	"hUSBTMCSlave"	16 "short"	0	0	0	0	0	0	159	
 .FUNC_END	"USBTMC_slave_detach"
 
 .FUNCTION	"get_device_status"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	200	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	185	
 .FUNC_END	"get_device_status"
 
 .FUNCTION	"strncpy"	extern
@@ -2054,9 +2103,9 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_slave_attach"	
 .RETURN "short"	16	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	172	
-.PARAMETER	"__unknown"	8 "char"	0	0	0	0	0	0	172	
-.PARAMETER	"hFT232"	16 "short"	0	0	0	0	0	0	172	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	167	
+.PARAMETER	"__unknown"	8 "char"	0	0	0	0	0	0	167	
+.PARAMETER	"hFT232"	16 "short"	0	0	0	0	0	0	167	
 .FUNC_END	"USBBRI_slave_attach"
 
 .FUNCTION	"vos_init_cond_var"	
@@ -2066,14 +2115,14 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_controul_transfer_out"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	207	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	207	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	207	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	202	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	202	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	202	
 .FUNC_END	"USBBRI_controul_transfer_out"
 
 .FUNCTION	"get_configuration"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	196	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	181	
 .FUNC_END	"get_configuration"
 
 .FUNCTION	"vos_wait_cond_var"	
@@ -2084,20 +2133,20 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"wait_setup_packet"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	206	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	191	
 .FUNC_END	"wait_setup_packet"
 
 .FUNCTION	"USBTMC_slave_attach"	
 .RETURN "short"	16	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	173	
-.PARAMETER	"__unknown"	8 "char"	0	0	0	0	0	0	173	
-.PARAMETER	"hFT232"	16 "short"	0	0	0	0	0	0	173	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	158	
+.PARAMETER	"__unknown"	8 "char"	0	0	0	0	0	0	158	
+.PARAMETER	"hFT232"	16 "short"	0	0	0	0	0	0	158	
 .FUNC_END	"USBTMC_slave_attach"
 
 .FUNCTION	"set_configuration"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	197	
-.PARAMETER	"config"	8 "char"	0	0	0	0	0	0	197	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	182	
+.PARAMETER	"config"	8 "char"	0	0	0	0	0	0	182	
 .FUNC_END	"set_configuration"
 
 .FUNCTION	"fat_dirEntryIsFile"	
@@ -2126,16 +2175,16 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"set_endpoint_maxpacket_size"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	170	
-.PARAMETER	"set_maxsize"	8 "char"	0	0	0	0	0	0	170	
-.PARAMETER	"set_handle"	8 "char"	0	0	0	0	0	0	170	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	155	
+.PARAMETER	"set_maxsize"	8 "char"	0	0	0	0	0	0	155	
+.PARAMETER	"set_handle"	8 "char"	0	0	0	0	0	0	155	
 .FUNC_END	"set_endpoint_maxpacket_size"
 
 .FUNCTION	"int_read"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	213	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	213	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	213	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	198	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	198	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	198	
 .FUNC_END	"int_read"
 
 .FUNCTION	"fat_time"	
@@ -2172,19 +2221,19 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"memset_bulk_header"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	242	
-.PARAMETER	"bulk_flag"	32 "int"	0	0	0	0	0	0	242	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	227	
+.PARAMETER	"bulk_flag"	32 "int"	0	0	0	0	0	0	227	
 .FUNC_END	"memset_bulk_header"
 
 .FUNCTION	"queue_bulk_in_data"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	240	
-.PARAMETER	"length"	32 "int"	0	0	0	0	0	0	240	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	225	
+.PARAMETER	"length"	32 "int"	0	0	0	0	0	0	225	
 .FUNC_END	"queue_bulk_in_data"
 
 .FUNCTION	"USB_device_behavior"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	237	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	222	
 .FUNC_END	"USB_device_behavior"
 
 .FUNCTION	"vos_init"	
@@ -2196,18 +2245,18 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_get_interface"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	192	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	187	
 .FUNC_END	"USBBRI_get_interface"
 
 .FUNCTION	"USBBRI_clear_feature"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	203	
-.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	203	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	198	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	198	
 .FUNC_END	"USBBRI_clear_feature"
 
 .FUNCTION	"USBBRI_set_interface"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	193	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	188	
 .FUNC_END	"USBBRI_set_interface"
 
 .FUNCTION	"vos_gpio_read_port"	
@@ -2228,8 +2277,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"set_endpoint_stall"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	201	
-.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	201	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	186	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	186	
 .FUNC_END	"set_endpoint_stall"
 
 .FUNCTION	"vos_init_semaphore"	
@@ -2256,23 +2305,23 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_get_ep_status"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	198	
-.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	198	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	193	
+.PARAMETER	"ep_id"	8 "char"	0	0	0	0	0	0	193	
 .FUNC_END	"USBBRI_get_ep_status"
 
 .FUNCTION	"USBBRI_function_init"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"vos_dev_num"	8 "char"	0	0	0	0	0	0	171	
+.PARAMETER	"vos_dev_num"	8 "char"	0	0	0	0	0	0	166	
 .FUNC_END	"USBBRI_function_init"
 
 .FUNCTION	"USBBRI_class_request"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	180	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	175	
 .FUNC_END	"USBBRI_class_request"
 
 .FUNCTION	"USBTMC_function_init"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"vos_dev_num"	8 "char"	0	0	0	0	0	0	172	
+.PARAMETER	"vos_dev_num"	8 "char"	0	0	0	0	0	0	157	
 .FUNC_END	"USBTMC_function_init"
 
 .FUNCTION	"vos_start_profiler"	
@@ -2281,9 +2330,9 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"bulk_read"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	211	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	211	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	211	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	196	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	196	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	196	
 .FUNC_END	"bulk_read"
 
 .FUNCTION	"fat_close"	
@@ -2293,18 +2342,18 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"USBBRI_read"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	183	
-.PARAMETER	"num_to_read"	16 "short"	0	0	0	0	0	0	183	
-.PARAMETER	"num_read"	16 "short"	0	1	0	0	0	1	183	
-.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	183	
+.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	178	
+.PARAMETER	"num_to_read"	16 "short"	0	0	0	0	0	0	178	
+.PARAMETER	"num_read"	16 "short"	0	1	0	0	0	1	178	
+.PARAMETER	"ctx"	16 "_USBBRI_context"	0	1	0	0	0	1	178	
 .FUNC_END	"USBBRI_read"
 
 .FUNCTION	"USBTMC_read"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	184	
-.PARAMETER	"num_to_read"	16 "short"	0	0	0	0	0	0	184	
-.PARAMETER	"num_read"	16 "short"	0	1	0	0	0	1	184	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	184	
+.PARAMETER	"xfer"	16 "char"	1	1	0	0	0	1	169	
+.PARAMETER	"num_to_read"	16 "short"	0	0	0	0	0	0	169	
+.PARAMETER	"num_read"	16 "short"	0	1	0	0	0	1	169	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	169	
 .FUNC_END	"USBTMC_read"
 
 .FUNCTION	"fat_bytesPerCluster"	
@@ -2321,14 +2370,14 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"class_requests_inititate_abort_bulk_in"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	229	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	214	
 .FUNC_END	"class_requests_inititate_abort_bulk_in"
 
 .FUNCTION	"int_write"	
 .RETURN "int"	32	1	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	214	
-.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	214	
-.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	214	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	199	
+.PARAMETER	"pbuffer"	16 "char"	0	1	0	0	0	1	199	
+.PARAMETER	"transfer_len"	16 "short"	0	0	0	0	0	0	199	
 .FUNC_END	"int_write"
 
 .FUNCTION	"vos_gpio_enable_int"	
@@ -2351,7 +2400,7 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .FUNCTION	"set_control_ep_halt"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	202	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	187	
 .FUNC_END	"set_control_ep_halt"
 
 
@@ -2505,6 +2554,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .WEAK	"vos_dma_get_fifo_count"
 
+.WEAK	"USBBRI_device_error_deal"
+
 .WEAK	"fat_getFSType"
 
 .WEAK	"USBTMC_connect"
@@ -2575,6 +2626,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .WEAK	"vos_dev_write"
 
+.WEAK	"USBBRI_queue_bulk_in_data"
+
 .WEAK	"class_requests_check_abort_bulk_out_status"
 
 .WEAK	"fat_fileDelete"
@@ -2604,6 +2657,8 @@ Str@2	.ASCIIZ	"USBBRI"
 .WEAK	"ltoa"
 
 .WEAK	"atol"
+
+.WEAK	"USBBRI_set_endpoint_stall"
 
 .WEAK	"vos_reset_vnc2"
 
@@ -2687,6 +2742,8 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .WEAK	"get_bulk_status"
 
+.WEAK	"USBBRI_queue_bulk_in_header"
+
 .WEAK	"USBTMC_disconnect"
 
 .WEAK	"USBTMC_queue_bulk_in_header"
@@ -2758,6 +2815,8 @@ Str@2	.ASCIIZ	"USBBRI"
 .WEAK	"fat_dirDirIsEmpty"
 
 .WEAK	"vos_unlock_mutex"
+
+.WEAK	"USBBRI_queue_bulk_out_header"
 
 .WEAK	"USBTMC_queue_bulk_out_header"
 
@@ -2897,31 +2956,33 @@ Str@2	.ASCIIZ	"USBBRI"
 
 .WEAK	"set_control_ep_halt"
 
-.LINE	56
+.LINE	65
 main:	
 .GLOBAL	 DO_NOT_EXPORT  "main"
 
-.VARIABLE	"uartContext"	8	"_uart_context_t"	0	0	2	0	0	0	60	
+.VARIABLE	"uartContext"	8	"_uart_context_t"	0	0	2	0	0	0	69	
 .FUNCTION	"main"	
 .RETURN "void"	0	0	0	25	0	0	0	
 SP_DEC	$22
-.LINE	65
+.LINE	74
 PUSH8	$5
 PUSH16	$1
 PUSH8	$50
 CALL	vos_init
 SP_INC	$4
-.LINE	66
+.LINE	75
 PUSH8	$0
 CALL	vos_set_clock_frequency
 SP_INC	$1
-.LINE	67
+.LINE	76
 PUSH16	$512
 CALL	vos_set_idle_thread_tcb_size
 SP_INC	$2
-.LINE	70
+.LINE	79
 CALL	iomux_setup
-.LINE	74
+.LINE	81
+CALL	global_array_init
+.LINE	84
 PUSH8	$0
 PUSH8	$0
 SP_DEC	$1
@@ -2929,7 +2990,7 @@ CALL	usbslave_init
 POP8	%eax
 SP_WR8	%eax	$2
 SP_INC	$2
-.LINE	77
+.LINE	87
 PUSH8	$1
 PUSH8	$1
 SP_DEC	$1
@@ -2937,7 +2998,7 @@ CALL	usbslave_init
 POP8	%eax
 SP_WR8	%eax	$3
 SP_INC	$2
-.LINE	80
+.LINE	90
 SP_STORE	%ecx
 ADD16	%ecx	$3
 SP_STORE	%eax
@@ -2951,7 +3012,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$5
 LD8	(%ecx)	$64
-.LINE	81
+.LINE	91
 SP_STORE	%ecx
 ADD16	%ecx	$7
 SP_STORE	%eax
@@ -2965,21 +3026,21 @@ CALL	uart_init
 POP8	%eax
 SP_WR8	%eax	$12
 SP_INC	$3
-.LINE	84
+.LINE	94
 PUSH8	$2
 SP_DEC	$1
 CALL	USBTMC_function_init
 POP8	%eax
 SP_WR8	%eax	$11
 SP_INC	$1
-.LINE	85
+.LINE	95
 PUSH8	$3
 SP_DEC	$1
 CALL	USBBRI_function_init
 POP8	%eax
 SP_WR8	%eax	$12
 SP_INC	$1
-.LINE	88
+.LINE	98
 SP_STORE	%ecx
 ADD16	%ecx	$12
 LD32	(%ecx)	$firmware
@@ -2999,28 +3060,120 @@ POP16	%eax
 SP_WR16	%eax	$31
 SP_INC	$11
 SP_RD16	tcbFIRMWARE	$20
-.LINE	91
+.LINE	101
 CALL	vos_start_scheduler
-.LINE	93
+.LINE	103
 @fl1main_loop:	
-.LINE	94
+.LINE	104
 JUMP	@fl1main_loop
-.LINE	94
+.LINE	104
 SP_INC	$22
 RTS	
 .FUNC_END	"main"
 
-.LINE	99
+.LINE	107
+global_array_init:	
+.GLOBAL	 DO_NOT_EXPORT  "global_array_init"
+
+.FUNCTION	"global_array_init"	
+.RETURN "void"	0	0	0	23	0	0	0	
+SP_DEC	$20
+.LINE	109
+SP_STORE	%ecx
+LD16	(%ecx)	$TMC_TO_BRI_controul_buffer
+PUSH16	$16
+PUSH32	$0
+SP_RD16	%eax	$6
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memset
+POP16	%eax
+SP_WR16	%eax	$10
+SP_INC	$8
+.LINE	110
+SP_STORE	%ecx
+ADD16	%ecx	$4
+LD16	(%ecx)	$BRI_TO_TMC_controul_buffer
+PUSH16	$16
+PUSH32	$0
+SP_RD16	%eax	$10
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memset
+POP16	%eax
+SP_WR16	%eax	$14
+SP_INC	$8
+.LINE	112
+SP_STORE	%ecx
+ADD16	%ecx	$8
+LD16	(%ecx)	$mark_array
+PUSH16	$31
+PUSH32	$0
+SP_RD16	%eax	$14
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memset
+POP16	%eax
+SP_WR16	%eax	$18
+SP_INC	$8
+.LINE	114
+SP_STORE	%ecx
+ADD16	%ecx	$12
+LD16	(%ecx)	$BRI_buffer
+PUSH16	$1024
+PUSH32	$0
+SP_RD16	%eax	$18
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memset
+POP16	%eax
+SP_WR16	%eax	$22
+SP_INC	$8
+.LINE	115
+SP_STORE	%ecx
+ADD16	%ecx	$16
+LD16	(%ecx)	$TMC_buffer
+PUSH16	$1024
+PUSH32	$0
+SP_RD16	%eax	$22
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memset
+POP16	%eax
+SP_WR16	%eax	$26
+SP_INC	$8
+.LINE	117
+LD32	TMC_read_length	$0
+.LINE	118
+LD32	BRI_read_length	$0
+.LINE	120
+LD8	TMC_bulk_write_done	$0
+.LINE	121
+LD8	BRI_bulk_write_done	$0
+.LINE	122
+LD8	TMC_bulk_read_done	$0
+.LINE	123
+LD8	BRI_bulk_read_done	$0
+.LINE	125
+LD8	TMC_request_read_enable	$0
+.LINE	126
+LD8	BRI_request_read_enable	$0
+.LINE	126
+SP_INC	$20
+RTS	
+.FUNC_END	"global_array_init"
+
+.LINE	131
 usbslave_connect:	
 .GLOBAL	 DO_NOT_EXPORT  "usbslave_connect"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	101	
-.VARIABLE	"ret"	8	"char"	0	0	26	0	0	0	102	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	133	
+.VARIABLE	"ret"	8	"char"	0	0	26	0	0	0	134	
 .FUNCTION	"usbslave_connect"	
 .RETURN "char"	8	0	0	30	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	31	0	0	0	99	
+.PARAMETER	"hUSB"	16 "short"	0	0	31	0	0	0	131	
 SP_DEC	$27
-.LINE	104
+.LINE	136
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -3034,7 +3187,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$27
-.LINE	105
+.LINE	137
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -3052,7 +3205,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$21
 CPY16	(%ecx)	(%eax)
-.LINE	106
+.LINE	138
 SP_STORE	%ecx
 ADD16	%ecx	$23
 SP_STORE	%eax
@@ -3068,7 +3221,7 @@ SP_WR8	%eax	$29
 SP_INC	$4
 SP_RD8	%ecx	$25
 SP_WR8	%ecx	$26
-.LINE	108
+.LINE	140
 SP_STORE	%eax
 ADD16	%eax	$26
 SP_STORE	%ecx
@@ -3078,17 +3231,17 @@ SP_INC	$27
 RTS	
 .FUNC_END	"usbslave_connect"
 
-.LINE	111
+.LINE	143
 usbslave_disconnect:	
 .GLOBAL	 DO_NOT_EXPORT  "usbslave_disconnect"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	113	
-.VARIABLE	"ret"	8	"char"	0	0	26	0	0	0	114	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	145	
+.VARIABLE	"ret"	8	"char"	0	0	26	0	0	0	146	
 .FUNCTION	"usbslave_disconnect"	
 .RETURN "char"	8	0	0	30	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	31	0	0	0	111	
+.PARAMETER	"hUSB"	16 "short"	0	0	31	0	0	0	143	
 SP_DEC	$27
-.LINE	116
+.LINE	148
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -3102,7 +3255,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$14
-.LINE	117
+.LINE	149
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -3120,7 +3273,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$21
 CPY16	(%ecx)	(%eax)
-.LINE	118
+.LINE	150
 SP_STORE	%ecx
 ADD16	%ecx	$23
 SP_STORE	%eax
@@ -3134,7 +3287,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$29
 SP_INC	$4
-.LINE	120
+.LINE	152
 SP_STORE	%eax
 ADD16	%eax	$26
 SP_STORE	%ecx
@@ -3144,14 +3297,14 @@ SP_INC	$27
 RTS	
 .FUNC_END	"usbslave_disconnect"
 
-.LINE	125
+.LINE	157
 open_drivers:	
 .GLOBAL	 DO_NOT_EXPORT  "open_drivers"
 
 .FUNCTION	"open_drivers"	
 .RETURN "void"	0	0	0	9	0	0	0	
 SP_DEC	$6
-.LINE	129
+.LINE	161
 PUSH8	$0
 SP_DEC	$2
 CALL	vos_dev_open
@@ -3159,7 +3312,7 @@ POP16	%eax
 SP_WR16	%eax	$1
 SP_INC	$1
 SP_RD16	hUSBSLAVE_1	$0
-.LINE	130
+.LINE	162
 PUSH8	$1
 SP_DEC	$2
 CALL	vos_dev_open
@@ -3167,7 +3320,7 @@ POP16	%eax
 SP_WR16	%eax	$3
 SP_INC	$1
 SP_RD16	hUSBSLAVE_2	$2
-.LINE	131
+.LINE	163
 PUSH8	$4
 SP_DEC	$2
 CALL	vos_dev_open
@@ -3175,53 +3328,53 @@ POP16	%eax
 SP_WR16	%eax	$5
 SP_INC	$1
 SP_RD16	hUART	$4
-.LINE	131
+.LINE	163
 SP_INC	$6
 RTS	
 .FUNC_END	"open_drivers"
 
-.LINE	135
+.LINE	167
 attach_drivers:	
 .GLOBAL	 DO_NOT_EXPORT  "attach_drivers"
 
 .FUNCTION	"attach_drivers"	
 .RETURN "void"	0	0	0	3	0	0	0	
-.LINE	135
+.LINE	167
 RTS	
 .FUNC_END	"attach_drivers"
 
-.LINE	141
+.LINE	173
 close_drivers:	
 .GLOBAL	 DO_NOT_EXPORT  "close_drivers"
 
 .FUNCTION	"close_drivers"	
 .RETURN "void"	0	0	0	3	0	0	0	
-.LINE	144
+.LINE	176
 PUSH16	hUSBSLAVE_1
 CALL	vos_dev_close
 SP_INC	$2
-.LINE	145
+.LINE	177
 PUSH16	hUSBSLAVE_2
 CALL	vos_dev_close
 SP_INC	$2
-.LINE	146
+.LINE	178
 PUSH16	hUART
 CALL	vos_dev_close
 SP_INC	$2
-.LINE	146
+.LINE	178
 RTS	
 .FUNC_END	"close_drivers"
 
-.LINE	154
+.LINE	186
 set_uart_baudrate:	
 .GLOBAL	 DO_NOT_EXPORT  "set_uart_baudrate"
 
-.VARIABLE	"uart_iocb"	72	"_common_ioctl_cb_t"	0	0	0	0	0	0	156	
+.VARIABLE	"uart_iocb"	72	"_common_ioctl_cb_t"	0	0	0	0	0	0	188	
 .FUNCTION	"set_uart_baudrate"	
 .RETURN "void"	0	0	0	25	0	0	0	
-.PARAMETER	"huart"	16 "short"	0	0	25	0	0	0	154	
+.PARAMETER	"huart"	16 "short"	0	0	25	0	0	0	186	
 SP_DEC	$22
-.LINE	158
+.LINE	190
 SP_STORE	%ecx
 ADD16	%ecx	$9
 SP_STORE	%eax
@@ -3235,7 +3388,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$11
 LD8	(%ecx)	$34
-.LINE	159
+.LINE	191
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -3255,7 +3408,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$17
 LD32	(%ecx)	$9600
-.LINE	160
+.LINE	192
 SP_STORE	%ecx
 ADD16	%ecx	$19
 SP_STORE	%eax
@@ -3270,25 +3423,25 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$25
 SP_INC	$4
-.LINE	160
+.LINE	192
 SP_INC	$22
 RTS	
 .FUNC_END	"set_uart_baudrate"
 
-.LINE	163
+.LINE	195
 write_uart:	
 .GLOBAL	 DO_NOT_EXPORT  "write_uart"
 
-.VARIABLE	"enter"	16	"char"	0	0	4	1	1	0	166	
-.VARIABLE	"actual_len"	16	"short"	0	0	10	0	0	0	165	
-.VARIABLE	"enter_len"	16	"short"	0	0	19	0	0	0	165	
+.VARIABLE	"enter"	16	"char"	0	0	4	1	1	0	198	
+.VARIABLE	"actual_len"	16	"short"	0	0	10	0	0	0	197	
+.VARIABLE	"enter_len"	16	"short"	0	0	19	0	0	0	197	
 .FUNCTION	"write_uart"	
 .RETURN "short"	16	0	0	27	0	0	0	
-.PARAMETER	"huart"	16 "short"	0	0	29	0	0	0	163	
-.PARAMETER	"puart_buffer"	16 "char"	0	1	31	0	0	1	163	
-.PARAMETER	"len"	16 "short"	0	0	33	0	0	0	163	
+.PARAMETER	"huart"	16 "short"	0	0	29	0	0	0	195	
+.PARAMETER	"puart_buffer"	16 "char"	0	1	31	0	0	1	195	
+.PARAMETER	"len"	16 "short"	0	0	33	0	0	0	195	
 SP_DEC	$24
-.LINE	167
+.LINE	199
 SP_STORE	%ecx
 LD32	%eax	$0
 LD32	%ebx	$1
@@ -3306,7 +3459,7 @@ SP_STORE	%ebx
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$8
 LD8	(%ecx)	$10
-.LINE	169
+.LINE	201
 SP_STORE	%ecx
 ADD16	%ecx	$12
 SP_STORE	%eax
@@ -3325,7 +3478,7 @@ CALL	vos_dev_write
 POP8	%eax
 SP_WR8	%eax	$22
 SP_INC	$8
-.LINE	170
+.LINE	202
 SP_STORE	%ecx
 ADD16	%ecx	$15
 SP_STORE	%eax
@@ -3350,43 +3503,43 @@ CALL	vos_dev_write
 POP8	%eax
 SP_WR8	%eax	$31
 SP_INC	$8
-.LINE	172
+.LINE	204
 SP_RD16	%eax	$10
 SP_WR16	%eax	$27
 SP_INC	$24
 RTS	
 .FUNC_END	"write_uart"
 
-.LINE	179
+.LINE	211
 firmware:	
 .GLOBAL	 DO_NOT_EXPORT  "firmware"
 
-.VARIABLE	"print"	8	"char"	0	0	0	0	0	0	182	
+.VARIABLE	"print"	8	"char"	0	0	0	0	0	0	214	
 .FUNCTION	"firmware"	
 .RETURN "void"	0	0	0	25	0	0	0	
 SP_DEC	$22
-.LINE	182
+.LINE	214
 LD8	%ecx	$255
 SP_WR8	%ecx	$0
-.LINE	183
+.LINE	215
 CALL	open_drivers
-.LINE	185
+.LINE	217
 CALL	attach_drivers
-.LINE	186
+.LINE	218
 PUSH16	hUART
 CALL	set_uart_baudrate
 SP_INC	$2
-.LINE	187
+.LINE	219
 PUSH16	$1500
 SP_DEC	$1
 CALL	vos_delay_msecs
 POP8	%eax
 SP_WR8	%eax	$3
 SP_INC	$2
-.LINE	190
+.LINE	223
 SP_STORE	%ecx
 ADD16	%ecx	$2
-LD32	(%ecx)	$USBTMC_attach
+LD32	(%ecx)	$USBBRI_attach
 SP_STORE	%ecx
 ADD16	%ecx	$6
 LD32	(%ecx)	$Str@1
@@ -3396,17 +3549,17 @@ PUSH16	%eax
 SP_RD32	%eax	$6
 PUSH32	%eax
 PUSH16	$2048
-PUSH8	$20
+PUSH8	$30
 SP_DEC	$2
 CALL	vos_create_thread_ex
 POP16	%eax
 SP_WR16	%eax	$21
 SP_INC	$11
-SP_RD16	tcbUSBTMC	$10
-.LINE	191
+SP_RD16	tcbUSBBRI	$10
+.LINE	224
 SP_STORE	%ecx
 ADD16	%ecx	$12
-LD32	(%ecx)	$USBBRI_attach
+LD32	(%ecx)	$USBTMC_attach
 SP_STORE	%ecx
 ADD16	%ecx	$16
 LD32	(%ecx)	$Str@2
@@ -3416,26 +3569,26 @@ PUSH16	%eax
 SP_RD32	%eax	$16
 PUSH32	%eax
 PUSH16	$2048
-PUSH8	$20
+PUSH8	$30
 SP_DEC	$2
 CALL	vos_create_thread_ex
 POP16	%eax
 SP_WR16	%eax	$31
 SP_INC	$11
-SP_RD16	tcbUSBBRI	$20
-.LINE	191
+SP_RD16	tcbUSBTMC	$20
+.LINE	224
 SP_INC	$22
 RTS	
 .FUNC_END	"firmware"
 
-.LINE	196
+.LINE	228
 USBTMC_attach:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_attach"
 
 .FUNCTION	"USBTMC_attach"	
 .RETURN "void"	0	0	0	5	0	0	0	
 SP_DEC	$2
-.LINE	201
+.LINE	233
 PUSH16	hUSBSLAVE_USBBRI
 PUSH8	$2
 PUSH16	hUSBSLAVE_1
@@ -3445,28 +3598,28 @@ POP16	%eax
 SP_WR16	%eax	$5
 SP_INC	$5
 SP_RD16	hUSBSLAVE_USBTMC	$0
-.LINE	203
+.LINE	235
 CMP16	hUSBSLAVE_USBTMC	$0
 JNZ	@IC1
 JUMP	@IC2
 @IC2:	
-.LINE	205
+.LINE	237
 SP_INC	$2
 RTS	
 @IC1:	
-.LINE	208
+.LINE	240
 SP_INC	$2
 RTS	
 .FUNC_END	"USBTMC_attach"
 
-.LINE	212
+.LINE	244
 USBBRI_attach:	
 .GLOBAL	 DO_NOT_EXPORT  "USBBRI_attach"
 
 .FUNCTION	"USBBRI_attach"	
 .RETURN "void"	0	0	0	5	0	0	0	
 SP_DEC	$2
-.LINE	217
+.LINE	249
 PUSH16	hUSBSLAVE_USBTMC
 PUSH8	$3
 PUSH16	hUSBSLAVE_2
@@ -3476,16 +3629,16 @@ POP16	%eax
 SP_WR16	%eax	$5
 SP_INC	$5
 SP_RD16	hUSBSLAVE_USBBRI	$0
-.LINE	219
+.LINE	251
 CMP16	hUSBSLAVE_USBBRI	$0
 JNZ	@IC3
 JUMP	@IC4
 @IC4:	
-.LINE	221
+.LINE	253
 SP_INC	$2
 RTS	
 @IC3:	
-.LINE	224
+.LINE	256
 SP_INC	$2
 RTS	
 .FUNC_END	"USBBRI_attach"

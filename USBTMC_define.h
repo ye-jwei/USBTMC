@@ -5,6 +5,22 @@
 /*y = 4,xis transfered to which is tome y and min*/
 # define roundup(x, y) ((((x) + ((y) - 1)) / (y)) * (y))
 
+
+typedef struct _Bulk_header
+{
+	unsigned char  MsgID;
+	unsigned char  bTag;
+	unsigned char  bTagInverse;
+	unsigned char  Reserved;
+	unsigned int   TransferSize;
+	unsigned char  bmTransfer_Attributes;
+	unsigned char  TermChar;
+	unsigned short unused;
+	
+}Bulk_header;
+
+
+
 /*MsgID values*/
 #define DEV_DEP_MSG_OUT              1   //The USBTMC message is a USBTMC device dependent command message. See section 3.2.1.1
 #define REQUEST_DEV_DEP_MSG_IN       2   //The USBTMC message is a USBTMC command message that requests the device to send a USBTMC response message on the Bulk-IN endpoint. See section 3.2.1.2.

@@ -94,37 +94,39 @@ Str@4	.ASCIIZ	"request_bulk_in"
 Str@5	.ASCIIZ	"bulk_out_done"
 Str@6	.ASCIIZ	"bulk_out_done"
 Str@7	.ASCIIZ	"device_error"
-Str@9	.ASCIIZ	"queue_bulk_in_data"
-Str@10	.ASCIIZ	"queue_bulk_in_header"
-Str@12	.ASCIIZ	"clear_feature"
-Str@13	.ASCIIZ	"set_endpoint_stall"
-Str@14	.ASCIIZ	"class_request_test"
-Str@15	.ASCIIZ	"get_bulk_out_header:"
-Str@16	.ASCIIZ	"get_bulk_in_status:"
-Str@17	.ASCIIZ	"get_bulk_in_header:"
-Str@19	.ASCIIZ	"inititate_abort_bulk_out"
-Str@20	.ASCIIZ	"check_abort_bulk_out_status"
-Str@21	.ASCIIZ	"inititate_abort_bulk_in"
-Str@22	.ASCIIZ	"check_abort_bulk_in_status"
-Str@24	.ASCIIZ	"show_endpoint_status_&_fifo"
-Str@25	.ASCIIZ	"initiate_clear"
-Str@26	.ASCIIZ	"check_clear_statue"
-Str@27	.ASCIIZ	"get_capablities"
-Str@28	.ASCIIZ	"indicator_pulse"
-.WEAK	"BRI_TO_TMC_bulk_buffer"
-.WEAK	"TMC_TO_BRI_bulk_buffer"
+Str@9	.ASCIIZ	"data_to_bulk_in"
+Str@10	.ASCIIZ	"queue_bulk_in_data"
+Str@11	.ASCIIZ	"queue_bulk_in_header"
+Str@13	.ASCIIZ	"clear_feature"
+Str@14	.ASCIIZ	"set_endpoint_stall"
+Str@15	.ASCIIZ	"class_request_test"
+Str@16	.ASCIIZ	"get_bulk_out_header:"
+Str@17	.ASCIIZ	"get_bulk_in_status:"
+Str@18	.ASCIIZ	"get_bulk_in_header:"
+Str@20	.ASCIIZ	"inititate_abort_bulk_out"
+Str@21	.ASCIIZ	"check_abort_bulk_out_status"
+Str@22	.ASCIIZ	"inititate_abort_bulk_in"
+Str@23	.ASCIIZ	"check_abort_bulk_in_status"
+Str@25	.ASCIIZ	"show_endpoint_status_&_fifo"
+Str@26	.ASCIIZ	"initiate_clear"
+Str@27	.ASCIIZ	"check_clear_statue"
+Str@28	.ASCIIZ	"get_capablities"
+Str@29	.ASCIIZ	"indicator_pulse"
 .WEAK	"mark_array"
 .WEAK	"bulk_header"
-.WEAK	"TMC_requset_BRI_answer"
-.WEAK	"BRI_read_done"
-.WEAK	"TMC_read_done"
-.WEAK	"BRI_write_done"
-.WEAK	"TMC_write_done"
+.WEAK	"BRI_request_read_enable"
+.WEAK	"TMC_request_read_enable"
 .WEAK	"hUART"
-.WEAK	"BRI_read_buffer"
-.WEAK	"TMC_read_buffer"
+.WEAK	"BRI_read_length"
+.WEAK	"TMC_read_length"
 .WEAK	"BRI_TO_TMC_controul_buffer"
 .WEAK	"TMC_TO_BRI_controul_buffer"
+.WEAK	"BRI_bulk_read_done"
+.WEAK	"TMC_bulk_read_done"
+.WEAK	"BRI_bulk_write_done"
+.WEAK	"TMC_bulk_write_done"
+.WEAK	"BRI_buffer"
+.WEAK	"TMC_buffer"
 
 
 .ENUM	"IOMUX_SIGNALS"
@@ -388,6 +390,17 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .STRUCTMEM	"bInterval"	"char"	8	0	0	0	0	0	0	
 .STRUCT_END	"_usb_deviceEndpointDescriptor_t"
 
+.STRUCT	"_Bulk_header"	96
+.STRUCTMEM	"MsgID"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"bTag"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"bTagInverse"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"Reserved"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"TransferSize"	"int"	32	0	0	0	0	0	0	
+.STRUCTMEM	"bmTransfer_Attributes"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"TermChar"	"char"	8	0	0	0	0	0	0	
+.STRUCTMEM	"unused"	"short"	16	0	0	0	0	0	0	
+.STRUCT_END	"_Bulk_header"
+
 .STRUCT	"_vos_semaphore_list_t"	56
 .STRUCTMEM	"next"	"_vos_semaphore_list_t"	16	0	1	0	0	0	1	
 .STRUCTMEM	"siz"	"char"	8	1	0	0	0	0	0	
@@ -531,8 +544,8 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .STRUCTMEM	"int_read_enable"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"int_write_enable"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"class_request_enable"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"USBTMC_bulk_out_header"	"_USBTMC_bulk_header"	96	0	0	0	0	0	0	
-.STRUCTMEM	"USBTMC_bulk_in_header"	"_USBTMC_bulk_header"	96	0	0	0	0	0	0	
+.STRUCTMEM	"USBTMC_bulk_out_header"	"_Bulk_header"	96	0	0	0	0	0	0	
+.STRUCTMEM	"USBTMC_bulk_in_header"	"_Bulk_header"	96	0	0	0	0	0	0	
 .STRUCTMEM	"bulk_out_header"	"char"	96	0	0	0	1	1	0	
 .STRUCTMEM	"bulk_in_header"	"char"	96	0	0	0	1	1	0	
 .STRUCTMEM	"response_packet"	"char"	104	0	0	0	1	1	0	
@@ -624,17 +637,6 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .STRUCTMEM	"flow_control"	"char"	8	0	0	0	0	0	0	
 .STRUCTMEM	"afull_trigger"	"char"	8	0	0	0	0	0	0	
 .STRUCT_END	"_vos_dma_config_t"
-
-.STRUCT	"_USBTMC_bulk_header"	96
-.STRUCTMEM	"MsgID"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"bTag"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"bTagInverse"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"Reserved"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"TransferSize"	"int"	32	0	0	0	0	0	0	
-.STRUCTMEM	"bmTransfer_Attributes"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"TermChar"	"char"	8	0	0	0	0	0	0	
-.STRUCTMEM	"unused"	"short"	16	0	0	0	0	0	0	
-.STRUCT_END	"_USBTMC_bulk_header"
 
 .ENUM	"FAT_STATUS"
 .ENUMERATOR	"FAT_OK"	0
@@ -807,6 +809,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .TYPEDEF	"char"	"usbslave_ep_handle_t"
 .TYPEDEF	"_vos_gpio_t"	"vos_gpio_t"
 .TYPEDEF	"_usb_deviceEndpointDescriptor_t"	"usb_deviceEndpointDescriptor_t"
+.TYPEDEF	"_Bulk_header"	"Bulk_header"
 .TYPEDEF	"_vos_semaphore_list_t"	"vos_semaphore_list_t"
 .TYPEDEF	"_fatdrv_ioctl_cb_dir_t"	"fatdrv_ioctl_cb_dir_t"
 .TYPEDEF	"char"	"PF"
@@ -840,7 +843,6 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .TYPEDEF	"char"	"PF_IOCTL"
 .TYPEDEF	"short"	"size_t"
 .TYPEDEF	"_vos_dma_config_t"	"vos_dma_config_t"
-.TYPEDEF	"_USBTMC_bulk_header"	"USBTMC_bulk_header"
 .TYPEDEF	"_usb_interfaceAssociationDescriptor_t"	"usb_interfaceAssociationDescriptor_t"
 .TYPEDEF	"_common_ioctl_cb_t"	"common_ioctl_cb_t"
 .TYPEDEF	"_usb_hub_selector_t"	"usb_hub_selector_t"
@@ -864,8 +866,6 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .RETURN "void"	0	0	0	0	0	0	0	
 .FUNC_END	"FT232_attach"
 
-.VARIABLE	"BRI_TO_TMC_bulk_buffer"	512	"char"	0	0	-2	1	1	0	20	extern
-.VARIABLE	"TMC_TO_BRI_bulk_buffer"	512	"char"	0	0	-2	1	1	0	19	extern
 .FUNCTION	"vos_gpio_write_port"	
 .RETURN "char"	8	0	0	0	0	0	0	
 .PARAMETER	"portId"	8 "char"	0	0	0	0	0	0	125	
@@ -921,9 +921,9 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"write_uart"	
 .RETURN "short"	16	0	0	0	0	0	0	
-.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	169	
-.PARAMETER	"puart_buffer"	16 "char"	0	1	0	0	0	1	169	
-.PARAMETER	"len"	16 "short"	0	0	0	0	0	0	169	
+.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	154	
+.PARAMETER	"puart_buffer"	16 "char"	0	1	0	0	0	1	154	
+.PARAMETER	"len"	16 "short"	0	0	0	0	0	0	154	
 .FUNC_END	"write_uart"
 
 .FUNCTION	"vos_dma_get_fifo_data_register"	
@@ -953,8 +953,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"intNum"	8 "char"	0	0	0	0	0	0	130	
 .FUNC_END	"vos_gpio_wait_on_int"
 
-.VARIABLE	"bulk_header"	96	"char"	0	0	-2	1	1	0	24	extern
-.VARIABLE	"TMC_requset_BRI_answer"	8	"char"	0	0	-2	0	0	0	31	extern
+.VARIABLE	"bulk_header"	96	"char"	0	0	-2	1	1	0	21	extern
 .FUNCTION	"stdinAttach"	
 .RETURN "int"	32	1	0	0	0	0	0	
 .PARAMETER	"__unknown"	16 "short"	0	0	0	0	0	0	43	
@@ -1072,16 +1071,14 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"USBTMC_int_write_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	220	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	205	
 .FUNC_END	"USBTMC_int_write_thread"
 
-.VARIABLE	"BRI_read_done"	8	"char"	0	0	-2	0	0	0	29	extern
 .FUNCTION	"vos_enable_interrupts"	
 .RETURN "void"	0	0	0	0	0	0	0	
 .PARAMETER	"mask"	32 "int"	0	0	0	0	0	0	72	
 .FUNC_END	"vos_enable_interrupts"
 
-.VARIABLE	"TMC_read_done"	8	"char"	0	0	-2	0	0	0	28	extern
 .FUNCTION	"fat_capacity"	
 .RETURN "char"	8	0	0	0	0	0	0	
 .PARAMETER	"fat_ctx"	16 "void"	0	1	0	0	0	1	216	
@@ -1107,6 +1104,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"__unknown"	16 "short"	0	0	0	0	0	0	44	
 .FUNC_END	"stdoutAttach"
 
+.VARIABLE	"BRI_request_read_enable"	8	"char"	0	0	-2	0	0	0	30	extern
 .FUNCTION	"vos_dev_open"	
 .RETURN "short"	16	0	0	0	0	0	0	
 .PARAMETER	"dev_num"	8 "char"	0	0	0	0	0	0	53	
@@ -1123,6 +1121,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"context"	16 "void"	0	1	0	0	0	1	50	
 .FUNC_END	"vos_dev_init"
 
+.VARIABLE	"TMC_request_read_enable"	8	"char"	0	0	-2	0	0	0	31	extern
 .FUNCTION	"open_drivers"	
 .RETURN "void"	0	0	0	0	0	0	0	
 .FUNC_END	"open_drivers"
@@ -1214,7 +1213,6 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"h"	16 "short"	0	0	0	0	0	0	57	
 .FUNC_END	"vos_dev_close"
 
-.VARIABLE	"BRI_write_done"	8	"char"	0	0	-2	0	0	0	27	extern
 .FUNCTION	"vos_wdt_clear"	
 .RETURN "void"	0	0	0	0	0	0	0	
 .FUNC_END	"vos_wdt_clear"
@@ -1229,7 +1227,6 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"cb"	16 "void"	0	1	0	0	0	1	56	
 .FUNC_END	"vos_dev_ioctl"
 
-.VARIABLE	"TMC_write_done"	8	"char"	0	0	-2	0	0	0	26	extern
 .FUNCTION	"close_drivers"	
 .RETURN "void"	0	0	0	0	0	0	0	
 .FUNC_END	"close_drivers"
@@ -1319,12 +1316,12 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"nptr"	16 "char"	1	1	0	0	0	1	29	const
 .FUNC_END	"atol"
 
-.VARIABLE	"BRI_read_buffer"	8192	"char"	0	0	-2	1	1	0	22	extern
 .FUNCTION	"vos_reset_vnc2"	
 .RETURN "void"	0	0	0	0	0	0	0	
 .FUNC_END	"vos_reset_vnc2"
 
-.VARIABLE	"TMC_read_buffer"	8192	"char"	0	0	-2	1	1	0	23	extern
+.VARIABLE	"BRI_read_length"	32	"int"	0	0	-2	0	0	0	29	extern
+.VARIABLE	"TMC_read_length"	32	"int"	0	0	-2	0	0	0	28	extern
 .FUNCTION	"vos_heap_space"	
 .RETURN "void"	0	0	0	0	0	0	0	
 .PARAMETER	"hfree"	16 "short"	0	1	0	0	0	1	30	
@@ -1544,7 +1541,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"get_descriptor_B"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	191	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	176	
 .FUNC_END	"get_descriptor_B"
 
 .FUNCTION	"fat_fileTruncate"	
@@ -1636,17 +1633,17 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"usbslave_connect"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	154	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	139	
 .FUNC_END	"usbslave_connect"
 
 .FUNCTION	"bulkwrite_thread"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	216	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	201	
 .FUNC_END	"bulkwrite_thread"
 
 .FUNCTION	"ft232_slave_detach"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"hSlaveFT232"	16 "short"	0	0	0	0	0	0	158	
+.PARAMETER	"hSlaveFT232"	16 "short"	0	0	0	0	0	0	143	
 .FUNC_END	"ft232_slave_detach"
 
 .FUNCTION	"vos_dma_retained_configure"	
@@ -1658,8 +1655,8 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"ft232_slave_attach"	
 .RETURN "short"	16	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	157	
-.PARAMETER	"devSlaveFT232"	8 "char"	0	0	0	0	0	0	157	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	142	
+.PARAMETER	"devSlaveFT232"	8 "char"	0	0	0	0	0	0	142	
 .FUNC_END	"ft232_slave_attach"
 
 .FUNCTION	"fat_dirDirIsEmpty"	
@@ -1676,6 +1673,8 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .RETURN "int"	32	1	0	0	0	0	0	
 .FUNC_END	"getchar"
 
+.VARIABLE	"BRI_bulk_read_done"	8	"char"	0	0	-2	0	0	0	26	extern
+.VARIABLE	"TMC_bulk_read_done"	8	"char"	0	0	-2	0	0	0	25	extern
 .FUNCTION	"putchar"	
 .RETURN "int"	32	1	0	0	0	0	0	
 .PARAMETER	"__unknown"	32 "int"	1	0	0	0	0	0	69	
@@ -1739,7 +1738,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"set_uart_baudrate"	
 .RETURN "void"	0	0	0	0	0	0	0	
-.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	167	
+.PARAMETER	"huart"	16 "short"	0	0	0	0	0	0	152	
 .FUNC_END	"set_uart_baudrate"
 
 .FUNCTION	"strncpy"	extern
@@ -1822,7 +1821,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"USB_device_behavior"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	237	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	0	0	0	1	222	
 .FUNC_END	"USB_device_behavior"
 
 .FUNCTION	"vos_init"	
@@ -1832,6 +1831,8 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"num_devices"	8 "char"	0	0	0	0	0	0	52	
 .FUNC_END	"vos_init"
 
+.VARIABLE	"BRI_bulk_write_done"	8	"char"	0	0	-2	0	0	0	24	extern
+.VARIABLE	"TMC_bulk_write_done"	8	"char"	0	0	-2	0	0	0	23	extern
 .FUNCTION	"vos_gpio_read_port"	
 .RETURN "char"	8	0	0	0	0	0	0	
 .PARAMETER	"portId"	8 "char"	0	0	0	0	0	0	121	
@@ -1879,6 +1880,8 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .PARAMETER	"fat_ctx"	16 "void"	0	1	0	0	0	1	210	
 .FUNC_END	"fat_close"
 
+.VARIABLE	"BRI_buffer"	8192	"char"	0	0	-2	1	1	0	19	extern
+.VARIABLE	"TMC_buffer"	8192	"char"	0	0	-2	1	1	0	20	extern
 .FUNCTION	"fat_bytesPerCluster"	
 .RETURN "char"	8	0	0	0	0	0	0	
 .PARAMETER	"fat_ctx"	16 "void"	0	1	0	0	0	1	217	
@@ -1911,7 +1914,7 @@ Str@28	.ASCIIZ	"indicator_pulse"
 
 .FUNCTION	"usbslave_disconnect"	
 .RETURN "char"	8	0	0	0	0	0	0	
-.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	155	
+.PARAMETER	"hUSB"	16 "short"	0	0	0	0	0	0	140	
 .FUNC_END	"usbslave_disconnect"
 
 
@@ -1919,9 +1922,9 @@ Str@28	.ASCIIZ	"indicator_pulse"
 .TEXT
 
 Array@8	.DB	12	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-Array@11	.DB	11	99, 108, 97, 115, 115, 95, 116, 101, 115, 116, 50
-Array@18	.DB	12	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-Array@23	.DB	12	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+Array@12	.DB	11	99, 108, 97, 115, 115, 95, 116, 101, 115, 116, 50
+Array@19	.DB	12	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+Array@24	.DB	12	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
 .WEAK	"vos_dma_get_fifo_flow_control"
 
@@ -3672,7 +3675,7 @@ LD16	%ebx	$214
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$227
 LD8	(%ecx)	$1
-.LINE	210
+.LINE	211
 SP_STORE	%ecx
 ADD16	%ecx	$229
 SP_STORE	%eax
@@ -3714,7 +3717,7 @@ SP_RD16	%ecx	$233
 SP_STORE	%eax
 ADD16	%eax	$243
 CPY16	(%ecx)	(%eax)
-.LINE	212
+.LINE	213
 SP_STORE	%ecx
 ADD16	%ecx	$245
 SP_STORE	%eax
@@ -3758,7 +3761,7 @@ SP_RD16	%ecx	$249
 SP_STORE	%eax
 ADD16	%eax	$259
 CPY16	(%ecx)	(%eax)
-.LINE	213
+.LINE	214
 SP_STORE	%ecx
 ADD16	%ecx	$261
 SP_STORE	%eax
@@ -3806,7 +3809,7 @@ CPY16	%ecx	(%ecx)
 SP_STORE	%eax
 ADD16	%eax	$275
 CPY16	(%ecx)	(%eax)
-.LINE	214
+.LINE	215
 SP_STORE	%ecx
 ADD16	%ecx	$277
 SP_STORE	%eax
@@ -3855,7 +3858,7 @@ SP_STORE	%eax
 ADD16	%eax	$291
 CPY16	(%ecx)	(%eax)
 @IC22:	
-.LINE	218
+.LINE	219
 SP_STORE	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$296
@@ -3865,24 +3868,24 @@ SP_INC	$38
 RTS	
 .FUNC_END	"USBTMC_connect"
 
-.LINE	222
+.LINE	223
 USBTMC_read:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_read"
 
 .FUNCTION	"USBTMC_read"	
 .RETURN "char"	8	0	0	9	0	0	0	
-.PARAMETER	"xfer"	16 "char"	0	1	10	0	0	1	222	
-.PARAMETER	"num_to_read"	16 "short"	0	0	12	0	0	0	222	
-.PARAMETER	"num_read"	16 "short"	0	1	14	0	0	1	222	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	16	0	0	1	222	
+.PARAMETER	"xfer"	16 "char"	0	1	10	0	0	1	223	
+.PARAMETER	"num_to_read"	16 "short"	0	0	12	0	0	0	223	
+.PARAMETER	"num_read"	16 "short"	0	1	14	0	0	1	223	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	16	0	0	1	223	
 SP_DEC	$6
-.LINE	224
+.LINE	225
 SP_RD16	%ecx	$14
 SP_WR16	%ecx	$0
 SP_RD16	%ecx	$0
 LD16	(%ecx)	$0
 @IC24:	
-.LINE	225
+.LINE	226
 SP_RD16	%ecx	$12
 SP_WR16	%ecx	$2
 SP_STORE	%eax
@@ -3894,7 +3897,7 @@ CMP16	(%ecx)	$0
 JNZ	@IC26
 JUMP	@IC25
 @IC26:	
-.LINE	228
+.LINE	229
 SP_STORE	%ecx
 ADD16	%ecx	$4
 SP_RD16	%eax	$14
@@ -3906,34 +3909,34 @@ SP_RD16	%ecx	$14
 SP_STORE	%eax
 ADD16	%eax	$4
 CPY16	(%ecx)	(%eax)
-.LINE	225
+.LINE	226
 JUMP	@IC24
 @IC25:	
-.LINE	231
+.LINE	232
 LD8	%eax	$0
 SP_WR8	%eax	$9
 SP_INC	$6
 RTS	
 .FUNC_END	"USBTMC_read"
 
-.LINE	235
+.LINE	236
 USBTMC_write:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_write"
 
-.VARIABLE	"iocb"	72	"_common_ioctl_cb_t"	0	0	14	0	0	0	237	
+.VARIABLE	"iocb"	72	"_common_ioctl_cb_t"	0	0	14	0	0	0	238	
 .FUNCTION	"USBTMC_write"	
 .RETURN "char"	8	0	0	82	0	0	0	
-.PARAMETER	"xfer"	16 "char"	1	1	83	0	0	1	235	
-.PARAMETER	"num_to_write"	16 "short"	0	0	85	0	0	0	235	
-.PARAMETER	"num_written"	16 "short"	0	1	87	0	0	1	235	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	89	0	0	1	235	
+.PARAMETER	"xfer"	16 "char"	1	1	83	0	0	1	236	
+.PARAMETER	"num_to_write"	16 "short"	0	0	85	0	0	0	236	
+.PARAMETER	"num_written"	16 "short"	0	1	87	0	0	1	236	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	89	0	0	1	236	
 SP_DEC	$79
-.LINE	239
+.LINE	240
 SP_RD16	%ecx	$87
 SP_WR16	%ecx	$0
 SP_RD16	%ecx	$0
 LD16	(%ecx)	$0
-.LINE	242
+.LINE	243
 SP_STORE	%ecx
 ADD16	%ecx	$2
 SP_STORE	%eax
@@ -3963,7 +3966,7 @@ ADD16	%ebx	$8
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$12
 SP_WR16	%ecx	$83
-.LINE	243
+.LINE	244
 SP_STORE	%ecx
 ADD16	%ecx	$23
 SP_STORE	%eax
@@ -3977,7 +3980,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$25
 LD8	(%ecx)	$3
-.LINE	244
+.LINE	245
 SP_STORE	%ecx
 ADD16	%ecx	$27
 SP_STORE	%eax
@@ -3997,7 +4000,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$31
 LD16	(%ecx)	$0
-.LINE	245
+.LINE	246
 SP_STORE	%ecx
 ADD16	%ecx	$33
 SP_STORE	%eax
@@ -4031,7 +4034,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$47
 SP_INC	$4
-.LINE	247
+.LINE	248
 SP_STORE	%ecx
 ADD16	%ecx	$44
 SP_STORE	%eax
@@ -4059,18 +4062,18 @@ CMP16	(%ecx)	$0
 JZ	@IC28
 JNZ	@IC27
 @IC28:	
-.LINE	249
+.LINE	250
 PUSH16	$500
 SP_DEC	$1
 CALL	vos_delay_msecs
 POP8	%eax
 SP_WR8	%eax	$54
 SP_INC	$2
-.LINE	251
+.LINE	252
 SP_INC	$79
 RTS	
 @IC27:	
-.LINE	254
+.LINE	255
 SP_STORE	%ecx
 ADD16	%ecx	$53
 SP_STORE	%eax
@@ -4098,7 +4101,7 @@ CMP16	(%ecx)	$128
 JGT	@IC32
 JUMP	@IC31
 @IC32:	
-.LINE	255
+.LINE	256
 SP_STORE	%ecx
 ADD16	%ecx	$61
 SP_STORE	%eax
@@ -4119,7 +4122,7 @@ ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$65
 LD16	(%ecx)	$128
 @IC31:	
-.LINE	257
+.LINE	258
 SP_STORE	%ecx
 ADD16	%ecx	$67
 SP_STORE	%eax
@@ -4144,7 +4147,7 @@ CPY16	(%ecx)	(%eax)
 SP_RD16	%ecx	$73
 SP_WR16	%ecx	$85
 @IC35:	
-.LINE	261
+.LINE	262
 SP_RD16	%ecx	$85
 SP_WR16	%ecx	$75
 SP_STORE	%eax
@@ -4156,7 +4159,7 @@ CMP16	(%ecx)	$0
 JNZ	@IC37
 JUMP	@IC36
 @IC37:	
-.LINE	264
+.LINE	265
 SP_STORE	%ecx
 ADD16	%ecx	$77
 SP_RD16	%eax	$87
@@ -4168,62 +4171,62 @@ SP_RD16	%ecx	$87
 SP_STORE	%eax
 ADD16	%eax	$77
 CPY16	(%ecx)	(%eax)
-.LINE	261
+.LINE	262
 JUMP	@IC35
 @IC36:	
-.LINE	267
+.LINE	268
 LD8	%eax	$0
 SP_WR8	%eax	$82
 SP_INC	$79
 RTS	
 .FUNC_END	"USBTMC_write"
 
-.LINE	272
+.LINE	273
 USBTMC_bulk_read_thread:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_bulk_read_thread"
 
 .FUNCTION	"USBTMC_bulk_read_thread"	
 .RETURN "void"	0	0	0	3	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	3	0	0	1	272	
-.LINE	313
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	3	0	0	1	273	
+.LINE	314
 RTS	
 .FUNC_END	"USBTMC_bulk_read_thread"
 
-.LINE	316
+.LINE	317
 USBTMC_bulk_write_thread:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_bulk_write_thread"
 
-.VARIABLE	"real_length"	32	"int"	0	0	0	0	0	0	320	
-.VARIABLE	"tmp"	32	"int"	1	0	4	0	0	0	322	
-.VARIABLE	"flag"	32	"int"	1	0	8	0	0	0	324	
-.VARIABLE	"num"	32	"int"	1	0	12	0	0	0	325	
-.VARIABLE	"count"	32	"int"	1	0	16	0	0	0	326	
-.VARIABLE	"remainder"	32	"int"	1	0	20	0	0	0	326	
-.VARIABLE	"endpoint_status"	8	"char"	0	0	25	0	0	0	327	
-.VARIABLE	"write_length"	32	"int"	0	0	81	0	0	0	320	
+.VARIABLE	"real_length"	32	"int"	0	0	0	0	0	0	319	
+.VARIABLE	"tmp"	32	"int"	1	0	4	0	0	0	321	
+.VARIABLE	"flag"	32	"int"	1	0	8	0	0	0	323	
+.VARIABLE	"num"	32	"int"	1	0	12	0	0	0	324	
+.VARIABLE	"count"	32	"int"	1	0	16	0	0	0	325	
+.VARIABLE	"remainder"	32	"int"	1	0	20	0	0	0	325	
+.VARIABLE	"endpoint_status"	8	"char"	0	0	25	0	0	0	326	
+.VARIABLE	"write_length"	32	"int"	0	0	81	0	0	0	319	
 .FUNCTION	"USBTMC_bulk_write_thread"	
 .RETURN "void"	0	0	0	380	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	380	0	0	1	316	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	380	0	0	1	317	
 SP_DEC	$255
 SP_DEC	$122
-.LINE	320
+.LINE	319
 LD32	%ecx	$0
 SP_WR32	%ecx	$0
-.LINE	322
+.LINE	321
 LD32	%ecx	$0
 SP_WR32	%ecx	$4
-.LINE	324
+.LINE	323
 LD32	%ecx	$1
 SP_WR32	%ecx	$8
-.LINE	325
+.LINE	324
 LD32	%ecx	$0
 SP_WR32	%ecx	$12
-.LINE	326
+.LINE	325
 LD32	%ecx	$0
 SP_WR32	%ecx	$16
 LD32	%ecx	$0
 SP_WR32	%ecx	$20
-.LINE	327
+.LINE	326
 PUSH8	$2
 SP_STORE	%eax
 ADD16	%eax	$381
@@ -4236,7 +4239,7 @@ SP_INC	$3
 SP_RD8	%ecx	$24
 SP_WR8	%ecx	$25
 @IC38:	
-.LINE	331
+.LINE	329
 SP_STORE	%ecx
 ADD16	%ecx	$26
 SP_STORE	%eax
@@ -4261,7 +4264,7 @@ CMP8	%ecx	$0
 JNZ	@IC40
 JUMP	@IC39
 @IC40:	
-.LINE	333
+.LINE	331
 SP_STORE	%ecx
 ADD16	%ecx	$33
 SP_STORE	%eax
@@ -4309,20 +4312,20 @@ ADD16	%ebx	$45
 ADD32	(%ecx)	(%eax)	(%ebx)
 SP_RD32	%ecx	$49
 SP_WR32	%ecx	$0
-.LINE	334
+.LINE	332
 SP_RD32	%ecx	$12
 SP_WR32	%ecx	$53
 SP_STORE	%eax
 ADD16	%eax	$12
 INC32	(%eax)	$1
-.LINE	336
+.LINE	334
 SP_STORE	%ecx
 ADD16	%ecx	$12
 CMP32	(%ecx)	$1
 JZ	@IC43
 JNZ	@IC42
 @IC43:	
-.LINE	338
+.LINE	336
 SP_STORE	%ecx
 ADD16	%ecx	$57
 SP_STORE	%eax
@@ -4363,7 +4366,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$75
 SP_INC	$6
-.LINE	341
+.LINE	339
 SP_STORE	%ecx
 ADD16	%ecx	$71
 SP_STORE	%eax
@@ -4391,7 +4394,7 @@ SP_WR32	%eax	$81
 SP_INC	$4
 SP_RD32	%ecx	$77
 SP_WR32	%ecx	$81
-.LINE	343
+.LINE	341
 SP_STORE	%ecx
 ADD16	%ecx	$85
 SP_STORE	%eax
@@ -4422,7 +4425,7 @@ CMP8	%ecx	$1
 JZ	@IC48
 JNZ	@IC47
 @IC48:	
-.LINE	347
+.LINE	345
 SP_STORE	%ecx
 ADD16	%ecx	$94
 SP_STORE	%eax
@@ -4438,7 +4441,7 @@ SP_STORE	%eax
 ADD16	%eax	$96
 LD16	%ebx	$218
 ADD16	(%ecx)	(%eax)	%ebx
-.LINE	346
+.LINE	344
 SP_STORE	%ecx
 ADD16	%ecx	$100
 SP_STORE	%eax
@@ -4449,7 +4452,7 @@ SP_STORE	%ecx
 ADD16	%ecx	$102
 SP_RD16	%eax	$100
 CPY8	(%ecx)	(%eax)
-.LINE	347
+.LINE	345
 SP_RD8	%ecx	$102
 CMP8	%ecx	$1
 JGE	@IC54
@@ -4470,7 +4473,7 @@ SP_STORE	%eax
 ADD16	%eax	$105
 LD16	%ebx	$218
 ADD16	(%ecx)	(%eax)	%ebx
-.LINE	346
+.LINE	344
 SP_STORE	%ecx
 ADD16	%ecx	$109
 SP_STORE	%eax
@@ -4481,7 +4484,7 @@ SP_STORE	%ecx
 ADD16	%ecx	$111
 SP_RD16	%eax	$109
 CPY8	(%ecx)	(%eax)
-.LINE	347
+.LINE	345
 SP_RD8	%ecx	$111
 CMP8	%ecx	$255
 JLE	@IC53
@@ -4550,21 +4553,21 @@ CMP8	(%ecx)	(%eax)
 JZ	@IC52
 JNZ	@IC51
 @IC52:	
-.LINE	349
+.LINE	347
 PUSH32	$1
 SP_STORE	%eax
 ADD16	%eax	$384
 PUSH16	(%eax)
 CALL	USB_device_error_deal
 SP_INC	$6
-.LINE	350
+.LINE	348
 LD32	%ecx	$-1
 SP_WR32	%ecx	$12
 @IC51:	
-.LINE	346
+.LINE	344
 JUMP	@IC46
 @IC47:	
-.LINE	353
+.LINE	351
 SP_STORE	%ecx
 ADD16	%ecx	$131
 SP_STORE	%eax
@@ -4595,7 +4598,7 @@ CMP8	%ecx	$2
 JZ	@IC63
 JNZ	@IC62
 @IC63:	
-.LINE	357
+.LINE	355
 SP_STORE	%ecx
 ADD16	%ecx	$140
 SP_STORE	%eax
@@ -4611,7 +4614,7 @@ SP_STORE	%eax
 ADD16	%eax	$142
 LD16	%ebx	$218
 ADD16	(%ecx)	(%eax)	%ebx
-.LINE	356
+.LINE	354
 SP_STORE	%ecx
 ADD16	%ecx	$146
 SP_STORE	%eax
@@ -4622,7 +4625,7 @@ SP_STORE	%ecx
 ADD16	%ecx	$148
 SP_RD16	%eax	$146
 CPY8	(%ecx)	(%eax)
-.LINE	357
+.LINE	355
 SP_RD8	%ecx	$148
 CMP8	%ecx	$1
 JGE	@IC69
@@ -4643,7 +4646,7 @@ SP_STORE	%eax
 ADD16	%eax	$151
 LD16	%ebx	$218
 ADD16	(%ecx)	(%eax)	%ebx
-.LINE	356
+.LINE	354
 SP_STORE	%ecx
 ADD16	%ecx	$155
 SP_STORE	%eax
@@ -4654,7 +4657,7 @@ SP_STORE	%ecx
 ADD16	%ecx	$157
 SP_RD16	%eax	$155
 CPY8	(%ecx)	(%eax)
-.LINE	357
+.LINE	355
 SP_RD8	%ecx	$157
 CMP8	%ecx	$255
 JLE	@IC68
@@ -4723,18 +4726,18 @@ CMP8	(%ecx)	(%eax)
 JZ	@IC67
 JNZ	@IC66
 @IC67:	
-.LINE	359
+.LINE	357
 PUSH32	$1
 SP_STORE	%eax
 ADD16	%eax	$384
 PUSH16	(%eax)
 CALL	USB_device_error_deal
 SP_INC	$6
-.LINE	360
+.LINE	358
 LD32	%ecx	$-1
 SP_WR32	%ecx	$12
 @IC66:	
-.LINE	363
+.LINE	361
 SP_STORE	%ecx
 ADD16	%ecx	$177
 LD16	(%ecx)	$mark_array
@@ -4751,7 +4754,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$189
 SP_INC	$6
-.LINE	364
+.LINE	362
 SP_STORE	%ecx
 ADD16	%ecx	$185
 LD16	(%ecx)	$mark_array
@@ -4764,7 +4767,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$193
 SP_INC	$6
-.LINE	365
+.LINE	363
 SP_STORE	%ecx
 ADD16	%ecx	$189
 LD16	(%ecx)	$mark_array
@@ -4777,7 +4780,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$199
 SP_INC	$8
-.LINE	367
+.LINE	365
 SP_STORE	%ecx
 ADD16	%ecx	$193
 LD16	(%ecx)	$mark_array
@@ -4794,7 +4797,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$205
 SP_INC	$6
-.LINE	368
+.LINE	366
 SP_STORE	%ecx
 ADD16	%ecx	$201
 LD16	(%ecx)	$mark_array
@@ -4807,7 +4810,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$209
 SP_INC	$6
-.LINE	369
+.LINE	367
 SP_STORE	%ecx
 ADD16	%ecx	$205
 LD16	(%ecx)	$mark_array
@@ -4820,7 +4823,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$215
 SP_INC	$8
-.LINE	370
+.LINE	368
 SP_STORE	%ecx
 ADD16	%ecx	$209
 SP_STORE	%eax
@@ -4838,30 +4841,30 @@ LD16	%ebx	$283
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$213
 LD8	(%ecx)	$1
+.LINE	370
+LD8	BRI_request_read_enable	$1
 .LINE	371
-LD8	TMC_requset_BRI_answer	$1
-.LINE	373
 LD32	%ecx	$0
 SP_WR32	%ecx	$12
-.LINE	374
+.LINE	372
 SP_INC	$255
 SP_INC	$122
 RTS	
 JUMP	@IC61
 @IC62:	
-.LINE	378
+.LINE	376
 PUSH32	$1
 SP_STORE	%eax
 ADD16	%eax	$384
 PUSH16	(%eax)
 CALL	USB_device_error_deal
 SP_INC	$6
-.LINE	379
+.LINE	377
 LD32	%ecx	$-1
 SP_WR32	%ecx	$12
 @IC61:	
 @IC46:	
-.LINE	381
+.LINE	379
 SP_STORE	%ecx
 ADD16	%ecx	$215
 SP_STORE	%eax
@@ -4876,7 +4879,7 @@ LD32	%ebx	$64
 DIV32	(%ecx)	(%eax)	%ebx
 SP_RD32	%ecx	$219
 SP_WR32	%ecx	$16
-.LINE	382
+.LINE	380
 SP_STORE	%ecx
 ADD16	%ecx	$223
 SP_STORE	%eax
@@ -4891,14 +4894,14 @@ LD32	%ebx	$64
 REM32	(%ecx)	(%eax)	%ebx
 SP_RD32	%ecx	$227
 SP_WR32	%ecx	$20
-.LINE	385
+.LINE	383
 SP_STORE	%ecx
 ADD16	%ecx	$81
 CMP32	(%ecx)	$52
 JLE	@IC78
 JUMP	@IC77
 @IC78:	
-.LINE	387
+.LINE	385
 SP_STORE	%ecx
 ADD16	%ecx	$231
 LD32	%eax	$0
@@ -4906,7 +4909,7 @@ LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$235
-LD16	(%ecx)	$BRI_read_buffer
+LD16	(%ecx)	$TMC_buffer
 SP_STORE	%ecx
 ADD16	%ecx	$237
 SP_STORE	%eax
@@ -4953,7 +4956,7 @@ SP_STORE	%eax
 ADD16	%eax	$259
 POP16	(%eax)
 SP_INC	$6
-.LINE	388
+.LINE	386
 SP_STORE	%ecx
 ADD16	%ecx	$253
 SP_STORE	%eax
@@ -4982,7 +4985,7 @@ POP16	(%eax)
 SP_INC	$8
 JUMP	@IC76
 @IC77:	
-.LINE	392
+.LINE	390
 SP_STORE	%ecx
 ADD16	%ecx	$261
 LD32	%eax	$0
@@ -4990,7 +4993,7 @@ LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$265
-LD16	(%ecx)	$BRI_read_buffer
+LD16	(%ecx)	$TMC_buffer
 SP_STORE	%ecx
 ADD16	%ecx	$267
 SP_STORE	%eax
@@ -5040,7 +5043,7 @@ SP_STORE	%eax
 ADD16	%eax	$289
 POP16	(%eax)
 SP_INC	$6
-.LINE	393
+.LINE	391
 SP_STORE	%ecx
 ADD16	%ecx	$283
 SP_STORE	%eax
@@ -5070,12 +5073,12 @@ ADD16	%eax	$299
 POP16	(%eax)
 SP_INC	$8
 @IC76:	
-.LINE	396
+.LINE	394
 LD32	%ecx	$0
 SP_WR32	%ecx	$8
 JUMP	@IC41
 @IC42:	
-.LINE	400
+.LINE	398
 SP_STORE	%ecx
 ADD16	%ecx	$291
 SP_STORE	%eax
@@ -5102,7 +5105,7 @@ LD32	%ebx	$1
 MUL32	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$307
-LD16	(%ecx)	$BRI_read_buffer
+LD16	(%ecx)	$TMC_buffer
 SP_STORE	%ecx
 ADD16	%ecx	$309
 SP_STORE	%eax
@@ -5153,7 +5156,7 @@ ADD16	%eax	$331
 POP16	(%eax)
 SP_INC	$6
 @IC41:	
-.LINE	404
+.LINE	401
 SP_STORE	%ecx
 ADD16	%ecx	$325
 SP_RD32	%eax	$81
@@ -5179,7 +5182,7 @@ CMP32	(%ecx)	(%eax)
 JZ	@IC82
 JNZ	@IC81
 @IC82:	
-.LINE	408
+.LINE	405
 SP_STORE	%ecx
 ADD16	%ecx	$337
 SP_STORE	%eax
@@ -5194,26 +5197,26 @@ CMP32	(%ecx)	(%eax)
 JNZ	@IC87
 JZ	@IC86
 @IC87:	
-.LINE	410
+.LINE	407
 PUSH32	$2
 SP_STORE	%eax
 ADD16	%eax	$384
 PUSH16	(%eax)
 CALL	USB_device_error_deal
 SP_INC	$6
-.LINE	411
+.LINE	408
 LD32	%ecx	$-1
 SP_WR32	%ecx	$12
 JUMP	@IC85
 @IC86:	
-.LINE	415
+.LINE	412
 LD32	%ecx	$0
 SP_WR32	%ecx	$12
 @IC85:	
-.LINE	418
+.LINE	415
 SP_STORE	%ecx
 ADD16	%ecx	$341
-LD16	(%ecx)	$BRI_read_buffer
+LD16	(%ecx)	$TMC_buffer
 SP_RD16	%eax	$81
 PUSH16	%eax
 SP_STORE	%eax
@@ -5226,9 +5229,7 @@ SP_STORE	%eax
 ADD16	%eax	$351
 POP16	(%eax)
 SP_INC	$6
-.LINE	419
-LD8	TMC_write_done	$1
-.LINE	421
+.LINE	418
 SP_STORE	%ecx
 ADD16	%ecx	$345
 LD16	(%ecx)	$mark_array
@@ -5248,7 +5249,7 @@ SP_STORE	%eax
 ADD16	%eax	$359
 POP16	(%eax)
 SP_INC	$6
-.LINE	422
+.LINE	419
 SP_STORE	%ecx
 ADD16	%ecx	$353
 LD16	(%ecx)	$mark_array
@@ -5263,7 +5264,7 @@ SP_STORE	%eax
 ADD16	%eax	$363
 POP16	(%eax)
 SP_INC	$6
-.LINE	423
+.LINE	420
 SP_STORE	%ecx
 ADD16	%ecx	$357
 LD16	(%ecx)	$mark_array
@@ -5278,20 +5279,22 @@ SP_STORE	%eax
 ADD16	%eax	$369
 POP16	(%eax)
 SP_INC	$8
-.LINE	424
+.LINE	421
 LD32	%ecx	$0
 SP_WR32	%ecx	$0
-.LINE	425
-JUMP	@IC39
+.LINE	422
+SP_INC	$255
+SP_INC	$122
+RTS	
 @IC81:	
-.LINE	427
+.LINE	424
 SP_STORE	%ecx
 ADD16	%ecx	$12
 CMP32	(%ecx)	$-1
 JZ	@IC91
 JNZ	@IC90
 @IC91:	
-.LINE	429
+.LINE	426
 SP_STORE	%ecx
 ADD16	%ecx	$361
 LD16	(%ecx)	$mark_array
@@ -5311,7 +5314,7 @@ SP_STORE	%eax
 ADD16	%eax	$375
 POP16	(%eax)
 SP_INC	$6
-.LINE	430
+.LINE	427
 SP_STORE	%ecx
 ADD16	%ecx	$369
 LD16	(%ecx)	$mark_array
@@ -5326,7 +5329,7 @@ SP_STORE	%eax
 ADD16	%eax	$379
 POP16	(%eax)
 SP_INC	$6
-.LINE	431
+.LINE	428
 SP_STORE	%ecx
 ADD16	%ecx	$373
 LD16	(%ecx)	$mark_array
@@ -5341,33 +5344,37 @@ SP_STORE	%eax
 ADD16	%eax	$385
 POP16	(%eax)
 SP_INC	$8
+.LINE	429
+SP_INC	$255
+SP_INC	$122
+RTS	
 @IC90:	
-.LINE	331
+.LINE	329
 JUMP	@IC38
 @IC39:	
-.LINE	435
+.LINE	433
 SP_INC	$255
 SP_INC	$122
 RTS	
 .FUNC_END	"USBTMC_bulk_write_thread"
 
-.LINE	438
+.LINE	436
 USB_device_error_deal:	
 .GLOBAL	 DO_NOT_EXPORT  "USB_device_error_deal"
 
 .FUNCTION	"USB_device_error_deal"	
 .RETURN "void"	0	0	0	23	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	23	0	0	1	438	
-.PARAMETER	"error_byte"	32 "int"	1	0	25	0	0	0	438	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	23	0	0	1	436	
+.PARAMETER	"error_byte"	32 "int"	1	0	25	0	0	0	436	
 SP_DEC	$20
-.LINE	441
+.LINE	439
 SP_STORE	%ecx
 ADD16	%ecx	$25
 CMP32	(%ecx)	$1
 JZ	@IC96
 JNZ	@IC95
 @IC96:	
-.LINE	443
+.LINE	441
 SP_STORE	%ecx
 SP_STORE	%eax
 ADD16	%eax	$23
@@ -5391,10 +5398,10 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$14
 SP_INC	$8
-.LINE	444
+.LINE	442
 SP_STORE	%ecx
 ADD16	%ecx	$8
-LD16	(%ecx)	$BRI_read_buffer
+LD16	(%ecx)	$TMC_buffer
 PUSH16	$1024
 PUSH32	$0
 SP_RD16	%eax	$14
@@ -5404,7 +5411,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$18
 SP_INC	$8
-.LINE	445
+.LINE	443
 PUSH8	$2
 SP_RD16	%eax	$24
 PUSH16	%eax
@@ -5412,14 +5419,14 @@ CALL	set_endpoint_stall
 SP_INC	$3
 JUMP	@IC94
 @IC95:	
-.LINE	448
+.LINE	446
 SP_STORE	%ecx
 ADD16	%ecx	$25
 CMP32	(%ecx)	$2
 JZ	@IC100
 JNZ	@IC99
 @IC100:	
-.LINE	450
+.LINE	448
 SP_STORE	%ecx
 ADD16	%ecx	$12
 SP_STORE	%eax
@@ -5444,7 +5451,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$26
 SP_INC	$8
-.LINE	451
+.LINE	449
 PUSH8	$2
 SP_RD16	%eax	$24
 PUSH16	%eax
@@ -5452,21 +5459,21 @@ CALL	set_endpoint_stall
 SP_INC	$3
 @IC99:	
 @IC94:	
-.LINE	451
+.LINE	449
 SP_INC	$20
 RTS	
 .FUNC_END	"USB_device_error_deal"
 
-.LINE	455
+.LINE	453
 USBTMC_send_setup_packet:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_send_setup_packet"
 
 .FUNCTION	"USBTMC_send_setup_packet"	
 .RETURN "void"	0	0	0	17	0	0	0	
-.PARAMETER	"packet"	16 "char"	0	1	17	0	0	1	455	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	19	0	0	1	455	
+.PARAMETER	"packet"	16 "char"	0	1	17	0	0	1	453	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	19	0	0	1	453	
 SP_DEC	$14
-.LINE	457
+.LINE	455
 SP_STORE	%ecx
 SP_STORE	%eax
 ADD16	%eax	$19
@@ -5491,7 +5498,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$12
 SP_INC	$6
-.LINE	458
+.LINE	456
 SP_STORE	%ecx
 ADD16	%ecx	$8
 SP_STORE	%eax
@@ -5509,21 +5516,21 @@ LD16	%ebx	$217
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$12
 LD8	(%ecx)	$1
-.LINE	459
+.LINE	457
 SP_INC	$14
 RTS	
 .FUNC_END	"USBTMC_send_setup_packet"
 
-.LINE	463
+.LINE	461
 USBTMC_queue_bulk_out_header:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_queue_bulk_out_header"
 
 .FUNCTION	"USBTMC_queue_bulk_out_header"	
 .RETURN "int"	32	0	0	239	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	243	0	0	1	463	
-.PARAMETER	"bulk_header"	16 "char"	0	1	245	0	0	1	463	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	243	0	0	1	461	
+.PARAMETER	"bulk_header"	16 "char"	0	1	245	0	0	1	461	
 SP_DEC	$236
-.LINE	465
+.LINE	463
 SP_STORE	%ecx
 SP_STORE	%eax
 ADD16	%eax	$243
@@ -5566,7 +5573,7 @@ SP_RD16	%ecx	$6
 SP_STORE	%eax
 ADD16	%eax	$14
 CPY8	(%ecx)	(%eax)
-.LINE	466
+.LINE	464
 SP_STORE	%ecx
 ADD16	%ecx	$18
 SP_STORE	%eax
@@ -5610,7 +5617,7 @@ SP_RD16	%ecx	$24
 SP_STORE	%eax
 ADD16	%eax	$32
 CPY8	(%ecx)	(%eax)
-.LINE	467
+.LINE	465
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -5654,7 +5661,7 @@ SP_RD16	%ecx	$42
 SP_STORE	%eax
 ADD16	%eax	$50
 CPY8	(%ecx)	(%eax)
-.LINE	468
+.LINE	466
 SP_STORE	%ecx
 ADD16	%ecx	$54
 SP_STORE	%eax
@@ -5698,7 +5705,7 @@ SP_RD16	%ecx	$60
 SP_STORE	%eax
 ADD16	%eax	$68
 CPY8	(%ecx)	(%eax)
-.LINE	469
+.LINE	467
 SP_STORE	%ecx
 ADD16	%ecx	$72
 SP_STORE	%eax
@@ -5835,7 +5842,7 @@ SP_RD16	%ecx	$78
 SP_STORE	%eax
 ADD16	%eax	$140
 CPY32	(%ecx)	(%eax)
-.LINE	472
+.LINE	470
 SP_STORE	%ecx
 ADD16	%ecx	$144
 SP_STORE	%eax
@@ -5879,7 +5886,7 @@ SP_RD16	%ecx	$150
 SP_STORE	%eax
 ADD16	%eax	$158
 CPY8	(%ecx)	(%eax)
-.LINE	473
+.LINE	471
 SP_STORE	%ecx
 ADD16	%ecx	$162
 SP_STORE	%eax
@@ -5923,7 +5930,7 @@ SP_RD16	%ecx	$168
 SP_STORE	%eax
 ADD16	%eax	$176
 CPY8	(%ecx)	(%eax)
-.LINE	474
+.LINE	472
 SP_STORE	%ecx
 ADD16	%ecx	$180
 SP_STORE	%eax
@@ -5998,7 +6005,7 @@ SP_RD16	%ecx	$186
 SP_STORE	%eax
 ADD16	%eax	$212
 CPY16	(%ecx)	(%eax)
-.LINE	481
+.LINE	474
 SP_STORE	%ecx
 ADD16	%ecx	$216
 SP_STORE	%eax
@@ -6024,7 +6031,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$228
 SP_INC	$6
-.LINE	482
+.LINE	475
 SP_STORE	%ecx
 ADD16	%ecx	$224
 SP_STORE	%eax
@@ -6059,43 +6066,43 @@ SP_INC	$236
 RTS	
 .FUNC_END	"USBTMC_queue_bulk_out_header"
 
-.LINE	487
+.LINE	480
 USBTMC_int_read_thread:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_int_read_thread"
 
-.VARIABLE	"bulk_header"	96	"char"	0	0	0	1	1	0	490	
-.VARIABLE	"count"	32	"int"	1	0	12	0	0	0	492	
-.VARIABLE	"remainder"	32	"int"	1	0	16	0	0	0	492	
-.VARIABLE	"i"	32	"int"	1	0	20	0	0	0	492	
-.VARIABLE	"flag"	32	"int"	1	0	24	0	0	0	493	
-.VARIABLE	"num"	32	"int"	1	0	28	0	0	0	493	
-.VARIABLE	"write_length"	32	"int"	0	0	52	0	0	0	491	
+.VARIABLE	"bulk_header"	96	"char"	0	0	0	1	1	0	482	
+.VARIABLE	"count"	32	"int"	1	0	12	0	0	0	484	
+.VARIABLE	"remainder"	32	"int"	1	0	16	0	0	0	484	
+.VARIABLE	"i"	32	"int"	1	0	20	0	0	0	484	
+.VARIABLE	"flag"	32	"int"	1	0	24	0	0	0	485	
+.VARIABLE	"num"	32	"int"	1	0	28	0	0	0	485	
+.VARIABLE	"write_length"	32	"int"	0	0	39	0	0	0	483	
 .FUNCTION	"USBTMC_int_read_thread"	
-.RETURN "void"	0	0	0	149	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	149	0	0	1	487	
-SP_DEC	$146
-.LINE	490
+.RETURN "void"	0	0	0	136	0	0	0	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	136	0	0	1	480	
+SP_DEC	$133
+.LINE	482
 SP_STORE	%ecx
 LD32	%eax	$Array@8
 CPYROM	(%ecx)	%eax	$6
-.LINE	492
+.LINE	484
 LD32	%ecx	$0
 SP_WR32	%ecx	$12
 LD32	%ecx	$0
 SP_WR32	%ecx	$16
 LD32	%ecx	$0
 SP_WR32	%ecx	$20
-.LINE	493
+.LINE	485
 LD32	%ecx	$1
 SP_WR32	%ecx	$24
 LD32	%ecx	$0
 SP_WR32	%ecx	$28
 @IC103:	
-.LINE	496
+.LINE	487
 SP_STORE	%ecx
 ADD16	%ecx	$32
 SP_STORE	%eax
-ADD16	%eax	$149
+ADD16	%eax	$136
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$34
@@ -6116,197 +6123,157 @@ CMP8	%ecx	$0
 JNZ	@IC105
 JUMP	@IC104
 @IC105:	
-.LINE	498
-SP_STORE	%ecx
-ADD16	%ecx	$39
-SP_STORE	%eax
-ADD16	%eax	$149
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$41
-SP_RD16	%eax	$39
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$43
-SP_STORE	%eax
-ADD16	%eax	$41
-LD16	%ebx	$283
-ADD16	(%ecx)	(%eax)	%ebx
-SP_STORE	%ecx
-ADD16	%ecx	$45
-SP_RD16	%eax	$43
-CPY8	(%ecx)	(%eax)
-SP_RD8	%ecx	$45
-CMP8	%ecx	$1
+.LINE	489
+CMP8	TMC_request_read_enable	$1
 JZ	@IC107
 JNZ	@IC106
 @IC107:	
-.LINE	500
+.LINE	491
 SP_STORE	%ecx
 ADD16	%ecx	$20
 CMP32	(%ecx)	$0
 JZ	@IC111
 JNZ	@IC110
 @IC111:	
-.LINE	506
+.LINE	493
 SP_STORE	%ecx
-ADD16	%ecx	$46
-SP_STORE	%eax
-ADD16	%eax	$0
-CPY16	(%ecx)	%eax
-SP_RD16	%eax	$46
-PUSH16	%eax
-SP_RD16	%eax	$151
-PUSH16	%eax
-SP_DEC	$4
-CALL	USBTMC_queue_bulk_in_header
-POP32	%eax
-SP_WR32	%eax	$52
-SP_INC	$4
-SP_RD32	%ecx	$48
-SP_WR32	%ecx	$52
-.LINE	507
-SP_RD32	%eax	$52
-PUSH32	%eax
-SP_RD16	%eax	$153
-PUSH16	%eax
-CALL	queue_bulk_in_data
-SP_INC	$6
-.LINE	509
+ADD16	%ecx	$39
+CPY32	(%ecx)	TMC_read_length
+.LINE	496
 SP_STORE	%ecx
-ADD16	%ecx	$56
-LD16	(%ecx)	$mark_array
+ADD16	%ecx	$43
+LD16	(%ecx)	$BRI_buffer
 SP_STORE	%ecx
-ADD16	%ecx	$58
-LD32	(%ecx)	$Str@9
-PUSH16	$18
-SP_RD16	%eax	$60
-PUSH16	%eax
-SP_RD16	%eax	$60
-PUSH16	%eax
-SP_DEC	$2
-CALL	vos_memcpy
-POP16	%eax
-SP_WR16	%eax	$68
-SP_INC	$6
-.LINE	510
-SP_STORE	%ecx
-ADD16	%ecx	$64
-LD16	(%ecx)	$mark_array
-PUSH16	$18
-SP_RD16	%eax	$66
-PUSH16	%eax
-PUSH16	hUART
-SP_DEC	$2
-CALL	write_uart
-POP16	%eax
-SP_WR16	%eax	$72
-SP_INC	$6
-.LINE	511
-SP_STORE	%ecx
-ADD16	%ecx	$68
-LD16	(%ecx)	$mark_array
-PUSH16	$18
-PUSH32	$0
-SP_RD16	%eax	$74
-PUSH16	%eax
-SP_DEC	$2
-CALL	vos_memset
-POP16	%eax
-SP_WR16	%eax	$78
-SP_INC	$8
-.LINE	513
-SP_STORE	%ecx
-ADD16	%ecx	$72
-LD16	(%ecx)	$TMC_read_buffer
-SP_STORE	%ecx
-ADD16	%ecx	$74
+ADD16	%ecx	$45
 SP_STORE	%eax
 ADD16	%eax	$0
 CPY16	(%ecx)	%eax
 PUSH16	$12
-SP_RD16	%eax	$76
+SP_RD16	%eax	$47
 PUSH16	%eax
-SP_RD16	%eax	$76
+SP_RD16	%eax	$47
 PUSH16	%eax
 SP_DEC	$2
 CALL	vos_memcpy
 POP16	%eax
-SP_WR16	%eax	$82
+SP_WR16	%eax	$53
 SP_INC	$6
-.LINE	515
-SP_RD32	%eax	$52
+.LINE	498
+SP_RD32	%eax	$39
 ADD32	%eax	$3
-SP_WR32	%eax	$78
+SP_WR32	%eax	$49
 SP_STORE	%ecx
-ADD16	%ecx	$82
+ADD16	%ecx	$53
 SP_STORE	%eax
-ADD16	%eax	$78
+ADD16	%eax	$49
 LD32	%ebx	$4
 DIV32	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$86
+ADD16	%ecx	$57
 SP_STORE	%eax
-ADD16	%eax	$82
+ADD16	%eax	$53
 LD32	%ebx	$4
 MUL32	(%ecx)	(%eax)	%ebx
-SP_RD32	%eax	$86
+SP_RD32	%eax	$57
 ADD32	%eax	$12
-SP_WR32	%eax	$90
+SP_WR32	%eax	$61
 SP_STORE	%ecx
-ADD16	%ecx	$94
+ADD16	%ecx	$65
 SP_STORE	%eax
-ADD16	%eax	$90
+ADD16	%eax	$61
 LD32	%ebx	$64
 DIV32	(%ecx)	(%eax)	%ebx
-SP_RD32	%ecx	$94
+SP_RD32	%ecx	$65
 SP_WR32	%ecx	$12
-.LINE	516
-SP_RD32	%eax	$52
+.LINE	499
+SP_RD32	%eax	$39
 ADD32	%eax	$3
-SP_WR32	%eax	$98
+SP_WR32	%eax	$69
 SP_STORE	%ecx
-ADD16	%ecx	$102
+ADD16	%ecx	$73
 SP_STORE	%eax
-ADD16	%eax	$98
+ADD16	%eax	$69
 LD32	%ebx	$4
 DIV32	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$106
+ADD16	%ecx	$77
 SP_STORE	%eax
-ADD16	%eax	$102
+ADD16	%eax	$73
 LD32	%ebx	$4
 MUL32	(%ecx)	(%eax)	%ebx
-SP_RD32	%eax	$106
+SP_RD32	%eax	$77
 ADD32	%eax	$12
-SP_WR32	%eax	$110
+SP_WR32	%eax	$81
 SP_STORE	%ecx
-ADD16	%ecx	$114
+ADD16	%ecx	$85
 SP_STORE	%eax
-ADD16	%eax	$110
+ADD16	%eax	$81
 LD32	%ebx	$64
 REM32	(%ecx)	(%eax)	%ebx
-SP_RD32	%ecx	$114
+SP_RD32	%ecx	$85
 SP_WR32	%ecx	$16
-.LINE	518
+.LINE	501
 SP_STORE	%ecx
-ADD16	%ecx	$118
-LD16	(%ecx)	$TMC_read_buffer
-SP_RD32	%eax	$52
-ADD32	%eax	$12
-SP_WR32	%eax	$120
-SP_RD16	%eax	$120
+ADD16	%ecx	$89
+LD16	(%ecx)	$mark_array
+SP_STORE	%ecx
+ADD16	%ecx	$91
+LD32	(%ecx)	$Str@9
+PUSH16	$15
+SP_RD16	%eax	$93
 PUSH16	%eax
-SP_RD16	%eax	$120
+SP_RD16	%eax	$93
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memcpy
+POP16	%eax
+SP_WR16	%eax	$101
+SP_INC	$6
+.LINE	502
+SP_STORE	%ecx
+ADD16	%ecx	$97
+LD16	(%ecx)	$mark_array
+PUSH16	$15
+SP_RD16	%eax	$99
 PUSH16	%eax
 PUSH16	hUART
 SP_DEC	$2
 CALL	write_uart
 POP16	%eax
-SP_WR16	%eax	$130
+SP_WR16	%eax	$105
+SP_INC	$6
+.LINE	503
+SP_STORE	%ecx
+ADD16	%ecx	$101
+LD16	(%ecx)	$mark_array
+PUSH16	$15
+PUSH32	$0
+SP_RD16	%eax	$107
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memset
+POP16	%eax
+SP_WR16	%eax	$111
+SP_INC	$8
+.LINE	505
+SP_STORE	%ecx
+ADD16	%ecx	$105
+LD16	(%ecx)	$BRI_buffer
+SP_RD32	%eax	$39
+ADD32	%eax	$12
+SP_WR32	%eax	$107
+SP_RD16	%eax	$107
+PUSH16	%eax
+SP_RD16	%eax	$107
+PUSH16	%eax
+PUSH16	hUART
+SP_DEC	$2
+CALL	write_uart
+POP16	%eax
+SP_WR16	%eax	$117
 SP_INC	$6
 @IC110:	
-.LINE	521
+.LINE	508
 LD32	%ecx	$0
 SP_WR32	%ecx	$20
 @IC114:	
@@ -6318,131 +6285,151 @@ CMP32	(%ecx)	(%eax)
 JLES	@IC116
 JUMP	@IC115
 @IC116:	
-.LINE	523
+.LINE	510
 SP_STORE	%ecx
-ADD16	%ecx	$126
+ADD16	%ecx	$113
 SP_STORE	%eax
 ADD16	%eax	$20
 LD32	%ebx	$64
 MUL32	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$130
+ADD16	%ecx	$117
 SP_STORE	%eax
-ADD16	%eax	$126
+ADD16	%eax	$113
 LD32	%ebx	$1
 MUL32	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$134
-LD16	(%ecx)	$TMC_read_buffer
+ADD16	%ecx	$121
+LD16	(%ecx)	$BRI_buffer
 SP_STORE	%ecx
-ADD16	%ecx	$136
+ADD16	%ecx	$123
 SP_STORE	%eax
-ADD16	%eax	$134
+ADD16	%eax	$121
 SP_STORE	%ebx
-ADD16	%ebx	$130
+ADD16	%ebx	$117
 ADD16	(%ecx)	(%eax)	(%ebx)
 PUSH16	$64
-SP_RD16	%eax	$138
+SP_RD16	%eax	$125
 PUSH16	%eax
-SP_RD16	%eax	$153
+SP_RD16	%eax	$140
 PUSH16	%eax
 SP_DEC	$4
 CALL	int_read
 POP32	%eax
-SP_WR32	%eax	$144
+SP_WR32	%eax	$131
 SP_INC	$6
 @IC117:	
-.LINE	521
+.LINE	508
 SP_RD32	%ecx	$20
-SP_WR32	%ecx	$142
+SP_WR32	%ecx	$129
 SP_STORE	%eax
 ADD16	%eax	$20
 INC32	(%eax)	$1
 JUMP	@IC114
 @IC115:	
 @IC106:	
-.LINE	496
+.LINE	487
 JUMP	@IC103
 @IC104:	
-.LINE	531
-SP_INC	$146
+.LINE	514
+SP_INC	$133
 RTS	
 .FUNC_END	"USBTMC_int_read_thread"
 
-.LINE	534
+.LINE	517
 queue_bulk_in_data:	
 .GLOBAL	 DO_NOT_EXPORT  "queue_bulk_in_data"
 
-.VARIABLE	"i"	32	"int"	1	0	0	0	0	0	536	
+.VARIABLE	"i"	32	"int"	1	0	0	0	0	0	519	
 .FUNCTION	"queue_bulk_in_data"	
-.RETURN "void"	0	0	0	23	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	23	0	0	1	534	
-.PARAMETER	"length"	32 "int"	1	0	25	0	0	0	534	
-SP_DEC	$20
-.LINE	538
+.RETURN "void"	0	0	0	27	0	0	0	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	27	0	0	1	517	
+.PARAMETER	"length"	32 "int"	1	0	29	0	0	0	517	
+SP_DEC	$24
+.LINE	521
 LD32	%ecx	$0
 SP_WR32	%ecx	$0
 @IC120:	
 SP_STORE	%ecx
 SP_STORE	%eax
-ADD16	%eax	$25
+ADD16	%eax	$29
 CMP32	(%ecx)	(%eax)
 JLTS	@IC122
 JUMP	@IC121
 @IC122:	
-.LINE	539
-SP_RD32	%eax	$0
-ADD32	%eax	$12
-SP_WR32	%eax	$4
+.LINE	524
 SP_STORE	%ecx
-ADD16	%ecx	$8
-SP_STORE	%eax
-ADD16	%eax	$4
-LD32	%ebx	$1
-MUL32	(%ecx)	(%eax)	%ebx
+ADD16	%ecx	$4
+LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
-ADD16	%ecx	$12
-LD16	(%ecx)	$TMC_read_buffer
-SP_STORE	%ecx
-ADD16	%ecx	$14
-SP_STORE	%eax
-ADD16	%eax	$12
-SP_STORE	%ebx
-ADD16	%ebx	$8
-ADD16	(%ecx)	(%eax)	(%ebx)
-SP_RD16	%ecx	$14
+ADD16	%ecx	$6
+LD32	(%ecx)	$Str@10
+PUSH16	$18
+SP_RD16	%eax	$8
+PUSH16	%eax
+SP_RD16	%eax	$8
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memcpy
+POP16	%eax
+SP_WR16	%eax	$16
+SP_INC	$6
+@IC123:	
+.LINE	521
+SP_RD32	%ecx	$0
+SP_WR32	%ecx	$12
 SP_STORE	%eax
 ADD16	%eax	$0
-CPY8	(%ecx)	(%eax)
-@IC123:	
-.LINE	538
-SP_RD32	%ecx	$0
-SP_WR32	%ecx	$16
-SP_STORE	%eax
 INC32	(%eax)	$1
 JUMP	@IC120
 @IC121:	
-.LINE	541
-SP_INC	$20
+.LINE	525
+SP_STORE	%ecx
+ADD16	%ecx	$16
+LD16	(%ecx)	$mark_array
+PUSH16	$18
+SP_RD16	%eax	$18
+PUSH16	%eax
+PUSH16	hUART
+SP_DEC	$2
+CALL	write_uart
+POP16	%eax
+SP_WR16	%eax	$24
+SP_INC	$6
+.LINE	526
+SP_STORE	%ecx
+ADD16	%ecx	$20
+LD16	(%ecx)	$mark_array
+PUSH16	$18
+PUSH32	$0
+SP_RD16	%eax	$26
+PUSH16	%eax
+SP_DEC	$2
+CALL	vos_memset
+POP16	%eax
+SP_WR16	%eax	$30
+SP_INC	$8
+.LINE	527
+SP_INC	$24
 RTS	
 .FUNC_END	"queue_bulk_in_data"
 
-.LINE	544
+.LINE	530
 USBTMC_queue_bulk_in_header:	
 .GLOBAL	 DO_NOT_EXPORT  "USBTMC_queue_bulk_in_header"
 
-.VARIABLE	"i"	8	"char"	0	0	0	0	0	0	546	
-.VARIABLE	"j"	8	"char"	1	0	52	0	0	0	546	
+.VARIABLE	"i"	8	"char"	0	0	0	0	0	0	532	
+.VARIABLE	"j"	8	"char"	1	0	52	0	0	0	532	
 .FUNCTION	"USBTMC_queue_bulk_in_header"	
 .RETURN "int"	32	0	0	321	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	325	0	0	1	544	
-.PARAMETER	"bulk_header"	16 "char"	0	1	327	0	0	1	544	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	325	0	0	1	530	
+.PARAMETER	"bulk_header"	16 "char"	0	1	327	0	0	1	530	
 SP_DEC	$255
 SP_DEC	$63
-.LINE	546
+.LINE	532
 LD8	%ecx	$2
 SP_WR8	%ecx	$0
-.LINE	548
+.LINE	534
 SP_STORE	%ecx
 ADD16	%ecx	$1
 LD32	%eax	$0
@@ -6457,7 +6444,7 @@ ADD16	%ebx	$1
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$5
 LD8	(%ecx)	$2
-.LINE	549
+.LINE	535
 SP_STORE	%ecx
 ADD16	%ecx	$7
 LD32	%eax	$1
@@ -6499,7 +6486,7 @@ SP_RD16	%ecx	$11
 SP_STORE	%eax
 ADD16	%eax	$21
 CPY8	(%ecx)	(%eax)
-.LINE	550
+.LINE	536
 SP_STORE	%ecx
 ADD16	%ecx	$22
 LD32	%eax	$2
@@ -6541,7 +6528,7 @@ SP_RD16	%ecx	$26
 SP_STORE	%eax
 ADD16	%eax	$36
 CPY8	(%ecx)	(%eax)
-.LINE	551
+.LINE	537
 SP_STORE	%ecx
 ADD16	%ecx	$37
 LD32	%eax	$3
@@ -6583,7 +6570,7 @@ SP_RD16	%ecx	$41
 SP_STORE	%eax
 ADD16	%eax	$51
 CPY8	(%ecx)	(%eax)
-.LINE	553
+.LINE	539
 LD8	%ecx	$0
 SP_WR8	%ecx	$52
 @IC126:	
@@ -6592,7 +6579,7 @@ CMP8	%ecx	$4
 JLT	@IC128
 JUMP	@IC127
 @IC128:	
-.LINE	554
+.LINE	540
 SP_STORE	%ecx
 ADD16	%ecx	$53
 SP_RD8	%eax	$52
@@ -6657,7 +6644,7 @@ SP_STORE	%eax
 ADD16	%eax	$83
 CPY8	(%ecx)	(%eax)
 @IC129:	
-.LINE	553
+.LINE	539
 SP_RD8	%ecx	$52
 SP_WR8	%ecx	$84
 SP_STORE	%eax
@@ -6665,7 +6652,7 @@ ADD16	%eax	$52
 INC8	(%eax)	$1
 JUMP	@IC126
 @IC127:	
-.LINE	556
+.LINE	542
 SP_STORE	%ecx
 ADD16	%ecx	$85
 LD32	%eax	$8
@@ -6707,7 +6694,7 @@ SP_RD16	%ecx	$89
 SP_STORE	%eax
 ADD16	%eax	$99
 CPY8	(%ecx)	(%eax)
-.LINE	557
+.LINE	543
 SP_STORE	%ecx
 ADD16	%ecx	$100
 LD32	%eax	$9
@@ -6749,7 +6736,7 @@ SP_RD16	%ecx	$104
 SP_STORE	%eax
 ADD16	%eax	$114
 CPY8	(%ecx)	(%eax)
-.LINE	558
+.LINE	544
 SP_STORE	%ecx
 ADD16	%ecx	$115
 LD32	%eax	$10
@@ -6791,7 +6778,7 @@ SP_RD16	%ecx	$119
 SP_STORE	%eax
 ADD16	%eax	$129
 CPY8	(%ecx)	(%eax)
-.LINE	559
+.LINE	545
 SP_STORE	%ecx
 ADD16	%ecx	$131
 LD32	%eax	$11
@@ -6839,7 +6826,7 @@ SP_RD16	%ecx	$135
 SP_STORE	%eax
 ADD16	%eax	$147
 CPY8	(%ecx)	(%eax)
-.LINE	562
+.LINE	548
 SP_STORE	%ecx
 ADD16	%ecx	$151
 SP_STORE	%eax
@@ -6863,7 +6850,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$157
 LD8	(%ecx)	$2
-.LINE	563
+.LINE	549
 SP_STORE	%ecx
 ADD16	%ecx	$159
 SP_STORE	%eax
@@ -6914,7 +6901,7 @@ SP_RD16	%ecx	$165
 SP_STORE	%eax
 ADD16	%eax	$175
 CPY8	(%ecx)	(%eax)
-.LINE	564
+.LINE	550
 SP_STORE	%ecx
 ADD16	%ecx	$176
 SP_STORE	%eax
@@ -6965,7 +6952,7 @@ SP_RD16	%ecx	$182
 SP_STORE	%eax
 ADD16	%eax	$192
 CPY8	(%ecx)	(%eax)
-.LINE	565
+.LINE	551
 SP_STORE	%ecx
 ADD16	%ecx	$193
 SP_STORE	%eax
@@ -7016,7 +7003,7 @@ SP_RD16	%ecx	$199
 SP_STORE	%eax
 ADD16	%eax	$209
 CPY8	(%ecx)	(%eax)
-.LINE	566
+.LINE	552
 SP_STORE	%ecx
 ADD16	%ecx	$210
 SP_STORE	%eax
@@ -7067,7 +7054,7 @@ SP_RD16	%ecx	$216
 SP_STORE	%eax
 ADD16	%eax	$226
 CPY32	(%ecx)	(%eax)
-.LINE	568
+.LINE	554
 SP_STORE	%ecx
 ADD16	%ecx	$230
 SP_STORE	%eax
@@ -7118,7 +7105,7 @@ SP_RD16	%ecx	$236
 SP_STORE	%eax
 ADD16	%eax	$246
 CPY8	(%ecx)	(%eax)
-.LINE	570
+.LINE	556
 SP_STORE	%ecx
 ADD16	%ecx	$247
 SP_STORE	%eax
@@ -7171,7 +7158,7 @@ SP_RD16	%ecx	$253
 SP_STORE	%eax
 ADD16	%eax	$263
 CPY8	(%ecx)	(%eax)
-.LINE	571
+.LINE	557
 SP_STORE	%ecx
 ADD16	%ecx	$264
 SP_STORE	%eax
@@ -7230,7 +7217,7 @@ CPY16	%ecx	(%ecx)
 SP_STORE	%eax
 ADD16	%eax	$280
 CPY16	(%ecx)	(%eax)
-.LINE	573
+.LINE	559
 SP_STORE	%ecx
 ADD16	%ecx	$282
 SP_STORE	%eax
@@ -7261,13 +7248,13 @@ SP_STORE	%eax
 ADD16	%eax	$296
 POP16	(%eax)
 SP_INC	$6
-.LINE	576
+.LINE	562
 SP_STORE	%ecx
 ADD16	%ecx	$290
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$292
-LD32	(%ecx)	$Str@10
+LD32	(%ecx)	$Str@11
 PUSH16	$20
 SP_STORE	%eax
 ADD16	%eax	$294
@@ -7281,7 +7268,7 @@ SP_STORE	%eax
 ADD16	%eax	$304
 POP16	(%eax)
 SP_INC	$6
-.LINE	577
+.LINE	563
 SP_STORE	%ecx
 ADD16	%ecx	$298
 LD16	(%ecx)	$mark_array
@@ -7296,7 +7283,7 @@ SP_STORE	%eax
 ADD16	%eax	$308
 POP16	(%eax)
 SP_INC	$6
-.LINE	578
+.LINE	564
 SP_STORE	%ecx
 ADD16	%ecx	$302
 LD16	(%ecx)	$mark_array
@@ -7311,7 +7298,7 @@ SP_STORE	%eax
 ADD16	%eax	$314
 POP16	(%eax)
 SP_INC	$8
-.LINE	581
+.LINE	567
 SP_STORE	%ecx
 ADD16	%ecx	$306
 SP_STORE	%eax
@@ -7351,22 +7338,22 @@ SP_INC	$63
 RTS	
 .FUNC_END	"USBTMC_queue_bulk_in_header"
 
-.LINE	585
+.LINE	571
 get_descriptor:	
 .GLOBAL	 DO_NOT_EXPORT  "get_descriptor"
 
-.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	8	0	0	1	588	
-.VARIABLE	"hValue"	8	"char"	0	0	22	0	0	0	589	
-.VARIABLE	"lValue"	8	"char"	0	0	35	0	0	0	590	
-.VARIABLE	"wLength"	16	"short"	0	0	44	0	0	0	591	
-.VARIABLE	"ul_siz"	16	"short"	0	0	48	0	0	0	592	
-.VARIABLE	"src"	16	"char"	0	1	78	0	0	1	594	
-.VARIABLE	"siz"	16	"short"	0	0	80	0	0	0	592	
+.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	8	0	0	1	574	
+.VARIABLE	"hValue"	8	"char"	0	0	22	0	0	0	575	
+.VARIABLE	"lValue"	8	"char"	0	0	35	0	0	0	576	
+.VARIABLE	"wLength"	16	"short"	0	0	44	0	0	0	577	
+.VARIABLE	"ul_siz"	16	"short"	0	0	48	0	0	0	578	
+.VARIABLE	"src"	16	"char"	0	1	78	0	0	1	580	
+.VARIABLE	"siz"	16	"short"	0	0	80	0	0	0	578	
 .FUNCTION	"get_descriptor"	
 .RETURN "char"	8	0	0	95	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	96	0	0	1	585	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	96	0	0	1	571	
 SP_DEC	$92
-.LINE	596
+.LINE	582
 SP_STORE	%ecx
 SP_STORE	%eax
 ADD16	%eax	$96
@@ -7385,7 +7372,7 @@ SP_RD16	%ecx	$4
 SP_WR16	%ecx	$6
 SP_RD16	%ecx	$6
 SP_WR16	%ecx	$8
-.LINE	598
+.LINE	584
 SP_STORE	%ecx
 ADD16	%ecx	$10
 SP_STORE	%eax
@@ -7413,7 +7400,7 @@ LD32	%ebx	$8
 SHR32	(%ecx)	%eax	%ebx
 SP_RD8	%ecx	$18
 SP_WR8	%ecx	$22
-.LINE	599
+.LINE	585
 SP_STORE	%ecx
 ADD16	%ecx	$23
 SP_STORE	%eax
@@ -7441,7 +7428,7 @@ LD32	%ebx	$255
 AND32	(%ecx)	%eax	%ebx
 SP_RD8	%ecx	$31
 SP_WR8	%ecx	$35
-.LINE	601
+.LINE	587
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -7463,15 +7450,15 @@ SP_RD16	%eax	$40
 CPY16	(%ecx)	(%eax)
 SP_RD16	%ecx	$42
 SP_WR16	%ecx	$44
-.LINE	603
+.LINE	589
 JUMP	@IC134
 @IC133:	
-.LINE	607
+.LINE	593
 SP_RD16	%ecx	$44
 SP_WR16	%ecx	$46
 SP_RD16	%ecx	$46
 SP_WR16	%ecx	$48
-.LINE	608
+.LINE	594
 SP_STORE	%ecx
 ADD16	%ecx	$50
 LD16	(%ecx)	$device_desc
@@ -7488,10 +7475,10 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$60
 SP_INC	$6
-.LINE	609
+.LINE	595
 JUMP	@IC132
 @IC135:	
-.LINE	615
+.LINE	601
 SP_STORE	%ecx
 ADD16	%ecx	$44
 CMP16	(%ecx)	$9
@@ -7523,7 +7510,7 @@ CPY32	(%ecx)	%eax
 @IC142:	
 SP_RD16	%ecx	$58
 SP_WR16	%ecx	$48
-.LINE	617
+.LINE	603
 SP_STORE	%ecx
 ADD16	%ecx	$68
 LD16	(%ecx)	$config_desc
@@ -7541,77 +7528,77 @@ POP32	%eax
 SP_WR32	%eax	$78
 SP_INC	$6
 @IC137:	
-.LINE	623
+.LINE	609
 SP_RD8	%ecx	$35
 CMP8	%ecx	$0
 JZ	@IC148
 JNZ	@IC147
 @IC148:	
-.LINE	625
+.LINE	611
 SP_STORE	%ecx
 ADD16	%ecx	$76
 LD16	(%ecx)	$str0_descriptor
 SP_RD16	%ecx	$76
 SP_WR16	%ecx	$78
-.LINE	626
+.LINE	612
 LD16	%ecx	$4
 SP_WR16	%ecx	$80
 JUMP	@IC146
 @IC147:	
-.LINE	628
+.LINE	614
 SP_RD8	%ecx	$35
 CMP8	%ecx	$1
 JZ	@IC153
 JNZ	@IC152
 @IC153:	
-.LINE	630
+.LINE	616
 SP_STORE	%ecx
 ADD16	%ecx	$82
 LD16	(%ecx)	$str1_descriptor
 SP_RD16	%ecx	$82
 SP_WR16	%ecx	$78
-.LINE	631
+.LINE	617
 LD16	%ecx	$10
 SP_WR16	%ecx	$80
 JUMP	@IC151
 @IC152:	
-.LINE	633
+.LINE	619
 SP_RD8	%ecx	$35
 CMP8	%ecx	$2
 JZ	@IC158
 JNZ	@IC157
 @IC158:	
-.LINE	635
+.LINE	621
 SP_STORE	%ecx
 ADD16	%ecx	$84
 LD16	(%ecx)	$str2_descriptor
 SP_RD16	%ecx	$84
 SP_WR16	%ecx	$78
-.LINE	636
+.LINE	622
 LD16	%ecx	$26
 SP_WR16	%ecx	$80
 JUMP	@IC156
 @IC157:	
-.LINE	638
+.LINE	624
 SP_RD8	%ecx	$35
 CMP8	%ecx	$3
 JZ	@IC162
 JNZ	@IC161
 @IC162:	
-.LINE	640
+.LINE	626
 SP_STORE	%ecx
 ADD16	%ecx	$86
 LD16	(%ecx)	$str3_descriptor
 SP_RD16	%ecx	$86
 SP_WR16	%ecx	$78
-.LINE	641
+.LINE	627
 LD16	%ecx	$10
 SP_WR16	%ecx	$80
 @IC161:	
 @IC156:	
 @IC151:	
 @IC146:	
-.LINE	644
+.LINE	630
 SP_STORE	%ecx
 ADD16	%ecx	$80
 SP_STORE	%eax
@@ -7620,11 +7607,11 @@ CMP16	(%ecx)	(%eax)
 JGT	@IC166
 JUMP	@IC165
 @IC166:	
-.LINE	645
+.LINE	631
 SP_RD16	%ecx	$44
 SP_WR16	%ecx	$80
 @IC165:	
-.LINE	647
+.LINE	633
 SP_RD16	%eax	$80
 PUSH16	%eax
 SP_RD16	%eax	$80
@@ -7636,21 +7623,21 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$94
 SP_INC	$6
-.LINE	648
+.LINE	634
 SP_INC	$92
 RTS	
 @IC139:	
-.LINE	652
+.LINE	638
 SP_RD16	%eax	$96
 PUSH16	%eax
 CALL	set_control_ep_halt
 SP_INC	$2
-.LINE	653
+.LINE	639
 LD8	%eax	$2
 SP_WR8	%eax	$95
 SP_INC	$92
 RTS	
-.LINE	603
+.LINE	589
 JUMP	@IC132
 @IC134:	
 SP_RD8	%ecx	$22
@@ -7667,28 +7654,28 @@ JZ	@IC137
 @IC140:	
 JUMP	@IC139
 @IC132:	
-.LINE	658
+.LINE	644
 LD8	%eax	$0
 SP_WR8	%eax	$95
 SP_INC	$92
 RTS	
 .FUNC_END	"get_descriptor"
 
-.LINE	661
+.LINE	647
 controul_setup:	
 .GLOBAL	 DO_NOT_EXPORT  "controul_setup"
 
-.VARIABLE	"bmRequestType"	8	"char"	0	0	46	0	0	0	664	
-.VARIABLE	"status"	8	"char"	0	0	61	0	0	0	665	
+.VARIABLE	"bmRequestType"	8	"char"	0	0	38	0	0	0	650	
+.VARIABLE	"status"	8	"char"	0	0	53	0	0	0	651	
 .FUNCTION	"controul_setup"	
-.RETURN "void"	0	0	0	68	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	68	0	0	1	661	
-SP_DEC	$65
+.RETURN "void"	0	0	0	60	0	0	0	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	60	0	0	1	647	
+SP_DEC	$57
 @IC169:	
-.LINE	667
+.LINE	653
 SP_STORE	%ecx
 SP_STORE	%eax
-ADD16	%eax	$68
+ADD16	%eax	$60
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$2
@@ -7709,11 +7696,11 @@ CMP8	%ecx	$0
 JNZ	@IC171
 JUMP	@IC170
 @IC171:	
-.LINE	669
+.LINE	655
 SP_STORE	%ecx
 ADD16	%ecx	$7
 SP_STORE	%eax
-ADD16	%eax	$68
+ADD16	%eax	$60
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$9
@@ -7734,17 +7721,17 @@ CMP8	%ecx	$0
 JZ	@IC173
 JNZ	@IC172
 @IC173:	
-.LINE	670
-SP_RD16	%eax	$68
+.LINE	656
+SP_RD16	%eax	$60
 PUSH16	%eax
 CALL	wait_setup_packet
 SP_INC	$2
 @IC172:	
-.LINE	673
+.LINE	659
 SP_STORE	%ecx
 ADD16	%ecx	$14
 SP_STORE	%eax
-ADD16	%eax	$68
+ADD16	%eax	$60
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$16
@@ -7767,11 +7754,11 @@ JUMP	@IC177
 @IC177:	
 JUMP	@IC170
 @IC176:	
-.LINE	675
+.LINE	667
 SP_STORE	%ecx
 ADD16	%ecx	$21
 SP_STORE	%eax
-ADD16	%eax	$68
+ADD16	%eax	$60
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$23
@@ -7783,184 +7770,159 @@ SP_STORE	%eax
 ADD16	%eax	$23
 LD16	%ebx	$12
 ADD16	(%ecx)	(%eax)	%ebx
-PUSH16	$9
-SP_RD16	%eax	$27
-PUSH16	%eax
-PUSH16	hUART
-SP_DEC	$2
-CALL	write_uart
-POP16	%eax
-SP_WR16	%eax	$33
-SP_INC	$6
-.LINE	677
 SP_STORE	%ecx
-ADD16	%ecx	$29
-SP_STORE	%eax
-ADD16	%eax	$68
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$31
-SP_RD16	%eax	$29
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$33
-SP_STORE	%eax
-ADD16	%eax	$31
-LD16	%ebx	$12
-ADD16	(%ecx)	(%eax)	%ebx
-SP_STORE	%ecx
-ADD16	%ecx	$35
+ADD16	%ecx	$27
 LD32	%eax	$0
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$39
+ADD16	%ecx	$31
 SP_STORE	%eax
-ADD16	%eax	$33
+ADD16	%eax	$25
 SP_STORE	%ebx
-ADD16	%ebx	$35
+ADD16	%ebx	$27
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
-ADD16	%ecx	$41
-SP_RD16	%eax	$39
+ADD16	%ecx	$33
+SP_RD16	%eax	$31
 CPY8	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$42
-SP_RD8	%eax	$41
+ADD16	%ecx	$34
+SP_RD8	%eax	$33
 AND32	%eax	$255
 LD32	%ebx	$96
 AND32	(%ecx)	%eax	%ebx
-SP_RD8	%ecx	$42
-SP_WR8	%ecx	$46
-.LINE	678
+SP_RD8	%ecx	$34
+SP_WR8	%ecx	$38
+.LINE	668
 SP_STORE	%ecx
-ADD16	%ecx	$47
+ADD16	%ecx	$39
 SP_STORE	%eax
-ADD16	%eax	$68
+ADD16	%eax	$60
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$49
-SP_RD16	%eax	$47
+ADD16	%ecx	$41
+SP_RD16	%eax	$39
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$51
+ADD16	%ecx	$43
 SP_STORE	%eax
-ADD16	%eax	$49
+ADD16	%eax	$41
 LD16	%ebx	$217
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$53
-SP_RD16	%eax	$51
+ADD16	%ecx	$45
+SP_RD16	%eax	$43
 CPY8	(%ecx)	(%eax)
-SP_RD8	%ecx	$53
+SP_RD8	%ecx	$45
 CMP8	%ecx	$1
 JZ	@IC179
 JNZ	@IC178
 @IC179:	
-.LINE	679
+.LINE	669
 SP_STORE	%ecx
-ADD16	%ecx	$54
+ADD16	%ecx	$46
 SP_STORE	%eax
-ADD16	%eax	$68
+ADD16	%eax	$60
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$56
-SP_RD16	%eax	$54
+ADD16	%ecx	$48
+SP_RD16	%eax	$46
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$58
+ADD16	%ecx	$50
 SP_STORE	%eax
-ADD16	%eax	$56
+ADD16	%eax	$48
 LD16	%ebx	$217
 ADD16	(%ecx)	(%eax)	%ebx
-SP_RD16	%ecx	$58
+SP_RD16	%ecx	$50
 LD8	(%ecx)	$0
 @IC178:	
-.LINE	681
-SP_RD8	%ecx	$46
+.LINE	671
+SP_RD8	%ecx	$38
 CMP8	%ecx	$0
 JZ	@IC184
 JNZ	@IC183
 @IC184:	
-.LINE	683
-SP_RD16	%eax	$68
+.LINE	673
+SP_RD16	%eax	$60
 PUSH16	%eax
 SP_DEC	$1
 CALL	standard_request
 POP8	%eax
-SP_WR8	%eax	$62
+SP_WR8	%eax	$54
 SP_INC	$2
-SP_RD8	%ecx	$60
-SP_WR8	%ecx	$61
+SP_RD8	%ecx	$52
+SP_WR8	%ecx	$53
 JUMP	@IC182
 @IC183:	
-.LINE	685
-SP_RD8	%ecx	$46
+.LINE	675
+SP_RD8	%ecx	$38
 CMP8	%ecx	$32
 JZ	@IC189
 JNZ	@IC188
 @IC189:	
-.LINE	687
-SP_RD16	%eax	$68
+.LINE	677
+SP_RD16	%eax	$60
 PUSH16	%eax
 SP_DEC	$1
 CALL	class_request
 POP8	%eax
-SP_WR8	%eax	$64
+SP_WR8	%eax	$56
 SP_INC	$2
-SP_RD8	%ecx	$62
-SP_WR8	%ecx	$61
+SP_RD8	%ecx	$54
+SP_WR8	%ecx	$53
 JUMP	@IC187
 @IC188:	
-.LINE	689
-SP_RD8	%ecx	$46
+.LINE	679
+SP_RD8	%ecx	$38
 CMP8	%ecx	$64
 JZ	@IC193
 JNZ	@IC192
 @IC193:	
-.LINE	691
-SP_RD16	%eax	$68
+.LINE	681
+SP_RD16	%eax	$60
 PUSH16	%eax
 SP_DEC	$1
 CALL	vendor_request
 POP8	%eax
-SP_WR8	%eax	$65
+SP_WR8	%eax	$57
 SP_INC	$2
-SP_RD8	%ecx	$63
-SP_WR8	%ecx	$61
+SP_RD8	%ecx	$55
+SP_WR8	%ecx	$53
 @IC192:	
 @IC187:	
 @IC182:	
-.LINE	694
+.LINE	684
 PUSH16	$500
 SP_DEC	$1
 CALL	vos_delay_msecs
 POP8	%eax
-SP_WR8	%eax	$66
+SP_WR8	%eax	$58
 SP_INC	$2
-.LINE	667
+.LINE	653
 JUMP	@IC169
 @IC170:	
-.LINE	667
-SP_INC	$65
+.LINE	653
+SP_INC	$57
 RTS	
 .FUNC_END	"controul_setup"
 
-.LINE	699
+.LINE	689
 standard_request:	
 .GLOBAL	 DO_NOT_EXPORT  "standard_request"
 
-.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	701	
-.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	9	0	0	1	702	
-.VARIABLE	"bReq"	8	"char"	0	0	18	0	0	0	703	
+.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	691	
+.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	9	0	0	1	692	
+.VARIABLE	"bReq"	8	"char"	0	0	18	0	0	0	693	
 .FUNCTION	"standard_request"	
 .RETURN "char"	8	0	0	71	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	72	0	0	1	699	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	72	0	0	1	689	
 SP_DEC	$68
-.LINE	701
+.LINE	691
 LD8	%ecx	$0
 SP_WR8	%ecx	$0
-.LINE	705
+.LINE	695
 SP_STORE	%ecx
 ADD16	%ecx	$1
 SP_STORE	%eax
@@ -7980,7 +7942,7 @@ SP_RD16	%ecx	$5
 SP_WR16	%ecx	$7
 SP_RD16	%ecx	$7
 SP_WR16	%ecx	$9
-.LINE	706
+.LINE	696
 SP_STORE	%ecx
 ADD16	%ecx	$11
 SP_STORE	%eax
@@ -8002,10 +7964,10 @@ SP_RD16	%eax	$15
 CPY8	(%ecx)	(%eax)
 SP_RD8	%ecx	$17
 SP_WR8	%ecx	$18
-.LINE	708
+.LINE	698
 JUMP	@IC198
 @IC197:	
-.LINE	712
+.LINE	702
 SP_STORE	%ecx
 ADD16	%ecx	$19
 SP_STORE	%eax
@@ -8037,10 +7999,10 @@ SP_RD16	%eax	$73
 PUSH16	%eax
 CALL	set_address
 SP_INC	$3
-.LINE	708
+.LINE	698
 JUMP	@IC196
 @IC199:	
-.LINE	717
+.LINE	707
 SP_RD16	%eax	$72
 PUSH16	%eax
 SP_DEC	$1
@@ -8048,10 +8010,10 @@ CALL	get_descriptor
 POP8	%eax
 SP_WR8	%eax	$33
 SP_INC	$2
-.LINE	708
+.LINE	698
 JUMP	@IC196
 @IC201:	
-.LINE	721
+.LINE	711
 SP_STORE	%ecx
 ADD16	%ecx	$32
 SP_STORE	%eax
@@ -8083,10 +8045,10 @@ SP_RD16	%eax	$73
 PUSH16	%eax
 CALL	set_configuration
 SP_INC	$3
-.LINE	708
+.LINE	698
 JUMP	@IC196
 @IC203:	
-.LINE	725
+.LINE	715
 SP_STORE	%ecx
 ADD16	%ecx	$44
 SP_STORE	%eax
@@ -8118,10 +8080,10 @@ SP_RD16	%eax	$73
 PUSH16	%eax
 CALL	clear_feature
 SP_INC	$3
-.LINE	708
+.LINE	698
 JUMP	@IC196
 @IC205:	
-.LINE	729
+.LINE	719
 SP_STORE	%ecx
 ADD16	%ecx	$56
 SP_STORE	%eax
@@ -8153,15 +8115,15 @@ SP_RD16	%eax	$73
 PUSH16	%eax
 CALL	set_feature
 SP_INC	$3
-.LINE	708
+.LINE	698
 JUMP	@IC196
 @IC207:	
-.LINE	734
+.LINE	724
 SP_RD16	%eax	$72
 PUSH16	%eax
 CALL	set_control_ep_halt
 SP_INC	$2
-.LINE	708
+.LINE	698
 JUMP	@IC196
 @IC198:	
 SP_RD8	%ecx	$18
@@ -8186,12 +8148,12 @@ JZ	@IC205
 @IC208:	
 JUMP	@IC207
 @IC196:	
-.LINE	738
+.LINE	728
 SP_RD16	%eax	$72
 PUSH16	%eax
 CALL	setup_transfer_handshake
 SP_INC	$2
-.LINE	739
+.LINE	729
 SP_STORE	%eax
 ADD16	%eax	$0
 SP_STORE	%ecx
@@ -8201,31 +8163,31 @@ SP_INC	$68
 RTS	
 .FUNC_END	"standard_request"
 
-.LINE	744
+.LINE	734
 class_request:	
 .GLOBAL	 DO_NOT_EXPORT  "class_request"
 
-.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	746	
-.VARIABLE	"class_test"	88	"char"	0	0	1	1	1	0	749	
-.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	20	0	0	1	747	
-.VARIABLE	"bReq"	8	"char"	0	0	29	0	0	0	748	
+.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	736	
+.VARIABLE	"class_test"	88	"char"	0	0	1	1	1	0	739	
+.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	20	0	0	1	737	
+.VARIABLE	"bReq"	8	"char"	0	0	29	0	0	0	738	
 .FUNCTION	"class_request"	
 .RETURN "char"	8	0	0	33	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	34	0	0	1	744	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	34	0	0	1	734	
 SP_DEC	$30
-.LINE	746
+.LINE	736
 LD8	%ecx	$0
 SP_WR8	%ecx	$0
-.LINE	749
+.LINE	739
 SP_STORE	%ecx
 ADD16	%ecx	$1
-LD32	%eax	$Array@11
+LD32	%eax	$Array@12
 CPYROM	(%ecx)	%eax	$5
 ADD16	%ecx	$10
 INC32	%eax	$5
 CPYROM	%ebx	%eax	$1
 CPY8	(%ecx)	%ebx
-.LINE	750
+.LINE	740
 SP_STORE	%ecx
 ADD16	%ecx	$12
 SP_STORE	%eax
@@ -8245,7 +8207,7 @@ SP_RD16	%ecx	$16
 SP_WR16	%ecx	$18
 SP_RD16	%ecx	$18
 SP_WR16	%ecx	$20
-.LINE	751
+.LINE	741
 SP_STORE	%ecx
 ADD16	%ecx	$22
 SP_STORE	%eax
@@ -8267,79 +8229,79 @@ SP_RD16	%eax	$26
 CPY8	(%ecx)	(%eax)
 SP_RD8	%ecx	$28
 SP_WR8	%ecx	$29
-.LINE	753
+.LINE	743
 JUMP	@IC211
 @IC210:	
-.LINE	756
+.LINE	746
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_inititate_abort_bulk_out
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC212:	
-.LINE	760
+.LINE	750
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_check_abort_bulk_out_status
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC214:	
-.LINE	764
+.LINE	754
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_inititate_abort_bulk_in
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC216:	
-.LINE	768
+.LINE	758
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_check_abort_bulk_in_status
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC218:	
-.LINE	772
+.LINE	762
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_initiate_clear
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC220:	
-.LINE	776
+.LINE	766
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_check_clear_statue
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC222:	
-.LINE	780
+.LINE	770
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_get_capablities
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC224:	
-.LINE	784
+.LINE	774
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	class_requests_indicator_pulse
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC226:	
-.LINE	789
+.LINE	779
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	set_control_ep_halt
 SP_INC	$2
-.LINE	753
+.LINE	743
 JUMP	@IC209
 @IC211:	
 SP_RD8	%ecx	$29
@@ -8376,12 +8338,12 @@ JZ	@IC224
 @IC227:	
 JUMP	@IC226
 @IC209:	
-.LINE	794
+.LINE	784
 SP_RD16	%eax	$34
 PUSH16	%eax
 CALL	setup_transfer_handshake
 SP_INC	$2
-.LINE	795
+.LINE	785
 SP_STORE	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$33
@@ -8390,45 +8352,45 @@ SP_INC	$30
 RTS	
 .FUNC_END	"class_request"
 
-.LINE	799
+.LINE	789
 vendor_request:	
 .GLOBAL	 DO_NOT_EXPORT  "vendor_request"
 
-.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	802	
-.VARIABLE	"iswriting"	8	"char"	0	0	1	0	0	0	805	
-.VARIABLE	"length"	16	"short"	0	0	2	0	0	0	806	
-.VARIABLE	"number"	16	"short"	0	0	4	0	0	0	807	
-.VARIABLE	"real_transfer"	32	"int"	1	0	6	0	0	0	808	
-.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	18	0	0	1	801	
-.VARIABLE	"bReq"	8	"char"	0	0	27	0	0	0	803	
-.VARIABLE	"ep_id"	8	"char"	0	0	75	0	0	0	804	
-.VARIABLE	"ep2_state"	8	"char"	0	0	77	0	0	0	809	
-.VARIABLE	"packet"	72	"char"	0	0	140	1	1	0	811	
+.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	792	
+.VARIABLE	"iswriting"	8	"char"	0	0	1	0	0	0	795	
+.VARIABLE	"length"	16	"short"	0	0	2	0	0	0	796	
+.VARIABLE	"number"	16	"short"	0	0	4	0	0	0	797	
+.VARIABLE	"real_transfer"	32	"int"	1	0	6	0	0	0	798	
+.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	18	0	0	1	791	
+.VARIABLE	"bReq"	8	"char"	0	0	27	0	0	0	793	
+.VARIABLE	"ep_id"	8	"char"	0	0	67	0	0	0	794	
+.VARIABLE	"ep2_state"	8	"char"	0	0	69	0	0	0	799	
+.VARIABLE	"packet"	72	"char"	0	0	132	1	1	0	801	
 .FUNCTION	"vendor_request"	
-.RETURN "char"	8	0	0	323	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	324	0	0	1	799	
+.RETURN "char"	8	0	0	315	0	0	0	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	316	0	0	1	789	
 SP_DEC	$255
-SP_DEC	$65
-.LINE	802
+SP_DEC	$57
+.LINE	792
 LD8	%ecx	$0
 SP_WR8	%ecx	$0
-.LINE	805
+.LINE	795
 LD8	%ecx	$0
 SP_WR8	%ecx	$1
-.LINE	806
+.LINE	796
 LD16	%ecx	$0
 SP_WR16	%ecx	$2
-.LINE	807
+.LINE	797
 LD16	%ecx	$0
 SP_WR16	%ecx	$4
-.LINE	808
+.LINE	798
 LD32	%ecx	$0
 SP_WR32	%ecx	$6
-.LINE	813
+.LINE	803
 SP_STORE	%ecx
 ADD16	%ecx	$10
 SP_STORE	%eax
-ADD16	%eax	$324
+ADD16	%eax	$316
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$12
@@ -8444,7 +8406,7 @@ SP_RD16	%ecx	$14
 SP_WR16	%ecx	$16
 SP_RD16	%ecx	$16
 SP_WR16	%ecx	$18
-.LINE	814
+.LINE	804
 SP_STORE	%ecx
 ADD16	%ecx	$20
 SP_STORE	%eax
@@ -8466,7 +8428,7 @@ SP_RD16	%eax	$24
 CPY8	(%ecx)	(%eax)
 SP_RD8	%ecx	$26
 SP_WR8	%ecx	$27
-.LINE	818
+.LINE	808
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -8493,14 +8455,14 @@ ADD16	%ecx	$2
 SP_RD8	%eax	$36
 AND16	%eax	$255
 CPY16	(%ecx)	%eax
-.LINE	820
+.LINE	810
 JUMP	@IC230
 @IC229:	
-.LINE	824
+.LINE	813
 SP_STORE	%ecx
 ADD16	%ecx	$37
 SP_STORE	%eax
-ADD16	%eax	$324
+ADD16	%eax	$316
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$39
@@ -8516,366 +8478,360 @@ SP_RD16	%ecx	$41
 SP_STORE	%eax
 ADD16	%eax	$2
 CPY16	(%ecx)	(%eax)
-.LINE	825
+.LINE	814
 SP_STORE	%ecx
 ADD16	%ecx	$43
-SP_STORE	%eax
-ADD16	%eax	$324
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$45
-SP_RD16	%eax	$43
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$47
-SP_STORE	%eax
-ADD16	%eax	$45
-LD16	%ebx	$21
-ADD16	(%ecx)	(%eax)	%ebx
+LD16	(%ecx)	$BRI_TO_TMC_controul_buffer
 SP_RD16	%eax	$2
 PUSH16	%eax
-SP_RD16	%eax	$49
+SP_RD16	%eax	$45
 PUSH16	%eax
 SP_STORE	%eax
-ADD16	%eax	$328
+ADD16	%eax	$320
 PUSH16	(%eax)
 SP_DEC	$4
 CALL	controul_transfer_in
 POP32	%eax
-SP_WR32	%eax	$55
+SP_WR32	%eax	$51
 SP_INC	$6
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC231:	
-.LINE	830
+.LINE	819
 SP_STORE	%ecx
-ADD16	%ecx	$53
-SP_STORE	%eax
-ADD16	%eax	$324
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$55
-SP_RD16	%eax	$53
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$57
-SP_STORE	%eax
-ADD16	%eax	$55
-LD16	%ebx	$21
-ADD16	(%ecx)	(%eax)	%ebx
+ADD16	%ecx	$49
+LD16	(%ecx)	$TMC_TO_BRI_controul_buffer
 SP_RD16	%eax	$2
 PUSH16	%eax
-SP_RD16	%eax	$59
+SP_RD16	%eax	$51
 PUSH16	%eax
 SP_STORE	%eax
-ADD16	%eax	$328
+ADD16	%eax	$320
 PUSH16	(%eax)
 SP_DEC	$4
 CALL	controul_transfer_out
 POP32	%eax
-SP_WR32	%eax	$65
+SP_WR32	%eax	$57
 SP_INC	$6
-SP_RD32	%ecx	$59
-SP_WR32	%ecx	$6
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC233:	
-.LINE	838
+.LINE	827
 SP_STORE	%ecx
-ADD16	%ecx	$63
+ADD16	%ecx	$55
 SP_STORE	%eax
 ADD16	%eax	$18
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$65
-SP_RD16	%eax	$63
+ADD16	%ecx	$57
+SP_RD16	%eax	$55
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$67
+ADD16	%ecx	$59
 SP_STORE	%eax
-ADD16	%eax	$65
+ADD16	%eax	$57
 LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$69
-SP_RD16	%eax	$67
+ADD16	%ecx	$61
+SP_RD16	%eax	$59
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$71
-SP_RD16	%eax	$69
+ADD16	%ecx	$63
+SP_RD16	%eax	$61
 AND32	%eax	$65535
 LD32	%ebx	$255
 AND32	(%ecx)	%eax	%ebx
-SP_RD8	%ecx	$71
-SP_WR8	%ecx	$75
-.LINE	839
-SP_RD16	%eax	$75
+SP_RD8	%ecx	$63
+SP_WR8	%ecx	$67
+.LINE	828
+SP_RD16	%eax	$67
 PUSH8	%eax
 SP_STORE	%eax
-ADD16	%eax	$325
+ADD16	%eax	$317
 PUSH16	(%eax)
 SP_DEC	$1
 CALL	get_ep_status
 POP8	%eax
-SP_WR8	%eax	$79
+SP_WR8	%eax	$71
 SP_INC	$3
-SP_RD8	%ecx	$76
-SP_WR8	%ecx	$77
-.LINE	841
+SP_RD8	%ecx	$68
+SP_WR8	%ecx	$69
+.LINE	830
 SP_STORE	%ecx
-ADD16	%ecx	$78
+ADD16	%ecx	$70
 SP_STORE	%eax
-ADD16	%eax	$77
+ADD16	%eax	$69
 CPY16	(%ecx)	%eax
 PUSH16	$1
-SP_RD16	%eax	$80
+SP_RD16	%eax	$72
 PUSH16	%eax
 SP_STORE	%eax
-ADD16	%eax	$328
+ADD16	%eax	$320
 PUSH16	(%eax)
 SP_DEC	$4
 CALL	controul_transfer_in
 POP32	%eax
-SP_WR32	%eax	$86
+SP_WR32	%eax	$78
 SP_INC	$6
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC235:	
-.LINE	846
+.LINE	835
 SP_STORE	%ecx
-ADD16	%ecx	$84
+ADD16	%ecx	$76
 SP_STORE	%eax
 ADD16	%eax	$18
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$86
-SP_RD16	%eax	$84
+ADD16	%ecx	$78
+SP_RD16	%eax	$76
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$88
+ADD16	%ecx	$80
 SP_STORE	%eax
-ADD16	%eax	$86
+ADD16	%eax	$78
 LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$90
-SP_RD16	%eax	$88
+ADD16	%ecx	$82
+SP_RD16	%eax	$80
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$92
-SP_RD16	%eax	$90
+ADD16	%ecx	$84
+SP_RD16	%eax	$82
 AND32	%eax	$65535
 LD32	%ebx	$255
 AND32	(%ecx)	%eax	%ebx
-SP_RD8	%ecx	$92
-SP_WR8	%ecx	$75
-.LINE	847
-SP_RD16	%eax	$75
+SP_RD8	%ecx	$84
+SP_WR8	%ecx	$67
+.LINE	836
+SP_RD16	%eax	$67
 PUSH8	%eax
 SP_STORE	%eax
-ADD16	%eax	$325
+ADD16	%eax	$317
 PUSH16	(%eax)
 CALL	clear_feature
 SP_INC	$3
-.LINE	849
+.LINE	838
 SP_STORE	%ecx
-ADD16	%ecx	$96
+ADD16	%ecx	$88
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
-ADD16	%ecx	$98
-LD32	(%ecx)	$Str@12
+ADD16	%ecx	$90
+LD32	(%ecx)	$Str@13
 PUSH16	$13
-SP_RD16	%eax	$100
+SP_RD16	%eax	$92
 PUSH16	%eax
-SP_RD16	%eax	$100
+SP_RD16	%eax	$92
 PUSH16	%eax
 SP_DEC	$2
 CALL	vos_memcpy
 POP16	%eax
-SP_WR16	%eax	$108
+SP_WR16	%eax	$100
 SP_INC	$6
-.LINE	850
+.LINE	839
 SP_STORE	%ecx
-ADD16	%ecx	$104
+ADD16	%ecx	$96
 LD16	(%ecx)	$mark_array
 PUSH16	$13
-SP_RD16	%eax	$106
+SP_RD16	%eax	$98
 PUSH16	%eax
 PUSH16	hUART
 SP_DEC	$2
 CALL	write_uart
 POP16	%eax
-SP_WR16	%eax	$112
+SP_WR16	%eax	$104
 SP_INC	$6
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC237:	
-.LINE	856
+.LINE	845
 SP_STORE	%ecx
-ADD16	%ecx	$108
+ADD16	%ecx	$100
 SP_STORE	%eax
 ADD16	%eax	$18
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$110
-SP_RD16	%eax	$108
+ADD16	%ecx	$102
+SP_RD16	%eax	$100
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$112
+ADD16	%ecx	$104
 SP_STORE	%eax
-ADD16	%eax	$110
+ADD16	%eax	$102
 LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$114
-SP_RD16	%eax	$112
+ADD16	%ecx	$106
+SP_RD16	%eax	$104
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$116
-SP_RD16	%eax	$114
+ADD16	%ecx	$108
+SP_RD16	%eax	$106
 AND32	%eax	$65535
 LD32	%ebx	$255
 AND32	(%ecx)	%eax	%ebx
-SP_RD8	%ecx	$116
-SP_WR8	%ecx	$75
-.LINE	857
-SP_RD16	%eax	$75
+SP_RD8	%ecx	$108
+SP_WR8	%ecx	$67
+.LINE	846
+SP_RD16	%eax	$67
 PUSH8	%eax
 SP_STORE	%eax
-ADD16	%eax	$325
+ADD16	%eax	$317
 PUSH16	(%eax)
 CALL	set_endpoint_stall
 SP_INC	$3
-.LINE	859
+.LINE	848
 SP_STORE	%ecx
-ADD16	%ecx	$120
+ADD16	%ecx	$112
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
-ADD16	%ecx	$122
-LD32	(%ecx)	$Str@13
+ADD16	%ecx	$114
+LD32	(%ecx)	$Str@14
 PUSH16	$18
-SP_RD16	%eax	$124
+SP_RD16	%eax	$116
 PUSH16	%eax
-SP_RD16	%eax	$124
+SP_RD16	%eax	$116
 PUSH16	%eax
 SP_DEC	$2
 CALL	vos_memcpy
 POP16	%eax
-SP_WR16	%eax	$132
+SP_WR16	%eax	$124
 SP_INC	$6
-.LINE	860
+.LINE	849
 SP_STORE	%ecx
-ADD16	%ecx	$128
+ADD16	%ecx	$120
 LD16	(%ecx)	$mark_array
 PUSH16	$18
-SP_RD16	%eax	$130
+SP_RD16	%eax	$122
 PUSH16	%eax
 PUSH16	hUART
 SP_DEC	$2
 CALL	write_uart
 POP16	%eax
-SP_WR16	%eax	$136
+SP_WR16	%eax	$128
 SP_INC	$6
-.LINE	861
+.LINE	850
 SP_STORE	%ecx
-ADD16	%ecx	$132
+ADD16	%ecx	$124
 LD16	(%ecx)	$mark_array
 PUSH16	$18
 PUSH32	$0
-SP_RD16	%eax	$138
+SP_RD16	%eax	$130
 PUSH16	%eax
 SP_DEC	$2
 CALL	vos_memset
 POP16	%eax
-SP_WR16	%eax	$142
+SP_WR16	%eax	$134
 SP_INC	$8
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC239:	
-.LINE	869
+.LINE	858
 SP_STORE	%ecx
-ADD16	%ecx	$136
+ADD16	%ecx	$128
 LD32	%eax	$1
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$149
+ADD16	%ecx	$141
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$151
+ADD16	%ecx	$143
 SP_STORE	%eax
-ADD16	%eax	$149
+ADD16	%eax	$141
 SP_STORE	%ebx
-ADD16	%ebx	$136
+ADD16	%ebx	$128
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
-ADD16	%ecx	$153
+ADD16	%ecx	$145
 SP_STORE	%eax
 ADD16	%eax	$18
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$155
-SP_RD16	%eax	$153
+ADD16	%ecx	$147
+SP_RD16	%eax	$145
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$157
+ADD16	%ecx	$149
 SP_STORE	%eax
-ADD16	%eax	$155
+ADD16	%eax	$147
 LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$159
-SP_RD16	%eax	$157
+ADD16	%ecx	$151
+SP_RD16	%eax	$149
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$161
-SP_RD16	%eax	$159
+ADD16	%ecx	$153
+SP_RD16	%eax	$151
 AND32	%eax	$65535
 LD32	%ebx	$255
 AND32	(%ecx)	%eax	%ebx
-SP_RD16	%ecx	$151
+SP_RD16	%ecx	$143
 SP_STORE	%eax
-ADD16	%eax	$161
+ADD16	%eax	$153
 CPY8	(%ecx)	(%eax)
-.LINE	871
+.LINE	860
 SP_STORE	%ecx
-ADD16	%ecx	$165
+ADD16	%ecx	$157
 LD32	%eax	$1
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$169
+ADD16	%ecx	$161
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$171
+ADD16	%ecx	$163
 SP_STORE	%eax
-ADD16	%eax	$169
+ADD16	%eax	$161
 SP_STORE	%ebx
-ADD16	%ebx	$165
+ADD16	%ebx	$157
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
-ADD16	%ecx	$173
-SP_RD16	%eax	$171
+ADD16	%ecx	$165
+SP_RD16	%eax	$163
 CPY8	(%ecx)	(%eax)
-SP_RD8	%ecx	$173
+SP_RD8	%ecx	$165
 CMP8	%ecx	$5
 JLT	@IC247
 JUMP	@IC246
 @IC247:	
-.LINE	873
+.LINE	862
+SP_STORE	%ecx
+ADD16	%ecx	$166
+LD32	%eax	$0
+LD32	%ebx	$1
+MUL32	(%ecx)	%eax	%ebx
+SP_STORE	%ecx
+ADD16	%ecx	$170
+SP_STORE	%eax
+ADD16	%eax	$132
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$172
+SP_STORE	%eax
+ADD16	%eax	$170
+SP_STORE	%ebx
+ADD16	%ebx	$166
+ADD16	(%ecx)	(%eax)	(%ebx)
+SP_RD16	%ecx	$172
+LD8	(%ecx)	$162
+.LINE	863
 SP_STORE	%ecx
 ADD16	%ecx	$174
-LD32	%eax	$0
+LD32	%eax	$1
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$178
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$180
@@ -8884,171 +8840,171 @@ ADD16	%eax	$178
 SP_STORE	%ebx
 ADD16	%ebx	$174
 ADD16	(%ecx)	(%eax)	(%ebx)
-SP_RD16	%ecx	$180
-LD8	(%ecx)	$162
-.LINE	874
 SP_STORE	%ecx
 ADD16	%ecx	$182
-LD32	%eax	$1
-LD32	%ebx	$1
-MUL32	(%ecx)	%eax	%ebx
-SP_STORE	%ecx
-ADD16	%ecx	$186
-SP_STORE	%eax
-ADD16	%eax	$140
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$188
-SP_STORE	%eax
-ADD16	%eax	$186
-SP_STORE	%ebx
-ADD16	%ebx	$182
-ADD16	(%ecx)	(%eax)	(%ebx)
-SP_STORE	%ecx
-ADD16	%ecx	$190
-SP_RD16	%eax	$188
+SP_RD16	%eax	$180
 CPY8	(%ecx)	(%eax)
-SP_RD8	%ecx	$190
+SP_RD8	%ecx	$182
 CMP8	%ecx	$1
 JZ	@IC252
 JNZ	@IC253
 @IC253:	
 SP_STORE	%ecx
-ADD16	%ecx	$191
+ADD16	%ecx	$183
 LD32	%eax	$1
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$195
+ADD16	%ecx	$187
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$197
+ADD16	%ecx	$189
 SP_STORE	%eax
-ADD16	%eax	$195
+ADD16	%eax	$187
 SP_STORE	%ebx
-ADD16	%ebx	$191
+ADD16	%ebx	$183
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
-ADD16	%ecx	$199
-SP_RD16	%eax	$197
+ADD16	%ecx	$191
+SP_RD16	%eax	$189
 CPY8	(%ecx)	(%eax)
-SP_RD8	%ecx	$199
+SP_RD8	%ecx	$191
 CMP8	%ecx	$3
 JZ	@IC252
 JNZ	@IC251
 @IC252:	
-.LINE	875
+.LINE	864
 SP_STORE	%ecx
-ADD16	%ecx	$200
+ADD16	%ecx	$192
 LD32	%eax	$2
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
+ADD16	%ecx	$196
+SP_STORE	%eax
+ADD16	%eax	$132
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$198
+SP_STORE	%eax
+ADD16	%eax	$196
+SP_STORE	%ebx
+ADD16	%ebx	$192
+ADD16	(%ecx)	(%eax)	(%ebx)
+SP_STORE	%ecx
+ADD16	%ecx	$200
+SP_STORE	%eax
+ADD16	%eax	$316
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$202
+SP_RD16	%eax	$200
+CPY16	(%ecx)	(%eax)
+SP_STORE	%ecx
 ADD16	%ecx	$204
 SP_STORE	%eax
-ADD16	%eax	$140
-CPY16	(%ecx)	%eax
+ADD16	%eax	$202
+LD16	%ebx	$218
+ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$206
 SP_STORE	%eax
 ADD16	%eax	$204
-SP_STORE	%ebx
-ADD16	%ebx	$200
-ADD16	(%ecx)	(%eax)	(%ebx)
-SP_STORE	%ecx
-ADD16	%ecx	$208
-SP_STORE	%eax
-ADD16	%eax	$324
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$210
-SP_RD16	%eax	$208
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$212
-SP_STORE	%eax
-ADD16	%eax	$210
-LD16	%ebx	$218
-ADD16	(%ecx)	(%eax)	%ebx
-SP_STORE	%ecx
-ADD16	%ecx	$214
-SP_STORE	%eax
-ADD16	%eax	$212
 LD16	%ebx	$1
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$216
-SP_RD16	%eax	$214
+ADD16	%ecx	$208
+SP_RD16	%eax	$206
 CPY8	(%ecx)	(%eax)
-SP_RD16	%ecx	$206
+SP_RD16	%ecx	$198
 SP_STORE	%eax
-ADD16	%eax	$216
+ADD16	%eax	$208
 CPY8	(%ecx)	(%eax)
 JUMP	@IC250
 @IC251:	
-.LINE	877
+.LINE	866
 SP_STORE	%ecx
-ADD16	%ecx	$217
+ADD16	%ecx	$209
 LD32	%eax	$2
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
+ADD16	%ecx	$213
+SP_STORE	%eax
+ADD16	%eax	$132
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$215
+SP_STORE	%eax
+ADD16	%eax	$213
+SP_STORE	%ebx
+ADD16	%ebx	$209
+ADD16	(%ecx)	(%eax)	(%ebx)
+SP_STORE	%ecx
+ADD16	%ecx	$217
+SP_STORE	%eax
+ADD16	%eax	$316
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$219
+SP_RD16	%eax	$217
+CPY16	(%ecx)	(%eax)
+SP_STORE	%ecx
 ADD16	%ecx	$221
 SP_STORE	%eax
-ADD16	%eax	$140
-CPY16	(%ecx)	%eax
+ADD16	%eax	$219
+LD16	%ebx	$230
+ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$223
 SP_STORE	%eax
 ADD16	%eax	$221
-SP_STORE	%ebx
-ADD16	%ebx	$217
-ADD16	(%ecx)	(%eax)	(%ebx)
-SP_STORE	%ecx
-ADD16	%ecx	$225
-SP_STORE	%eax
-ADD16	%eax	$324
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$227
-SP_RD16	%eax	$225
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$229
-SP_STORE	%eax
-ADD16	%eax	$227
-LD16	%ebx	$230
-ADD16	(%ecx)	(%eax)	%ebx
-SP_STORE	%ecx
-ADD16	%ecx	$231
-SP_STORE	%eax
-ADD16	%eax	$229
 LD16	%ebx	$1
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$233
-SP_RD16	%eax	$231
+ADD16	%ecx	$225
+SP_RD16	%eax	$223
 CPY8	(%ecx)	(%eax)
-SP_RD16	%ecx	$223
+SP_RD16	%ecx	$215
 SP_STORE	%eax
-ADD16	%eax	$233
+ADD16	%eax	$225
 CPY8	(%ecx)	(%eax)
 @IC250:	
-.LINE	874
+.LINE	863
 JUMP	@IC245
 @IC246:	
-.LINE	881
+.LINE	870
+SP_STORE	%ecx
+ADD16	%ecx	$226
+LD32	%eax	$0
+LD32	%ebx	$1
+MUL32	(%ecx)	%eax	%ebx
+SP_STORE	%ecx
+ADD16	%ecx	$230
+SP_STORE	%eax
+ADD16	%eax	$132
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$232
+SP_STORE	%eax
+ADD16	%eax	$230
+SP_STORE	%ebx
+ADD16	%ebx	$226
+ADD16	(%ecx)	(%eax)	(%ebx)
+SP_RD16	%ecx	$232
+LD8	(%ecx)	$161
+.LINE	871
 SP_STORE	%ecx
 ADD16	%ecx	$234
-LD32	%eax	$0
+LD32	%eax	$2
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$238
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$240
@@ -9058,17 +9014,18 @@ SP_STORE	%ebx
 ADD16	%ebx	$234
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$240
-LD8	(%ecx)	$161
-.LINE	882
+LD8	(%ecx)	$0
+@IC245:	
+.LINE	873
 SP_STORE	%ecx
 ADD16	%ecx	$242
-LD32	%eax	$2
+LD32	%eax	$3
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$246
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$248
@@ -9079,17 +9036,16 @@ ADD16	%ebx	$242
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$248
 LD8	(%ecx)	$0
-@IC245:	
-.LINE	884
+.LINE	874
 SP_STORE	%ecx
 ADD16	%ecx	$250
-LD32	%eax	$3
+LD32	%eax	$4
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$254
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$256
@@ -9101,17 +9057,17 @@ ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
 ADD16	%ecx	$256
 CPY16	%ecx	(%ecx)
-LD8	(%ecx)	$0
-.LINE	885
+LD8	(%ecx)	$2
+.LINE	875
 SP_STORE	%ecx
 ADD16	%ecx	$258
-LD32	%eax	$4
+LD32	%eax	$5
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$262
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$264
@@ -9123,17 +9079,17 @@ ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
 ADD16	%ecx	$264
 CPY16	%ecx	(%ecx)
-LD8	(%ecx)	$2
-.LINE	886
+LD8	(%ecx)	$0
+.LINE	876
 SP_STORE	%ecx
 ADD16	%ecx	$266
-LD32	%eax	$5
+LD32	%eax	$6
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$270
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$272
@@ -9145,17 +9101,17 @@ ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
 ADD16	%ecx	$272
 CPY16	%ecx	(%ecx)
-LD8	(%ecx)	$0
-.LINE	887
+LD8	(%ecx)	$2
+.LINE	877
 SP_STORE	%ecx
 ADD16	%ecx	$274
-LD32	%eax	$6
+LD32	%eax	$7
 LD32	%ebx	$1
 MUL32	(%ecx)	%eax	%ebx
 SP_STORE	%ecx
 ADD16	%ecx	$278
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$280
@@ -9167,146 +9123,124 @@ ADD16	(%ecx)	(%eax)	(%ebx)
 SP_STORE	%ecx
 ADD16	%ecx	$280
 CPY16	%ecx	(%ecx)
-LD8	(%ecx)	$2
-.LINE	888
+LD8	(%ecx)	$0
+.LINE	880
 SP_STORE	%ecx
 ADD16	%ecx	$282
-LD32	%eax	$7
-LD32	%ebx	$1
-MUL32	(%ecx)	%eax	%ebx
-SP_STORE	%ecx
-ADD16	%ecx	$286
-SP_STORE	%eax
-ADD16	%eax	$140
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$288
-SP_STORE	%eax
-ADD16	%eax	$286
-SP_STORE	%ebx
-ADD16	%ebx	$282
-ADD16	(%ecx)	(%eax)	(%ebx)
-SP_STORE	%ecx
-ADD16	%ecx	$288
-CPY16	%ecx	(%ecx)
-LD8	(%ecx)	$0
-.LINE	891
-SP_STORE	%ecx
-ADD16	%ecx	$290
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
-ADD16	%ecx	$292
-LD32	(%ecx)	$Str@14
+ADD16	%ecx	$284
+LD32	(%ecx)	$Str@15
 PUSH16	$18
 SP_STORE	%eax
-ADD16	%eax	$294
+ADD16	%eax	$286
 PUSH16	(%eax)
 SP_STORE	%eax
-ADD16	%eax	$294
+ADD16	%eax	$286
 PUSH16	(%eax)
 SP_DEC	$2
 CALL	vos_memcpy
 SP_STORE	%eax
-ADD16	%eax	$304
+ADD16	%eax	$296
 POP16	(%eax)
 SP_INC	$6
-.LINE	893
+.LINE	882
 SP_STORE	%ecx
-ADD16	%ecx	$298
+ADD16	%ecx	$290
 LD16	(%ecx)	$mark_array
 PUSH16	$18
 SP_STORE	%eax
-ADD16	%eax	$300
+ADD16	%eax	$292
 PUSH16	(%eax)
 PUSH16	hUART
 SP_DEC	$2
 CALL	write_uart
 SP_STORE	%eax
-ADD16	%eax	$308
+ADD16	%eax	$300
 POP16	(%eax)
 SP_INC	$6
-.LINE	894
+.LINE	883
 SP_STORE	%ecx
-ADD16	%ecx	$302
+ADD16	%ecx	$294
 LD16	(%ecx)	$mark_array
 PUSH16	$18
 PUSH32	$0
 SP_STORE	%eax
-ADD16	%eax	$308
+ADD16	%eax	$300
 PUSH16	(%eax)
 SP_DEC	$2
 CALL	vos_memset
 SP_STORE	%eax
-ADD16	%eax	$314
+ADD16	%eax	$306
 POP16	(%eax)
 SP_INC	$8
-.LINE	895
+.LINE	884
 SP_STORE	%ecx
-ADD16	%ecx	$306
+ADD16	%ecx	$298
 SP_STORE	%eax
-ADD16	%eax	$140
+ADD16	%eax	$132
 CPY16	(%ecx)	%eax
 SP_STORE	%eax
-ADD16	%eax	$324
+ADD16	%eax	$316
 PUSH16	(%eax)
 SP_STORE	%eax
-ADD16	%eax	$308
+ADD16	%eax	$300
 PUSH16	(%eax)
 CALL	USBTMC_send_setup_packet
 SP_INC	$4
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC241:	
-.LINE	901
+.LINE	890
 SP_STORE	%ecx
-ADD16	%ecx	$308
+ADD16	%ecx	$300
 SP_STORE	%eax
 ADD16	%eax	$18
 CPY16	(%ecx)	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$310
+ADD16	%ecx	$302
 SP_STORE	%eax
-ADD16	%eax	$308
+ADD16	%eax	$300
 CPY16	%eax	(%eax)
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$312
+ADD16	%ecx	$304
 SP_STORE	%eax
-ADD16	%eax	$310
+ADD16	%eax	$302
 LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_STORE	%ecx
-ADD16	%ecx	$314
+ADD16	%ecx	$306
 SP_STORE	%eax
-ADD16	%eax	$312
+ADD16	%eax	$304
 CPY16	%eax	(%eax)
 CPY16	(%ecx)	(%eax)
 SP_STORE	%ecx
-ADD16	%ecx	$316
+ADD16	%ecx	$308
 SP_STORE	%eax
-ADD16	%eax	$314
+ADD16	%eax	$306
 CPY16	%eax	(%eax)
 AND32	%eax	$65535
 LD32	%ebx	$255
 AND32	(%ecx)	%eax	%ebx
 SP_STORE	%eax
-ADD16	%eax	$316
+ADD16	%eax	$308
 PUSH32	(%eax)
 SP_STORE	%eax
-ADD16	%eax	$328
+ADD16	%eax	$320
 PUSH16	(%eax)
 CALL	get_bulk_status
 SP_INC	$6
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC243:	
-.LINE	907
+.LINE	896
 SP_STORE	%eax
-ADD16	%eax	$324
+ADD16	%eax	$316
 PUSH16	(%eax)
 CALL	setup_transfer_handshake
 SP_INC	$2
-.LINE	820
+.LINE	810
 JUMP	@IC228
 @IC230:	
 SP_RD8	%ecx	$27
@@ -9318,59 +9252,59 @@ CMP8	%ecx	$179
 JZ	@IC231
 @IC234:	
 SP_RD8	%ecx	$27
-CMP8	%ecx	$183
+CMP8	%ecx	$167
 JZ	@IC233
 @IC236:	
 SP_RD8	%ecx	$27
-CMP8	%ecx	$182
+CMP8	%ecx	$166
 JZ	@IC235
 @IC238:	
 SP_RD8	%ecx	$27
-CMP8	%ecx	$181
+CMP8	%ecx	$165
 JZ	@IC237
 @IC240:	
 SP_RD8	%ecx	$27
-CMP8	%ecx	$176
+CMP8	%ecx	$192
 JZ	@IC239
 @IC242:	
 SP_RD8	%ecx	$27
-CMP8	%ecx	$177
+CMP8	%ecx	$193
 JZ	@IC241
 @IC244:	
 JUMP	@IC243
 @IC228:	
-.LINE	912
+.LINE	901
 SP_STORE	%eax
 SP_STORE	%ecx
-ADD16	%ecx	$323
+ADD16	%ecx	$315
 CPY8	(%ecx)	(%eax)
 SP_INC	$255
-SP_INC	$65
+SP_INC	$57
 RTS	
 .FUNC_END	"vendor_request"
 
-.LINE	916
+.LINE	905
 get_bulk_status:	
 .GLOBAL	 DO_NOT_EXPORT  "get_bulk_status"
 
 .FUNCTION	"get_bulk_status"	
 .RETURN "void"	0	0	0	87	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	87	0	0	1	916	
-.PARAMETER	"bulk_flag"	32 "int"	0	0	89	0	0	0	916	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	87	0	0	1	905	
+.PARAMETER	"bulk_flag"	32 "int"	0	0	89	0	0	0	905	
 SP_DEC	$84
-.LINE	921
+.LINE	910
 SP_STORE	%ecx
 ADD16	%ecx	$89
 CMP32	(%ecx)	$1
 JZ	@IC260
 JNZ	@IC259
 @IC260:	
-.LINE	936
+.LINE	925
 SP_STORE	%ecx
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$2
-LD32	(%ecx)	$Str@15
+LD32	(%ecx)	$Str@16
 PUSH16	$20
 SP_RD16	%eax	$4
 PUSH16	%eax
@@ -9381,7 +9315,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$12
 SP_INC	$6
-.LINE	937
+.LINE	926
 SP_STORE	%ecx
 ADD16	%ecx	$8
 LD16	(%ecx)	$mark_array
@@ -9394,7 +9328,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$16
 SP_INC	$6
-.LINE	938
+.LINE	927
 SP_STORE	%ecx
 ADD16	%ecx	$12
 LD16	(%ecx)	$mark_array
@@ -9407,7 +9341,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$22
 SP_INC	$8
-.LINE	942
+.LINE	931
 SP_STORE	%ecx
 ADD16	%ecx	$16
 SP_STORE	%eax
@@ -9432,7 +9366,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$28
 SP_INC	$6
-.LINE	943
+.LINE	932
 SP_STORE	%ecx
 ADD16	%ecx	$24
 SP_STORE	%eax
@@ -9460,20 +9394,20 @@ SP_WR32	%eax	$36
 SP_INC	$6
 JUMP	@IC258
 @IC259:	
-.LINE	946
+.LINE	935
 SP_STORE	%ecx
 ADD16	%ecx	$89
 CMP32	(%ecx)	$2
 JZ	@IC264
 JNZ	@IC263
 @IC264:	
-.LINE	948
+.LINE	937
 SP_STORE	%ecx
 ADD16	%ecx	$34
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$36
-LD32	(%ecx)	$Str@16
+LD32	(%ecx)	$Str@17
 PUSH16	$19
 SP_RD16	%eax	$38
 PUSH16	%eax
@@ -9484,7 +9418,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$46
 SP_INC	$6
-.LINE	949
+.LINE	938
 SP_STORE	%ecx
 ADD16	%ecx	$42
 LD16	(%ecx)	$mark_array
@@ -9497,7 +9431,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$50
 SP_INC	$6
-.LINE	950
+.LINE	939
 SP_STORE	%ecx
 ADD16	%ecx	$46
 LD16	(%ecx)	$mark_array
@@ -9510,13 +9444,13 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$56
 SP_INC	$8
-.LINE	967
+.LINE	956
 SP_STORE	%ecx
 ADD16	%ecx	$50
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$52
-LD32	(%ecx)	$Str@17
+LD32	(%ecx)	$Str@18
 PUSH16	$19
 SP_RD16	%eax	$54
 PUSH16	%eax
@@ -9527,7 +9461,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$62
 SP_INC	$6
-.LINE	968
+.LINE	957
 SP_STORE	%ecx
 ADD16	%ecx	$58
 LD16	(%ecx)	$mark_array
@@ -9540,7 +9474,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$66
 SP_INC	$6
-.LINE	969
+.LINE	958
 SP_STORE	%ecx
 ADD16	%ecx	$62
 LD16	(%ecx)	$mark_array
@@ -9553,7 +9487,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$72
 SP_INC	$8
-.LINE	971
+.LINE	960
 SP_STORE	%ecx
 ADD16	%ecx	$66
 SP_STORE	%eax
@@ -9578,7 +9512,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$78
 SP_INC	$6
-.LINE	972
+.LINE	961
 SP_STORE	%ecx
 ADD16	%ecx	$74
 SP_STORE	%eax
@@ -9606,21 +9540,21 @@ SP_WR32	%eax	$86
 SP_INC	$6
 @IC263:	
 @IC258:	
-.LINE	975
+.LINE	964
 SP_INC	$84
 RTS	
 .FUNC_END	"get_bulk_status"
 
-.LINE	983
+.LINE	972
 wait_setup_packet:	
 .GLOBAL	 DO_NOT_EXPORT  "wait_setup_packet"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	985	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	974	
 .FUNCTION	"wait_setup_packet"	
 .RETURN "void"	0	0	0	59	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	59	0	0	1	983	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	59	0	0	1	972	
 SP_DEC	$56
-.LINE	989
+.LINE	978
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -9634,7 +9568,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$5
-.LINE	990
+.LINE	979
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -9689,7 +9623,7 @@ SP_RD16	%ecx	$23
 SP_STORE	%eax
 ADD16	%eax	$35
 CPY16	(%ecx)	(%eax)
-.LINE	991
+.LINE	980
 SP_STORE	%ecx
 ADD16	%ecx	$37
 SP_STORE	%eax
@@ -9715,7 +9649,7 @@ LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$43
 LD16	(%ecx)	$9
-.LINE	992
+.LINE	981
 SP_STORE	%ecx
 ADD16	%ecx	$45
 SP_STORE	%eax
@@ -9749,23 +9683,23 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$59
 SP_INC	$4
-.LINE	992
+.LINE	981
 SP_INC	$56
 RTS	
 .FUNC_END	"wait_setup_packet"
 
-.LINE	996
+.LINE	985
 controul_transfer_in:	
 .GLOBAL	 DO_NOT_EXPORT  "controul_transfer_in"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	998	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	987	
 .FUNCTION	"controul_transfer_in"	
 .RETURN "int"	32	1	0	76	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	80	0	0	1	996	
-.PARAMETER	"pbuffer"	16 "char"	0	1	82	0	0	1	996	
-.PARAMETER	"transfer_len"	16 "short"	0	0	84	0	0	0	996	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	80	0	0	1	985	
+.PARAMETER	"pbuffer"	16 "char"	0	1	82	0	0	1	985	
+.PARAMETER	"transfer_len"	16 "short"	0	0	84	0	0	0	985	
 SP_DEC	$73
-.LINE	1000
+.LINE	989
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -9779,7 +9713,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$6
-.LINE	1002
+.LINE	991
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -9814,7 +9748,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$27
 CPY8	(%ecx)	(%eax)
-.LINE	1004
+.LINE	993
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -9842,7 +9776,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$82
 CPY16	(%ecx)	(%eax)
-.LINE	1005
+.LINE	994
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -9869,7 +9803,7 @@ SP_RD16	%ecx	$42
 SP_STORE	%eax
 ADD16	%eax	$84
 CPY16	(%ecx)	(%eax)
-.LINE	1006
+.LINE	995
 SP_STORE	%ecx
 ADD16	%ecx	$44
 SP_STORE	%eax
@@ -9894,7 +9828,7 @@ LD16	%ebx	$4
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$50
 LD16	(%ecx)	$0
-.LINE	1007
+.LINE	996
 SP_STORE	%ecx
 ADD16	%ecx	$52
 SP_STORE	%eax
@@ -9928,7 +9862,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$66
 SP_INC	$4
-.LINE	1010
+.LINE	999
 SP_STORE	%ecx
 ADD16	%ecx	$63
 SP_STORE	%eax
@@ -9967,18 +9901,18 @@ SP_INC	$73
 RTS	
 .FUNC_END	"controul_transfer_in"
 
-.LINE	1014
+.LINE	1003
 controul_transfer_out:	
 .GLOBAL	 DO_NOT_EXPORT  "controul_transfer_out"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1016	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1005	
 .FUNCTION	"controul_transfer_out"	
 .RETURN "int"	32	1	0	76	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	80	0	0	1	1014	
-.PARAMETER	"pbuffer"	16 "char"	0	1	82	0	0	1	1014	
-.PARAMETER	"transfer_len"	16 "short"	0	0	84	0	0	0	1014	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	80	0	0	1	1003	
+.PARAMETER	"pbuffer"	16 "char"	0	1	82	0	0	1	1003	
+.PARAMETER	"transfer_len"	16 "short"	0	0	84	0	0	0	1003	
 SP_DEC	$73
-.LINE	1018
+.LINE	1007
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -9992,7 +9926,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$6
-.LINE	1020
+.LINE	1009
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -10027,7 +9961,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$27
 CPY8	(%ecx)	(%eax)
-.LINE	1022
+.LINE	1011
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -10055,7 +9989,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$82
 CPY16	(%ecx)	(%eax)
-.LINE	1023
+.LINE	1012
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -10082,7 +10016,7 @@ SP_RD16	%ecx	$42
 SP_STORE	%eax
 ADD16	%eax	$84
 CPY16	(%ecx)	(%eax)
-.LINE	1024
+.LINE	1013
 SP_STORE	%ecx
 ADD16	%ecx	$44
 SP_STORE	%eax
@@ -10107,7 +10041,7 @@ LD16	%ebx	$4
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$50
 LD16	(%ecx)	$0
-.LINE	1025
+.LINE	1014
 SP_STORE	%ecx
 ADD16	%ecx	$52
 SP_STORE	%eax
@@ -10141,7 +10075,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$66
 SP_INC	$4
-.LINE	1028
+.LINE	1017
 SP_STORE	%ecx
 ADD16	%ecx	$63
 SP_STORE	%eax
@@ -10180,18 +10114,18 @@ SP_INC	$73
 RTS	
 .FUNC_END	"controul_transfer_out"
 
-.LINE	1032
+.LINE	1021
 bulk_read:	
 .GLOBAL	 DO_NOT_EXPORT  "bulk_read"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1034	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1023	
 .FUNCTION	"bulk_read"	
 .RETURN "int"	32	1	0	70	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1032	
-.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1032	
-.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1032	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1021	
+.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1021	
+.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1021	
 SP_DEC	$67
-.LINE	1036
+.LINE	1025
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -10205,7 +10139,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$7
-.LINE	1037
+.LINE	1026
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -10240,7 +10174,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$27
 CPY8	(%ecx)	(%eax)
-.LINE	1038
+.LINE	1027
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -10268,7 +10202,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$76
 CPY16	(%ecx)	(%eax)
-.LINE	1039
+.LINE	1028
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -10297,7 +10231,7 @@ SP_RD16	%ecx	$42
 SP_STORE	%eax
 ADD16	%eax	$44
 CPY16	(%ecx)	(%eax)
-.LINE	1040
+.LINE	1029
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -10331,7 +10265,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$60
 SP_INC	$4
-.LINE	1042
+.LINE	1031
 SP_STORE	%ecx
 ADD16	%ecx	$57
 SP_STORE	%eax
@@ -10370,18 +10304,18 @@ SP_INC	$67
 RTS	
 .FUNC_END	"bulk_read"
 
-.LINE	1045
+.LINE	1034
 bulk_write:	
 .GLOBAL	 DO_NOT_EXPORT  "bulk_write"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1047	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1036	
 .FUNCTION	"bulk_write"	
 .RETURN "int"	32	1	0	70	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1045	
-.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1045	
-.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1045	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1034	
+.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1034	
+.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1034	
 SP_DEC	$67
-.LINE	1049
+.LINE	1038
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -10395,7 +10329,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$7
-.LINE	1050
+.LINE	1039
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -10430,7 +10364,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$27
 CPY8	(%ecx)	(%eax)
-.LINE	1051
+.LINE	1040
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -10458,7 +10392,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$76
 CPY16	(%ecx)	(%eax)
-.LINE	1052
+.LINE	1041
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -10487,7 +10421,7 @@ SP_RD16	%ecx	$42
 SP_STORE	%eax
 ADD16	%eax	$44
 CPY16	(%ecx)	(%eax)
-.LINE	1053
+.LINE	1042
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -10521,7 +10455,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$60
 SP_INC	$4
-.LINE	1055
+.LINE	1044
 SP_STORE	%ecx
 ADD16	%ecx	$57
 SP_STORE	%eax
@@ -10560,18 +10494,18 @@ SP_INC	$67
 RTS	
 .FUNC_END	"bulk_write"
 
-.LINE	1058
+.LINE	1047
 int_read:	
 .GLOBAL	 DO_NOT_EXPORT  "int_read"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1060	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1049	
 .FUNCTION	"int_read"	
 .RETURN "int"	32	1	0	70	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1058	
-.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1058	
-.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1058	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1047	
+.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1047	
+.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1047	
 SP_DEC	$67
-.LINE	1062
+.LINE	1051
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -10585,7 +10519,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$7
-.LINE	1063
+.LINE	1052
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -10620,7 +10554,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$27
 CPY8	(%ecx)	(%eax)
-.LINE	1064
+.LINE	1053
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -10648,7 +10582,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$76
 CPY16	(%ecx)	(%eax)
-.LINE	1065
+.LINE	1054
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -10677,7 +10611,7 @@ SP_RD16	%ecx	$42
 SP_STORE	%eax
 ADD16	%eax	$44
 CPY16	(%ecx)	(%eax)
-.LINE	1066
+.LINE	1055
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -10711,7 +10645,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$60
 SP_INC	$4
-.LINE	1068
+.LINE	1057
 SP_STORE	%ecx
 ADD16	%ecx	$57
 SP_STORE	%eax
@@ -10750,18 +10684,18 @@ SP_INC	$67
 RTS	
 .FUNC_END	"int_read"
 
-.LINE	1072
+.LINE	1061
 int_write:	
 .GLOBAL	 DO_NOT_EXPORT  "int_write"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1074	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1063	
 .FUNCTION	"int_write"	
 .RETURN "int"	32	1	0	70	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1072	
-.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1072	
-.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1072	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	74	0	0	1	1061	
+.PARAMETER	"pbuffer"	16 "char"	0	1	76	0	0	1	1061	
+.PARAMETER	"transfer_len"	16 "short"	0	0	78	0	0	0	1061	
 SP_DEC	$67
-.LINE	1076
+.LINE	1065
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -10775,7 +10709,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$7
-.LINE	1077
+.LINE	1066
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -10810,7 +10744,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$27
 CPY8	(%ecx)	(%eax)
-.LINE	1078
+.LINE	1067
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -10838,7 +10772,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$76
 CPY16	(%ecx)	(%eax)
-.LINE	1079
+.LINE	1068
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -10867,7 +10801,7 @@ SP_RD16	%ecx	$42
 SP_STORE	%eax
 ADD16	%eax	$44
 CPY16	(%ecx)	(%eax)
-.LINE	1080
+.LINE	1069
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -10901,7 +10835,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$60
 SP_INC	$4
-.LINE	1082
+.LINE	1071
 SP_STORE	%ecx
 ADD16	%ecx	$57
 SP_STORE	%eax
@@ -10940,16 +10874,16 @@ SP_INC	$67
 RTS	
 .FUNC_END	"int_write"
 
-.LINE	1085
+.LINE	1074
 setup_transfer_handshake:	
 .GLOBAL	 DO_NOT_EXPORT  "setup_transfer_handshake"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1087	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1076	
 .FUNCTION	"setup_transfer_handshake"	
 .RETURN "void"	0	0	0	60	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	60	0	0	1	1085	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	60	0	0	1	1074	
 SP_DEC	$57
-.LINE	1089
+.LINE	1078
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -10963,7 +10897,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$6
-.LINE	1090
+.LINE	1079
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -10998,7 +10932,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$27
 CPY8	(%ecx)	(%eax)
-.LINE	1091
+.LINE	1080
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -11028,7 +10962,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$36
 CPY16	(%ecx)	(%eax)
-.LINE	1092
+.LINE	1081
 SP_STORE	%ecx
 ADD16	%ecx	$38
 SP_STORE	%eax
@@ -11053,7 +10987,7 @@ LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$44
 LD16	(%ecx)	$0
-.LINE	1093
+.LINE	1082
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -11087,27 +11021,27 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$60
 SP_INC	$4
-.LINE	1093
+.LINE	1082
 SP_INC	$57
 RTS	
 .FUNC_END	"setup_transfer_handshake"
 
-.LINE	1098
+.LINE	1087
 set_endpoint_maxpacket_size:	
 .GLOBAL	 DO_NOT_EXPORT  "set_endpoint_maxpacket_size"
 
-.VARIABLE	"record"	8	"char"	0	0	0	0	0	0	1100	
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	1	0	0	0	1101	
+.VARIABLE	"record"	8	"char"	0	0	0	0	0	0	1089	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	1	0	0	0	1090	
 .FUNCTION	"set_endpoint_maxpacket_size"	
 .RETURN "char"	8	0	0	66	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	67	0	0	1	1098	
-.PARAMETER	"set_maxsize"	8 "char"	0	0	69	0	0	0	1098	
-.PARAMETER	"set_handle"	8 "char"	0	0	70	0	0	0	1098	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	67	0	0	1	1087	
+.PARAMETER	"set_maxsize"	8 "char"	0	0	69	0	0	0	1087	
+.PARAMETER	"set_handle"	8 "char"	0	0	70	0	0	0	1087	
 SP_DEC	$63
-.LINE	1100
+.LINE	1089
 LD8	%ecx	$0
 SP_WR8	%ecx	$0
-.LINE	1103
+.LINE	1092
 SP_STORE	%ecx
 ADD16	%ecx	$14
 SP_STORE	%eax
@@ -11121,7 +11055,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$16
 LD8	(%ecx)	$22
-.LINE	1104
+.LINE	1093
 SP_STORE	%ecx
 ADD16	%ecx	$18
 SP_STORE	%eax
@@ -11137,10 +11071,10 @@ SP_RD16	%ecx	$20
 SP_STORE	%eax
 ADD16	%eax	$70
 CPY8	(%ecx)	(%eax)
-.LINE	1105
+.LINE	1094
 JUMP	@IC269
 @IC268:	
-.LINE	1108
+.LINE	1097
 SP_STORE	%ecx
 ADD16	%ecx	$22
 SP_STORE	%eax
@@ -11160,13 +11094,13 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$26
 LD32	(%ecx)	$0
-.LINE	1109
+.LINE	1098
 LD8	%ecx	$8
 SP_WR8	%ecx	$0
-.LINE	1105
+.LINE	1094
 JUMP	@IC267
 @IC270:	
-.LINE	1113
+.LINE	1102
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -11186,13 +11120,13 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$32
 LD32	(%ecx)	$536870912
-.LINE	1114
+.LINE	1103
 LD8	%ecx	$16
 SP_WR8	%ecx	$0
-.LINE	1105
+.LINE	1094
 JUMP	@IC267
 @IC272:	
-.LINE	1118
+.LINE	1107
 SP_STORE	%ecx
 ADD16	%ecx	$34
 SP_STORE	%eax
@@ -11212,13 +11146,13 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$38
 LD32	(%ecx)	$1073741824
-.LINE	1119
+.LINE	1108
 LD8	%ecx	$32
 SP_WR8	%ecx	$0
-.LINE	1105
+.LINE	1094
 JUMP	@IC267
 @IC274:	
-.LINE	1123
+.LINE	1112
 SP_STORE	%ecx
 ADD16	%ecx	$40
 SP_STORE	%eax
@@ -11238,13 +11172,13 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$44
 LD32	(%ecx)	$1610612736
-.LINE	1124
+.LINE	1113
 LD8	%ecx	$64
 SP_WR8	%ecx	$0
-.LINE	1105
+.LINE	1094
 JUMP	@IC267
 @IC276:	
-.LINE	1128
+.LINE	1117
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -11264,10 +11198,10 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$50
 LD32	(%ecx)	$1610612736
-.LINE	1129
+.LINE	1118
 LD8	%ecx	$64
 SP_WR8	%ecx	$0
-.LINE	1105
+.LINE	1094
 JUMP	@IC267
 @IC269:	
 SP_RD8	%ecx	$69
@@ -11288,7 +11222,7 @@ JZ	@IC274
 @IC277:	
 JUMP	@IC276
 @IC267:	
-.LINE	1133
+.LINE	1122
 SP_STORE	%ecx
 ADD16	%ecx	$52
 SP_STORE	%eax
@@ -11322,7 +11256,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$66
 SP_INC	$4
-.LINE	1135
+.LINE	1124
 SP_STORE	%eax
 SP_STORE	%ecx
 ADD16	%ecx	$66
@@ -11331,14 +11265,91 @@ SP_INC	$63
 RTS	
 .FUNC_END	"set_endpoint_maxpacket_size"
 
-.LINE	1138
+.LINE	1127
 set_control_ep_halt:	
 .GLOBAL	 DO_NOT_EXPORT  "set_control_ep_halt"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1140	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1129	
 .FUNCTION	"set_control_ep_halt"	
 .RETURN "void"	0	0	0	35	0	0	0	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	35	0	0	1	1127	
+SP_DEC	$32
+.LINE	1132
+SP_STORE	%ecx
+ADD16	%ecx	$13
+SP_STORE	%eax
+ADD16	%eax	$0
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$15
+SP_STORE	%eax
+ADD16	%eax	$13
+LD16	%ebx	$0
+ADD16	(%ecx)	(%eax)	%ebx
+SP_RD16	%ecx	$15
+LD8	(%ecx)	$9
+.LINE	1134
+SP_STORE	%ecx
+ADD16	%ecx	$17
+SP_STORE	%eax
+ADD16	%eax	$0
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$19
+SP_STORE	%eax
+ADD16	%eax	$17
+LD16	%ebx	$1
+ADD16	(%ecx)	(%eax)	%ebx
+SP_RD16	%ecx	$19
+LD8	(%ecx)	$1
+.LINE	1135
+SP_STORE	%ecx
+ADD16	%ecx	$21
+SP_STORE	%eax
+ADD16	%eax	$35
+CPY16	(%ecx)	%eax
+SP_STORE	%ecx
+ADD16	%ecx	$23
+SP_RD16	%eax	$21
+CPY16	(%ecx)	(%eax)
+SP_STORE	%ecx
+ADD16	%ecx	$25
+SP_STORE	%eax
+ADD16	%eax	$23
+LD16	%ebx	$0
+ADD16	(%ecx)	(%eax)	%ebx
+SP_STORE	%ecx
+ADD16	%ecx	$27
+SP_RD16	%eax	$25
+CPY16	(%ecx)	(%eax)
+SP_STORE	%ecx
+ADD16	%ecx	$29
+SP_STORE	%eax
+ADD16	%eax	$0
+CPY16	(%ecx)	%eax
+SP_RD16	%eax	$29
+PUSH16	%eax
+SP_RD16	%eax	$29
+PUSH16	%eax
+SP_DEC	$1
+CALL	vos_dev_ioctl
+POP8	%eax
+SP_WR8	%eax	$35
+SP_INC	$4
+.LINE	1135
+SP_INC	$32
+RTS	
+.FUNC_END	"set_control_ep_halt"
+
+.LINE	1138
+set_endpoint_stall:	
+.GLOBAL	 DO_NOT_EXPORT  "set_endpoint_stall"
+
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1140	
+.FUNCTION	"set_endpoint_stall"	
+.RETURN "void"	0	0	0	35	0	0	0	
 .PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	35	0	0	1	1138	
+.PARAMETER	"ep_id"	8 "char"	0	0	37	0	0	0	1138	
 SP_DEC	$32
 .LINE	1143
 SP_STORE	%ecx
@@ -11367,87 +11378,10 @@ ADD16	%eax	$17
 LD16	%ebx	$1
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$19
-LD8	(%ecx)	$1
-.LINE	1146
-SP_STORE	%ecx
-ADD16	%ecx	$21
-SP_STORE	%eax
-ADD16	%eax	$35
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$23
-SP_RD16	%eax	$21
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$25
-SP_STORE	%eax
-ADD16	%eax	$23
-LD16	%ebx	$0
-ADD16	(%ecx)	(%eax)	%ebx
-SP_STORE	%ecx
-ADD16	%ecx	$27
-SP_RD16	%eax	$25
-CPY16	(%ecx)	(%eax)
-SP_STORE	%ecx
-ADD16	%ecx	$29
-SP_STORE	%eax
-ADD16	%eax	$0
-CPY16	(%ecx)	%eax
-SP_RD16	%eax	$29
-PUSH16	%eax
-SP_RD16	%eax	$29
-PUSH16	%eax
-SP_DEC	$1
-CALL	vos_dev_ioctl
-POP8	%eax
-SP_WR8	%eax	$35
-SP_INC	$4
-.LINE	1146
-SP_INC	$32
-RTS	
-.FUNC_END	"set_control_ep_halt"
-
-.LINE	1149
-set_endpoint_stall:	
-.GLOBAL	 DO_NOT_EXPORT  "set_endpoint_stall"
-
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1151	
-.FUNCTION	"set_endpoint_stall"	
-.RETURN "void"	0	0	0	35	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	35	0	0	1	1149	
-.PARAMETER	"ep_id"	8 "char"	0	0	37	0	0	0	1149	
-SP_DEC	$32
-.LINE	1154
-SP_STORE	%ecx
-ADD16	%ecx	$13
-SP_STORE	%eax
-ADD16	%eax	$0
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$15
-SP_STORE	%eax
-ADD16	%eax	$13
-LD16	%ebx	$0
-ADD16	(%ecx)	(%eax)	%ebx
-SP_RD16	%ecx	$15
-LD8	(%ecx)	$9
-.LINE	1156
-SP_STORE	%ecx
-ADD16	%ecx	$17
-SP_STORE	%eax
-ADD16	%eax	$0
-CPY16	(%ecx)	%eax
-SP_STORE	%ecx
-ADD16	%ecx	$19
-SP_STORE	%eax
-ADD16	%eax	$17
-LD16	%ebx	$1
-ADD16	(%ecx)	(%eax)	%ebx
-SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$37
 CPY8	(%ecx)	(%eax)
-.LINE	1157
+.LINE	1146
 SP_STORE	%ecx
 ADD16	%ecx	$21
 SP_STORE	%eax
@@ -11481,22 +11415,22 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$35
 SP_INC	$4
-.LINE	1157
+.LINE	1146
 SP_INC	$32
 RTS	
 .FUNC_END	"set_endpoint_stall"
 
-.LINE	1160
+.LINE	1149
 set_address:	
 .GLOBAL	 DO_NOT_EXPORT  "set_address"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1162	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1151	
 .FUNCTION	"set_address"	
 .RETURN "void"	0	0	0	37	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	37	0	0	1	1160	
-.PARAMETER	"addr"	8 "char"	0	0	39	0	0	0	1160	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	37	0	0	1	1149	
+.PARAMETER	"addr"	8 "char"	0	0	39	0	0	0	1149	
 SP_DEC	$34
-.LINE	1164
+.LINE	1153
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -11510,7 +11444,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$8
-.LINE	1165
+.LINE	1154
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -11531,7 +11465,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$21
 CPY16	(%ecx)	(%eax)
-.LINE	1166
+.LINE	1155
 SP_STORE	%ecx
 ADD16	%ecx	$23
 SP_STORE	%eax
@@ -11565,21 +11499,21 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$37
 SP_INC	$4
-.LINE	1166
+.LINE	1155
 SP_INC	$34
 RTS	
 .FUNC_END	"set_address"
 
-.LINE	1170
+.LINE	1159
 get_interface:	
 .GLOBAL	 DO_NOT_EXPORT  "get_interface"
 
-.VARIABLE	"interface_value"	8	"char"	0	0	5	0	0	0	1172	
+.VARIABLE	"interface_value"	8	"char"	0	0	5	0	0	0	1161	
 .FUNCTION	"get_interface"	
 .RETURN "char"	8	0	0	15	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	16	0	0	1	1170	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	16	0	0	1	1159	
 SP_DEC	$12
-.LINE	1174
+.LINE	1163
 SP_STORE	%ecx
 LD16	(%ecx)	$interface_desc
 SP_STORE	%ecx
@@ -11594,7 +11528,7 @@ SP_RD16	%eax	$2
 CPY8	(%ecx)	(%eax)
 SP_RD8	%ecx	$4
 SP_WR8	%ecx	$5
-.LINE	1175
+.LINE	1164
 SP_STORE	%ecx
 ADD16	%ecx	$6
 SP_STORE	%eax
@@ -11610,23 +11544,23 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$14
 SP_INC	$6
-.LINE	1177
+.LINE	1166
 LD8	%eax	$0
 SP_WR8	%eax	$15
 SP_INC	$12
 RTS	
 .FUNC_END	"get_interface"
 
-.LINE	1180
+.LINE	1169
 set_interface:	
 .GLOBAL	 DO_NOT_EXPORT  "set_interface"
 
-.VARIABLE	"set_value"	8	"char"	0	0	13	0	0	0	1182	
+.VARIABLE	"set_value"	8	"char"	0	0	13	0	0	0	1171	
 .FUNCTION	"set_interface"	
 .RETURN "char"	8	0	0	21	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	22	0	0	1	1180	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	22	0	0	1	1169	
 SP_DEC	$18
-.LINE	1184
+.LINE	1173
 SP_STORE	%ecx
 SP_STORE	%eax
 ADD16	%eax	$22
@@ -11659,7 +11593,7 @@ SP_RD16	%eax	$10
 CPY8	(%ecx)	(%eax)
 SP_RD8	%ecx	$12
 SP_WR8	%ecx	$13
-.LINE	1185
+.LINE	1174
 SP_STORE	%ecx
 ADD16	%ecx	$14
 LD16	(%ecx)	$interface_desc
@@ -11673,23 +11607,23 @@ SP_RD16	%ecx	$16
 SP_STORE	%eax
 ADD16	%eax	$13
 CPY8	(%ecx)	(%eax)
-.LINE	1187
+.LINE	1176
 LD8	%eax	$1
 SP_WR8	%eax	$21
 SP_INC	$18
 RTS	
 .FUNC_END	"set_interface"
 
-.LINE	1191
+.LINE	1180
 get_configuration:	
 .GLOBAL	 DO_NOT_EXPORT  "get_configuration"
 
-.VARIABLE	"config_value"	8	"char"	0	0	5	0	0	0	1193	
+.VARIABLE	"config_value"	8	"char"	0	0	5	0	0	0	1182	
 .FUNCTION	"get_configuration"	
 .RETURN "char"	8	0	0	15	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	16	0	0	1	1191	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	16	0	0	1	1180	
 SP_DEC	$12
-.LINE	1195
+.LINE	1184
 SP_STORE	%ecx
 ADD16	%ecx	$0
 LD16	(%ecx)	$config_desc
@@ -11705,7 +11639,7 @@ SP_RD16	%eax	$2
 CPY8	(%ecx)	(%eax)
 SP_RD8	%ecx	$4
 SP_WR8	%ecx	$5
-.LINE	1196
+.LINE	1185
 SP_STORE	%ecx
 ADD16	%ecx	$6
 SP_STORE	%eax
@@ -11721,24 +11655,24 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$14
 SP_INC	$6
-.LINE	1198
+.LINE	1187
 LD8	%eax	$1
 SP_WR8	%eax	$15
 SP_INC	$12
 RTS	
 .FUNC_END	"get_configuration"
 
-.LINE	1202
+.LINE	1191
 set_configuration:	
 .GLOBAL	 DO_NOT_EXPORT  "set_configuration"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1204	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1193	
 .FUNCTION	"set_configuration"	
 .RETURN "void"	0	0	0	37	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	37	0	0	1	1202	
-.PARAMETER	"config"	8 "char"	0	0	39	0	0	0	1202	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	37	0	0	1	1191	
+.PARAMETER	"config"	8 "char"	0	0	39	0	0	0	1191	
 SP_DEC	$34
-.LINE	1206
+.LINE	1195
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -11752,7 +11686,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$12
-.LINE	1209
+.LINE	1198
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -11773,7 +11707,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$21
 CPY16	(%ecx)	(%eax)
-.LINE	1210
+.LINE	1199
 SP_STORE	%ecx
 ADD16	%ecx	$23
 SP_STORE	%eax
@@ -11807,22 +11741,22 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$37
 SP_INC	$4
-.LINE	1210
+.LINE	1199
 SP_INC	$34
 RTS	
 .FUNC_END	"set_configuration"
 
-.LINE	1215
+.LINE	1204
 set_feature:	
 .GLOBAL	 DO_NOT_EXPORT  "set_feature"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1217	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1206	
 .FUNCTION	"set_feature"	
 .RETURN "void"	0	0	0	35	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	35	0	0	1	1215	
-.PARAMETER	"ep_id"	8 "char"	0	0	37	0	0	0	1215	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	35	0	0	1	1204	
+.PARAMETER	"ep_id"	8 "char"	0	0	37	0	0	0	1204	
 SP_DEC	$32
-.LINE	1219
+.LINE	1208
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -11836,7 +11770,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$9
-.LINE	1220
+.LINE	1209
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -11852,7 +11786,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$37
 CPY8	(%ecx)	(%eax)
-.LINE	1221
+.LINE	1210
 SP_STORE	%ecx
 ADD16	%ecx	$21
 SP_STORE	%eax
@@ -11886,22 +11820,22 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$35
 SP_INC	$4
-.LINE	1221
+.LINE	1210
 SP_INC	$32
 RTS	
 .FUNC_END	"set_feature"
 
-.LINE	1227
+.LINE	1216
 clear_feature:	
 .GLOBAL	 DO_NOT_EXPORT  "clear_feature"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1229	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1218	
 .FUNCTION	"clear_feature"	
 .RETURN "void"	0	0	0	35	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	35	0	0	1	1227	
-.PARAMETER	"ep_id"	8 "char"	0	0	37	0	0	0	1227	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	35	0	0	1	1216	
+.PARAMETER	"ep_id"	8 "char"	0	0	37	0	0	0	1216	
 SP_DEC	$32
-.LINE	1231
+.LINE	1220
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -11915,7 +11849,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$10
-.LINE	1232
+.LINE	1221
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -11931,7 +11865,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$37
 CPY8	(%ecx)	(%eax)
-.LINE	1233
+.LINE	1222
 SP_STORE	%ecx
 ADD16	%ecx	$21
 SP_STORE	%eax
@@ -11965,23 +11899,23 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$35
 SP_INC	$4
-.LINE	1233
+.LINE	1222
 SP_INC	$32
 RTS	
 .FUNC_END	"clear_feature"
 
-.LINE	1238
+.LINE	1227
 get_ep_status:	
 .GLOBAL	 DO_NOT_EXPORT  "get_ep_status"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1241	
-.VARIABLE	"state"	8	"char"	0	0	25	0	0	0	1240	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1230	
+.VARIABLE	"state"	8	"char"	0	0	25	0	0	0	1229	
 .FUNCTION	"get_ep_status"	
 .RETURN "char"	8	0	0	42	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	43	0	0	1	1238	
-.PARAMETER	"ep_id"	8 "char"	0	0	45	0	0	0	1238	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	43	0	0	1	1227	
+.PARAMETER	"ep_id"	8 "char"	0	0	45	0	0	0	1227	
 SP_DEC	$39
-.LINE	1243
+.LINE	1232
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -11995,7 +11929,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$13
-.LINE	1244
+.LINE	1233
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -12011,7 +11945,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$45
 CPY8	(%ecx)	(%eax)
-.LINE	1245
+.LINE	1234
 SP_STORE	%ecx
 ADD16	%ecx	$21
 SP_STORE	%eax
@@ -12031,7 +11965,7 @@ SP_RD16	%ecx	$23
 SP_STORE	%eax
 ADD16	%eax	$26
 CPY16	(%ecx)	(%eax)
-.LINE	1246
+.LINE	1235
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -12065,7 +11999,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$42
 SP_INC	$4
-.LINE	1249
+.LINE	1238
 SP_STORE	%eax
 ADD16	%eax	$25
 SP_STORE	%ecx
@@ -12075,17 +12009,17 @@ SP_INC	$39
 RTS	
 .FUNC_END	"get_ep_status"
 
-.LINE	1253
+.LINE	1242
 get_device_status:	
 .GLOBAL	 DO_NOT_EXPORT  "get_device_status"
 
-.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1256	
-.VARIABLE	"state"	8	"char"	0	0	21	0	0	0	1255	
+.VARIABLE	"iocb"	104	"_usbslave_ioctl_cb_t"	0	0	0	0	0	0	1245	
+.VARIABLE	"state"	8	"char"	0	0	21	0	0	0	1244	
 .FUNCTION	"get_device_status"	
 .RETURN "char"	8	0	0	44	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	45	0	0	1	1253	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	45	0	0	1	1242	
 SP_DEC	$41
-.LINE	1258
+.LINE	1247
 SP_STORE	%ecx
 ADD16	%ecx	$13
 SP_STORE	%eax
@@ -12099,7 +12033,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$15
 LD8	(%ecx)	$0
-.LINE	1259
+.LINE	1248
 SP_STORE	%ecx
 ADD16	%ecx	$17
 SP_STORE	%eax
@@ -12120,7 +12054,7 @@ SP_RD16	%ecx	$19
 SP_STORE	%eax
 ADD16	%eax	$22
 CPY16	(%ecx)	(%eax)
-.LINE	1260
+.LINE	1249
 SP_STORE	%ecx
 ADD16	%ecx	$24
 SP_STORE	%eax
@@ -12154,7 +12088,7 @@ CALL	vos_dev_ioctl
 POP8	%eax
 SP_WR8	%eax	$38
 SP_INC	$4
-.LINE	1262
+.LINE	1251
 SP_STORE	%ecx
 ADD16	%ecx	$35
 SP_STORE	%eax
@@ -12170,7 +12104,7 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$43
 SP_INC	$6
-.LINE	1264
+.LINE	1253
 SP_STORE	%eax
 ADD16	%eax	$21
 SP_STORE	%ecx
@@ -12180,28 +12114,28 @@ SP_INC	$41
 RTS	
 .FUNC_END	"get_device_status"
 
-.LINE	1268
+.LINE	1257
 memset_bulk_header:	
 .GLOBAL	 DO_NOT_EXPORT  "memset_bulk_header"
 
-.VARIABLE	"bulk_header"	96	"char"	0	0	0	1	1	0	1270	
+.VARIABLE	"bulk_header"	96	"char"	0	0	0	1	1	0	1259	
 .FUNCTION	"memset_bulk_header"	
 .RETURN "void"	0	0	0	175	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	175	0	0	1	1268	
-.PARAMETER	"bulk_flag"	32 "int"	0	0	177	0	0	0	1268	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	175	0	0	1	1257	
+.PARAMETER	"bulk_flag"	32 "int"	0	0	177	0	0	0	1257	
 SP_DEC	$172
-.LINE	1270
+.LINE	1259
 SP_STORE	%ecx
-LD32	%eax	$Array@18
+LD32	%eax	$Array@19
 CPYROM	(%ecx)	%eax	$6
-.LINE	1271
+.LINE	1260
 SP_STORE	%ecx
 ADD16	%ecx	$177
 CMP32	(%ecx)	$2
 JZ	@IC280
 JNZ	@IC279
 @IC280:	
-.LINE	1273
+.LINE	1262
 SP_STORE	%ecx
 ADD16	%ecx	$12
 SP_STORE	%eax
@@ -12225,7 +12159,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$18
 LD8	(%ecx)	$0
-.LINE	1274
+.LINE	1263
 SP_STORE	%ecx
 ADD16	%ecx	$20
 SP_STORE	%eax
@@ -12249,7 +12183,7 @@ LD16	%ebx	$1
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$26
 LD8	(%ecx)	$0
-.LINE	1275
+.LINE	1264
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -12273,7 +12207,7 @@ LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$34
 LD8	(%ecx)	$0
-.LINE	1276
+.LINE	1265
 SP_STORE	%ecx
 ADD16	%ecx	$36
 SP_STORE	%eax
@@ -12297,7 +12231,7 @@ LD16	%ebx	$3
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$42
 LD8	(%ecx)	$0
-.LINE	1277
+.LINE	1266
 SP_STORE	%ecx
 ADD16	%ecx	$44
 SP_STORE	%eax
@@ -12321,7 +12255,7 @@ LD16	%ebx	$4
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$50
 LD32	(%ecx)	$0
-.LINE	1279
+.LINE	1268
 SP_STORE	%ecx
 ADD16	%ecx	$52
 SP_STORE	%eax
@@ -12345,7 +12279,7 @@ LD16	%ebx	$8
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$58
 LD8	(%ecx)	$0
-.LINE	1280
+.LINE	1269
 SP_STORE	%ecx
 ADD16	%ecx	$60
 SP_STORE	%eax
@@ -12369,7 +12303,7 @@ LD16	%ebx	$9
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$66
 LD8	(%ecx)	$0
-.LINE	1281
+.LINE	1270
 SP_STORE	%ecx
 ADD16	%ecx	$68
 SP_STORE	%eax
@@ -12393,7 +12327,7 @@ LD16	%ebx	$10
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$74
 LD16	(%ecx)	$0
-.LINE	1282
+.LINE	1271
 SP_STORE	%ecx
 ADD16	%ecx	$76
 SP_STORE	%eax
@@ -12417,7 +12351,7 @@ LD16	%ebx	$10
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$82
 LD16	(%ecx)	$0
-.LINE	1284
+.LINE	1273
 SP_STORE	%ecx
 ADD16	%ecx	$84
 SP_STORE	%eax
@@ -12444,14 +12378,14 @@ SP_WR16	%eax	$98
 SP_INC	$8
 JUMP	@IC278
 @IC279:	
-.LINE	1286
+.LINE	1275
 SP_STORE	%ecx
 ADD16	%ecx	$177
 CMP32	(%ecx)	$1
 JZ	@IC284
 JNZ	@IC283
 @IC284:	
-.LINE	1288
+.LINE	1277
 SP_STORE	%ecx
 ADD16	%ecx	$92
 SP_STORE	%eax
@@ -12475,7 +12409,7 @@ LD16	%ebx	$0
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$98
 LD8	(%ecx)	$0
-.LINE	1289
+.LINE	1278
 SP_STORE	%ecx
 ADD16	%ecx	$100
 SP_STORE	%eax
@@ -12499,7 +12433,7 @@ LD16	%ebx	$1
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$106
 LD8	(%ecx)	$0
-.LINE	1290
+.LINE	1279
 SP_STORE	%ecx
 ADD16	%ecx	$108
 SP_STORE	%eax
@@ -12523,7 +12457,7 @@ LD16	%ebx	$2
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$114
 LD8	(%ecx)	$0
-.LINE	1291
+.LINE	1280
 SP_STORE	%ecx
 ADD16	%ecx	$116
 SP_STORE	%eax
@@ -12547,7 +12481,7 @@ LD16	%ebx	$3
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$122
 LD8	(%ecx)	$0
-.LINE	1292
+.LINE	1281
 SP_STORE	%ecx
 ADD16	%ecx	$124
 SP_STORE	%eax
@@ -12571,7 +12505,7 @@ LD16	%ebx	$4
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$130
 LD32	(%ecx)	$0
-.LINE	1294
+.LINE	1283
 SP_STORE	%ecx
 ADD16	%ecx	$132
 SP_STORE	%eax
@@ -12595,7 +12529,7 @@ LD16	%ebx	$8
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$138
 LD8	(%ecx)	$0
-.LINE	1295
+.LINE	1284
 SP_STORE	%ecx
 ADD16	%ecx	$140
 SP_STORE	%eax
@@ -12619,7 +12553,7 @@ LD16	%ebx	$9
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$146
 LD8	(%ecx)	$0
-.LINE	1296
+.LINE	1285
 SP_STORE	%ecx
 ADD16	%ecx	$148
 SP_STORE	%eax
@@ -12643,7 +12577,7 @@ LD16	%ebx	$10
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$154
 LD16	(%ecx)	$0
-.LINE	1297
+.LINE	1286
 SP_STORE	%ecx
 ADD16	%ecx	$156
 SP_STORE	%eax
@@ -12667,7 +12601,7 @@ LD16	%ebx	$10
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$162
 LD16	(%ecx)	$0
-.LINE	1300
+.LINE	1289
 SP_STORE	%ecx
 ADD16	%ecx	$164
 SP_STORE	%eax
@@ -12694,26 +12628,26 @@ SP_WR16	%eax	$178
 SP_INC	$8
 @IC283:	
 @IC278:	
-.LINE	1303
+.LINE	1292
 SP_INC	$172
 RTS	
 .FUNC_END	"memset_bulk_header"
 
-.LINE	1312
+.LINE	1301
 class_requests_inititate_abort_bulk_out:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_inititate_abort_bulk_out"
 
-.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	1323	
-.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	9	0	0	1	1324	
-.VARIABLE	"wValue"	16	"short"	0	0	19	0	0	0	1325	
+.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	1312	
+.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	9	0	0	1	1313	
+.VARIABLE	"wValue"	16	"short"	0	0	19	0	0	0	1314	
 .FUNCTION	"class_requests_inititate_abort_bulk_out"	
 .RETURN "void"	0	0	0	204	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	204	0	0	1	1312	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	204	0	0	1	1301	
 SP_DEC	$201
-.LINE	1323
+.LINE	1312
 LD8	%ecx	$0
 SP_WR8	%ecx	$0
-.LINE	1327
+.LINE	1316
 SP_STORE	%ecx
 ADD16	%ecx	$1
 SP_STORE	%eax
@@ -12733,7 +12667,7 @@ SP_RD16	%ecx	$5
 SP_WR16	%ecx	$7
 SP_RD16	%ecx	$7
 SP_WR16	%ecx	$9
-.LINE	1329
+.LINE	1318
 SP_STORE	%ecx
 ADD16	%ecx	$11
 SP_STORE	%eax
@@ -12755,7 +12689,7 @@ SP_RD16	%eax	$15
 CPY16	(%ecx)	(%eax)
 SP_RD16	%ecx	$17
 SP_WR16	%ecx	$19
-.LINE	1335
+.LINE	1324
 SP_STORE	%ecx
 ADD16	%ecx	$21
 SP_STORE	%eax
@@ -12840,7 +12774,7 @@ CMP8	(%ecx)	(%eax)
 JZ	@IC289
 JNZ	@IC288
 @IC289:	
-.LINE	1337
+.LINE	1326
 SP_STORE	%ecx
 ADD16	%ecx	$51
 SP_STORE	%eax
@@ -12858,13 +12792,13 @@ LD16	%ebx	$279
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$55
 LD8	(%ecx)	$1
-.LINE	1338
+.LINE	1327
 PUSH8	$2
 SP_RD16	%eax	$205
 PUSH16	%eax
 CALL	set_endpoint_stall
 SP_INC	$3
-.LINE	1340
+.LINE	1329
 SP_STORE	%ecx
 ADD16	%ecx	$57
 SP_STORE	%eax
@@ -12889,7 +12823,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$71
 SP_INC	$8
-.LINE	1342
+.LINE	1331
 SP_STORE	%ecx
 ADD16	%ecx	$65
 SP_STORE	%eax
@@ -12919,7 +12853,7 @@ ADD16	%ebx	$71
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$75
 LD8	(%ecx)	$1
-.LINE	1343
+.LINE	1332
 SP_STORE	%ecx
 ADD16	%ecx	$77
 SP_STORE	%eax
@@ -12955,7 +12889,7 @@ ADD16	%eax	$89
 CPY8	(%ecx)	(%eax)
 JUMP	@IC287
 @IC288:	
-.LINE	1345
+.LINE	1334
 SP_STORE	%ecx
 ADD16	%ecx	$90
 SP_STORE	%eax
@@ -12986,7 +12920,7 @@ CMP8	%ecx	$0
 JZ	@IC297
 JNZ	@IC296
 @IC297:	
-.LINE	1347
+.LINE	1336
 PUSH8	$2
 SP_RD16	%eax	$205
 PUSH16	%eax
@@ -13000,7 +12934,7 @@ CMP8	%ecx	$0
 JZ	@IC302
 JNZ	@IC301
 @IC302:	
-.LINE	1350
+.LINE	1339
 SP_STORE	%ecx
 ADD16	%ecx	$100
 SP_STORE	%eax
@@ -13030,7 +12964,7 @@ ADD16	%ebx	$106
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$110
 LD8	(%ecx)	$128
-.LINE	1351
+.LINE	1340
 SP_STORE	%ecx
 ADD16	%ecx	$112
 SP_STORE	%eax
@@ -13066,7 +13000,7 @@ ADD16	%eax	$124
 CPY8	(%ecx)	(%eax)
 JUMP	@IC300
 @IC301:	
-.LINE	1356
+.LINE	1345
 SP_STORE	%ecx
 ADD16	%ecx	$125
 SP_STORE	%eax
@@ -13096,7 +13030,7 @@ ADD16	%ebx	$131
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$135
 LD8	(%ecx)	$129
-.LINE	1357
+.LINE	1346
 SP_STORE	%ecx
 ADD16	%ecx	$137
 SP_STORE	%eax
@@ -13131,7 +13065,7 @@ SP_STORE	%eax
 ADD16	%eax	$149
 CPY8	(%ecx)	(%eax)
 @IC300:	
-.LINE	1359
+.LINE	1348
 PUSH8	$2
 SP_RD16	%eax	$205
 PUSH16	%eax
@@ -13139,7 +13073,7 @@ CALL	clear_feature
 SP_INC	$3
 JUMP	@IC295
 @IC296:	
-.LINE	1364
+.LINE	1353
 SP_STORE	%ecx
 ADD16	%ecx	$150
 SP_STORE	%eax
@@ -13169,7 +13103,7 @@ ADD16	%ebx	$156
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$160
 LD8	(%ecx)	$129
-.LINE	1365
+.LINE	1354
 SP_STORE	%ecx
 ADD16	%ecx	$162
 SP_STORE	%eax
@@ -13203,7 +13137,7 @@ SP_RD16	%ecx	$172
 SP_STORE	%eax
 ADD16	%eax	$174
 CPY8	(%ecx)	(%eax)
-.LINE	1366
+.LINE	1355
 PUSH8	$2
 SP_RD16	%eax	$205
 PUSH16	%eax
@@ -13211,13 +13145,13 @@ CALL	clear_feature
 SP_INC	$3
 @IC295:	
 @IC287:	
-.LINE	1369
+.LINE	1358
 SP_STORE	%ecx
 ADD16	%ecx	$175
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$177
-LD32	(%ecx)	$Str@19
+LD32	(%ecx)	$Str@20
 PUSH16	$24
 SP_RD16	%eax	$179
 PUSH16	%eax
@@ -13228,7 +13162,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$187
 SP_INC	$6
-.LINE	1370
+.LINE	1359
 SP_STORE	%ecx
 ADD16	%ecx	$183
 LD16	(%ecx)	$mark_array
@@ -13241,7 +13175,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$191
 SP_INC	$6
-.LINE	1371
+.LINE	1360
 SP_STORE	%ecx
 ADD16	%ecx	$187
 LD16	(%ecx)	$mark_array
@@ -13254,7 +13188,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$197
 SP_INC	$8
-.LINE	1372
+.LINE	1361
 SP_STORE	%ecx
 ADD16	%ecx	$191
 SP_STORE	%eax
@@ -13280,21 +13214,21 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$203
 SP_INC	$6
-.LINE	1372
+.LINE	1361
 SP_INC	$201
 RTS	
 .FUNC_END	"class_requests_inititate_abort_bulk_out"
 
-.LINE	1375
+.LINE	1364
 class_requests_check_abort_bulk_out_status:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_check_abort_bulk_out_status"
 
-.VARIABLE	"TransferSize"	32	"int"	0	0	12	0	0	0	1387	
+.VARIABLE	"TransferSize"	32	"int"	0	0	12	0	0	0	1376	
 .FUNCTION	"class_requests_check_abort_bulk_out_status"	
 .RETURN "void"	0	0	0	188	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	188	0	0	1	1375	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	188	0	0	1	1364	
 SP_DEC	$185
-.LINE	1387
+.LINE	1376
 SP_STORE	%ecx
 SP_STORE	%eax
 ADD16	%eax	$188
@@ -13321,7 +13255,7 @@ SP_RD16	%eax	$6
 CPY32	(%ecx)	(%eax)
 SP_RD32	%ecx	$8
 SP_WR32	%ecx	$12
-.LINE	1389
+.LINE	1378
 SP_STORE	%ecx
 ADD16	%ecx	$16
 SP_STORE	%eax
@@ -13346,7 +13280,7 @@ CMP8	%ecx	$0
 JZ	@IC307
 JNZ	@IC306
 @IC307:	
-.LINE	1390
+.LINE	1379
 SP_STORE	%ecx
 ADD16	%ecx	$23
 SP_STORE	%eax
@@ -13378,7 +13312,7 @@ SP_RD16	%ecx	$33
 LD8	(%ecx)	$2
 JUMP	@IC305
 @IC306:	
-.LINE	1393
+.LINE	1382
 SP_STORE	%ecx
 ADD16	%ecx	$35
 SP_STORE	%eax
@@ -13408,7 +13342,7 @@ ADD16	%ebx	$41
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$45
 LD8	(%ecx)	$1
-.LINE	1394
+.LINE	1383
 SP_STORE	%ecx
 ADD16	%ecx	$47
 SP_STORE	%eax
@@ -13446,7 +13380,7 @@ SP_RD16	%ecx	$57
 SP_STORE	%eax
 ADD16	%eax	$59
 CPY8	(%ecx)	(%eax)
-.LINE	1395
+.LINE	1384
 SP_STORE	%ecx
 ADD16	%ecx	$63
 SP_STORE	%eax
@@ -13490,7 +13424,7 @@ SP_RD16	%ecx	$73
 SP_STORE	%eax
 ADD16	%eax	$79
 CPY8	(%ecx)	(%eax)
-.LINE	1396
+.LINE	1385
 SP_STORE	%ecx
 ADD16	%ecx	$83
 SP_STORE	%eax
@@ -13534,7 +13468,7 @@ SP_RD16	%ecx	$93
 SP_STORE	%eax
 ADD16	%eax	$99
 CPY8	(%ecx)	(%eax)
-.LINE	1397
+.LINE	1386
 SP_STORE	%ecx
 ADD16	%ecx	$103
 SP_STORE	%eax
@@ -13579,7 +13513,7 @@ SP_STORE	%eax
 ADD16	%eax	$119
 CPY8	(%ecx)	(%eax)
 @IC305:	
-.LINE	1399
+.LINE	1388
 SP_STORE	%ecx
 ADD16	%ecx	$123
 SP_STORE	%eax
@@ -13609,7 +13543,7 @@ ADD16	%ebx	$129
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$133
 LD8	(%ecx)	$0
-.LINE	1400
+.LINE	1389
 SP_STORE	%ecx
 ADD16	%ecx	$135
 SP_STORE	%eax
@@ -13639,7 +13573,7 @@ ADD16	%ebx	$141
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$145
 LD8	(%ecx)	$0
-.LINE	1401
+.LINE	1390
 SP_STORE	%ecx
 ADD16	%ecx	$147
 SP_STORE	%eax
@@ -13669,13 +13603,13 @@ ADD16	%ebx	$153
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$157
 LD8	(%ecx)	$0
-.LINE	1403
+.LINE	1392
 SP_STORE	%ecx
 ADD16	%ecx	$159
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$161
-LD32	(%ecx)	$Str@20
+LD32	(%ecx)	$Str@21
 PUSH16	$27
 SP_RD16	%eax	$163
 PUSH16	%eax
@@ -13686,7 +13620,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$171
 SP_INC	$6
-.LINE	1404
+.LINE	1393
 SP_STORE	%ecx
 ADD16	%ecx	$167
 LD16	(%ecx)	$mark_array
@@ -13699,7 +13633,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$175
 SP_INC	$6
-.LINE	1405
+.LINE	1394
 SP_STORE	%ecx
 ADD16	%ecx	$171
 LD16	(%ecx)	$mark_array
@@ -13712,7 +13646,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$181
 SP_INC	$8
-.LINE	1407
+.LINE	1396
 SP_STORE	%ecx
 ADD16	%ecx	$175
 SP_STORE	%eax
@@ -13738,27 +13672,27 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$187
 SP_INC	$6
-.LINE	1407
+.LINE	1396
 SP_INC	$185
 RTS	
 .FUNC_END	"class_requests_check_abort_bulk_out_status"
 
-.LINE	1409
+.LINE	1398
 class_requests_inititate_abort_bulk_in:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_inititate_abort_bulk_in"
 
-.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	1420	
-.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	9	0	0	1	1421	
-.VARIABLE	"wValue"	16	"short"	0	0	19	0	0	0	1422	
-.VARIABLE	"tmp"	8	"char"	0	0	155	0	0	0	1423	
+.VARIABLE	"status"	8	"char"	0	0	0	0	0	0	1409	
+.VARIABLE	"devReq"	16	"_usb_deviceRequest_t"	0	1	9	0	0	1	1410	
+.VARIABLE	"wValue"	16	"short"	0	0	19	0	0	0	1411	
+.VARIABLE	"tmp"	8	"char"	0	0	155	0	0	0	1412	
 .FUNCTION	"class_requests_inititate_abort_bulk_in"	
 .RETURN "void"	0	0	0	217	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	217	0	0	1	1409	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	217	0	0	1	1398	
 SP_DEC	$214
-.LINE	1420
+.LINE	1409
 LD8	%ecx	$0
 SP_WR8	%ecx	$0
-.LINE	1425
+.LINE	1414
 SP_STORE	%ecx
 ADD16	%ecx	$1
 SP_STORE	%eax
@@ -13778,7 +13712,7 @@ SP_RD16	%ecx	$5
 SP_WR16	%ecx	$7
 SP_RD16	%ecx	$7
 SP_WR16	%ecx	$9
-.LINE	1427
+.LINE	1416
 SP_STORE	%ecx
 ADD16	%ecx	$11
 SP_STORE	%eax
@@ -13800,7 +13734,7 @@ SP_RD16	%eax	$15
 CPY16	(%ecx)	(%eax)
 SP_RD16	%ecx	$17
 SP_WR16	%ecx	$19
-.LINE	1436
+.LINE	1425
 SP_STORE	%ecx
 ADD16	%ecx	$21
 SP_STORE	%eax
@@ -13975,7 +13909,7 @@ CMP8	(%ecx)	(%eax)
 JZ	@IC312
 JNZ	@IC311
 @IC312:	
-.LINE	1438
+.LINE	1427
 SP_STORE	%ecx
 ADD16	%ecx	$85
 SP_STORE	%eax
@@ -13993,7 +13927,7 @@ LD16	%ebx	$280
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$89
 LD8	(%ecx)	$1
-.LINE	1441
+.LINE	1430
 SP_STORE	%ecx
 ADD16	%ecx	$91
 SP_STORE	%eax
@@ -14023,7 +13957,7 @@ ADD16	%ebx	$97
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$101
 LD8	(%ecx)	$1
-.LINE	1442
+.LINE	1431
 SP_STORE	%ecx
 ADD16	%ecx	$103
 SP_STORE	%eax
@@ -14059,7 +13993,7 @@ ADD16	%eax	$115
 CPY8	(%ecx)	(%eax)
 JUMP	@IC310
 @IC311:	
-.LINE	1445
+.LINE	1434
 SP_STORE	%ecx
 ADD16	%ecx	$116
 SP_STORE	%eax
@@ -14099,7 +14033,7 @@ CMP8	(%ecx)	(%eax)
 JNZ	@IC326
 JZ	@IC325
 @IC326:	
-.LINE	1449
+.LINE	1438
 SP_STORE	%ecx
 ADD16	%ecx	$129
 SP_STORE	%eax
@@ -14129,7 +14063,7 @@ ADD16	%ebx	$135
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$139
 LD8	(%ecx)	$129
-.LINE	1450
+.LINE	1439
 SP_STORE	%ecx
 ADD16	%ecx	$141
 SP_STORE	%eax
@@ -14165,7 +14099,7 @@ ADD16	%eax	$153
 CPY8	(%ecx)	(%eax)
 JUMP	@IC324
 @IC325:	
-.LINE	1455
+.LINE	1444
 PUSH8	$1
 SP_RD16	%eax	$218
 PUSH16	%eax
@@ -14176,7 +14110,7 @@ SP_WR8	%eax	$157
 SP_INC	$3
 SP_RD8	%ecx	$154
 SP_WR8	%ecx	$155
-.LINE	1459
+.LINE	1448
 SP_STORE	%ecx
 ADD16	%ecx	$156
 SP_RD16	%eax	$19
@@ -14194,7 +14128,7 @@ CMP8	%ecx	$0
 JNZ	@IC330
 JZ	@IC329
 @IC330:	
-.LINE	1461
+.LINE	1450
 SP_STORE	%ecx
 ADD16	%ecx	$160
 SP_STORE	%eax
@@ -14225,7 +14159,7 @@ ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$170
 LD8	(%ecx)	$129
 @IC329:	
-.LINE	1465
+.LINE	1454
 SP_STORE	%ecx
 ADD16	%ecx	$172
 SP_RD16	%eax	$19
@@ -14243,7 +14177,7 @@ CMP8	%ecx	$0
 JZ	@IC337
 JNZ	@IC336
 @IC337:	
-.LINE	1467
+.LINE	1456
 SP_STORE	%ecx
 ADD16	%ecx	$176
 SP_STORE	%eax
@@ -14276,13 +14210,13 @@ LD8	(%ecx)	$128
 @IC336:	
 @IC324:	
 @IC310:	
-.LINE	1474
+.LINE	1463
 SP_STORE	%ecx
 ADD16	%ecx	$188
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$190
-LD32	(%ecx)	$Str@21
+LD32	(%ecx)	$Str@22
 PUSH16	$23
 SP_RD16	%eax	$192
 PUSH16	%eax
@@ -14293,7 +14227,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$200
 SP_INC	$6
-.LINE	1475
+.LINE	1464
 SP_STORE	%ecx
 ADD16	%ecx	$196
 LD16	(%ecx)	$mark_array
@@ -14306,7 +14240,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$204
 SP_INC	$6
-.LINE	1476
+.LINE	1465
 SP_STORE	%ecx
 ADD16	%ecx	$200
 LD16	(%ecx)	$mark_array
@@ -14319,7 +14253,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$210
 SP_INC	$8
-.LINE	1477
+.LINE	1466
 SP_STORE	%ecx
 ADD16	%ecx	$204
 SP_STORE	%eax
@@ -14345,22 +14279,22 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$216
 SP_INC	$6
-.LINE	1477
+.LINE	1466
 SP_INC	$214
 RTS	
 .FUNC_END	"class_requests_inititate_abort_bulk_in"
 
-.LINE	1482
+.LINE	1471
 class_requests_check_abort_bulk_in_status:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_check_abort_bulk_in_status"
 
-.VARIABLE	"tmp"	8	"char"	0	0	1	0	0	0	1491	
-.VARIABLE	"TransferSize"	32	"int"	0	0	14	0	0	0	1492	
+.VARIABLE	"tmp"	8	"char"	0	0	1	0	0	0	1480	
+.VARIABLE	"TransferSize"	32	"int"	0	0	14	0	0	0	1481	
 .FUNCTION	"class_requests_check_abort_bulk_in_status"	
 .RETURN "void"	0	0	0	255	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	255	0	0	1	1482	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	255	0	0	1	1471	
 SP_DEC	$252
-.LINE	1491
+.LINE	1480
 PUSH8	$1
 SP_STORE	%eax
 ADD16	%eax	$256
@@ -14373,7 +14307,7 @@ SP_INC	$3
 SP_STORE	%eax
 CPY8	%ecx	(%eax)
 SP_WR8	%ecx	$1
-.LINE	1492
+.LINE	1481
 SP_STORE	%ecx
 ADD16	%ecx	$2
 SP_STORE	%eax
@@ -14401,13 +14335,13 @@ SP_RD16	%eax	$8
 CPY32	(%ecx)	(%eax)
 SP_RD32	%ecx	$10
 SP_WR32	%ecx	$14
-.LINE	1493
+.LINE	1482
 SP_RD8	%ecx	$1
 CMP8	%ecx	$0
 JZ	@IC345
 JNZ	@IC344
 @IC345:	
-.LINE	1495
+.LINE	1484
 SP_STORE	%ecx
 ADD16	%ecx	$18
 SP_STORE	%eax
@@ -14437,7 +14371,7 @@ ADD16	%ebx	$24
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$28
 LD8	(%ecx)	$1
-.LINE	1496
+.LINE	1485
 SP_STORE	%ecx
 ADD16	%ecx	$30
 SP_STORE	%eax
@@ -14467,7 +14401,7 @@ ADD16	%ebx	$36
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$40
 LD8	(%ecx)	$0
-.LINE	1497
+.LINE	1486
 SP_STORE	%ecx
 ADD16	%ecx	$42
 SP_STORE	%eax
@@ -14505,7 +14439,7 @@ SP_RD16	%ecx	$52
 SP_STORE	%eax
 ADD16	%eax	$54
 CPY8	(%ecx)	(%eax)
-.LINE	1498
+.LINE	1487
 SP_STORE	%ecx
 ADD16	%ecx	$58
 SP_STORE	%eax
@@ -14549,7 +14483,7 @@ SP_RD16	%ecx	$68
 SP_STORE	%eax
 ADD16	%eax	$74
 CPY8	(%ecx)	(%eax)
-.LINE	1499
+.LINE	1488
 SP_STORE	%ecx
 ADD16	%ecx	$78
 SP_STORE	%eax
@@ -14593,7 +14527,7 @@ SP_RD16	%ecx	$88
 SP_STORE	%eax
 ADD16	%eax	$94
 CPY8	(%ecx)	(%eax)
-.LINE	1500
+.LINE	1489
 SP_STORE	%ecx
 ADD16	%ecx	$98
 SP_STORE	%eax
@@ -14639,7 +14573,7 @@ ADD16	%eax	$114
 CPY8	(%ecx)	(%eax)
 JUMP	@IC343
 @IC344:	
-.LINE	1504
+.LINE	1493
 SP_STORE	%ecx
 ADD16	%ecx	$118
 SP_STORE	%eax
@@ -14669,7 +14603,7 @@ ADD16	%ebx	$124
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$128
 LD8	(%ecx)	$2
-.LINE	1505
+.LINE	1494
 SP_STORE	%ecx
 ADD16	%ecx	$130
 SP_STORE	%eax
@@ -14699,7 +14633,7 @@ ADD16	%ebx	$136
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$140
 LD8	(%ecx)	$0
-.LINE	1506
+.LINE	1495
 SP_STORE	%ecx
 ADD16	%ecx	$142
 SP_STORE	%eax
@@ -14729,7 +14663,7 @@ ADD16	%ebx	$148
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$152
 LD8	(%ecx)	$0
-.LINE	1507
+.LINE	1496
 SP_STORE	%ecx
 ADD16	%ecx	$154
 SP_STORE	%eax
@@ -14759,7 +14693,7 @@ ADD16	%ebx	$160
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$164
 LD8	(%ecx)	$0
-.LINE	1508
+.LINE	1497
 SP_STORE	%ecx
 ADD16	%ecx	$166
 SP_STORE	%eax
@@ -14789,13 +14723,13 @@ ADD16	%ebx	$172
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$176
 LD8	(%ecx)	$0
-.LINE	1509
+.LINE	1498
 SP_RD8	%ecx	$1
 CMP8	%ecx	$0
 JNZ	@IC350
 JZ	@IC349
 @IC350:	
-.LINE	1510
+.LINE	1499
 SP_STORE	%ecx
 ADD16	%ecx	$178
 SP_STORE	%eax
@@ -14827,7 +14761,7 @@ SP_RD16	%ecx	$188
 LD8	(%ecx)	$1
 JUMP	@IC348
 @IC349:	
-.LINE	1512
+.LINE	1501
 SP_STORE	%ecx
 ADD16	%ecx	$190
 SP_STORE	%eax
@@ -14859,7 +14793,7 @@ SP_RD16	%ecx	$200
 LD8	(%ecx)	$0
 @IC348:	
 @IC343:	
-.LINE	1514
+.LINE	1503
 SP_STORE	%ecx
 ADD16	%ecx	$202
 SP_STORE	%eax
@@ -14889,7 +14823,7 @@ ADD16	%ebx	$208
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$212
 LD8	(%ecx)	$0
-.LINE	1515
+.LINE	1504
 SP_STORE	%ecx
 ADD16	%ecx	$214
 SP_STORE	%eax
@@ -14919,13 +14853,13 @@ ADD16	%ebx	$220
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$224
 LD8	(%ecx)	$0
-.LINE	1518
+.LINE	1507
 SP_STORE	%ecx
 ADD16	%ecx	$226
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$228
-LD32	(%ecx)	$Str@22
+LD32	(%ecx)	$Str@23
 PUSH16	$26
 SP_RD16	%eax	$230
 PUSH16	%eax
@@ -14936,7 +14870,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$238
 SP_INC	$6
-.LINE	1519
+.LINE	1508
 SP_STORE	%ecx
 ADD16	%ecx	$234
 LD16	(%ecx)	$mark_array
@@ -14949,7 +14883,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$242
 SP_INC	$6
-.LINE	1520
+.LINE	1509
 SP_STORE	%ecx
 ADD16	%ecx	$238
 LD16	(%ecx)	$mark_array
@@ -14962,7 +14896,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$248
 SP_INC	$8
-.LINE	1522
+.LINE	1511
 SP_STORE	%ecx
 ADD16	%ecx	$242
 SP_STORE	%eax
@@ -14990,27 +14924,27 @@ SP_STORE	%eax
 ADD16	%eax	$258
 POP32	(%eax)
 SP_INC	$6
-.LINE	1522
+.LINE	1511
 SP_INC	$252
 RTS	
 .FUNC_END	"class_requests_check_abort_bulk_in_status"
 
-.LINE	1525
+.LINE	1514
 class_requests_initiate_clear:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_initiate_clear"
 
-.VARIABLE	"bulk_header"	96	"char"	0	0	0	1	1	0	1534	
-.VARIABLE	"tmp"	8	"char"	0	0	37	0	0	0	1533	
+.VARIABLE	"bulk_header"	96	"char"	0	0	0	1	1	0	1523	
+.VARIABLE	"tmp"	8	"char"	0	0	37	0	0	0	1522	
 .FUNCTION	"class_requests_initiate_clear"	
 .RETURN "void"	0	0	0	136	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	136	0	0	1	1525	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	136	0	0	1	1514	
 SP_DEC	$133
-.LINE	1534
+.LINE	1523
 SP_STORE	%ecx
 ADD16	%ecx	$0
-LD32	%eax	$Array@23
+LD32	%eax	$Array@24
 CPYROM	(%ecx)	%eax	$6
-.LINE	1536
+.LINE	1525
 SP_STORE	%ecx
 ADD16	%ecx	$12
 SP_STORE	%eax
@@ -15040,7 +14974,7 @@ ADD16	%ebx	$18
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$22
 LD8	(%ecx)	$1
-.LINE	1538
+.LINE	1527
 SP_STORE	%ecx
 ADD16	%ecx	$24
 SP_STORE	%eax
@@ -15058,7 +14992,7 @@ LD16	%ebx	$279
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$28
 LD8	(%ecx)	$1
-.LINE	1539
+.LINE	1528
 SP_STORE	%ecx
 ADD16	%ecx	$30
 SP_STORE	%eax
@@ -15076,13 +15010,13 @@ LD16	%ebx	$281
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$34
 LD8	(%ecx)	$0
-.LINE	1541
+.LINE	1530
 PUSH8	$2
 SP_RD16	%eax	$137
 PUSH16	%eax
 CALL	clear_feature
 SP_INC	$3
-.LINE	1542
+.LINE	1531
 PUSH8	$2
 SP_RD16	%eax	$137
 PUSH16	%eax
@@ -15093,7 +15027,7 @@ SP_WR8	%eax	$39
 SP_INC	$3
 SP_RD8	%ecx	$36
 SP_WR8	%ecx	$37
-.LINE	1543
+.LINE	1532
 SP_STORE	%ecx
 ADD16	%ecx	$38
 SP_STORE	%eax
@@ -15118,13 +15052,13 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$52
 SP_INC	$8
-.LINE	1545
+.LINE	1534
 SP_RD8	%ecx	$37
 CMP8	%ecx	$0
 JZ	@IC354
 JNZ	@IC353
 @IC354:	
-.LINE	1546
+.LINE	1535
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -15143,7 +15077,7 @@ ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$50
 LD8	(%ecx)	$1
 @IC353:	
-.LINE	1548
+.LINE	1537
 SP_STORE	%ecx
 ADD16	%ecx	$52
 SP_STORE	%eax
@@ -15161,7 +15095,7 @@ LD16	%ebx	$280
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$56
 LD8	(%ecx)	$1
-.LINE	1549
+.LINE	1538
 SP_STORE	%ecx
 ADD16	%ecx	$58
 SP_STORE	%eax
@@ -15179,13 +15113,13 @@ LD16	%ebx	$282
 ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$62
 LD8	(%ecx)	$0
-.LINE	1551
+.LINE	1540
 PUSH8	$1
 SP_RD16	%eax	$137
 PUSH16	%eax
 CALL	clear_feature
 SP_INC	$3
-.LINE	1552
+.LINE	1541
 SP_STORE	%ecx
 ADD16	%ecx	$64
 SP_STORE	%eax
@@ -15210,7 +15144,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$78
 SP_INC	$8
-.LINE	1553
+.LINE	1542
 PUSH8	$1
 SP_RD16	%eax	$137
 PUSH16	%eax
@@ -15221,13 +15155,13 @@ SP_WR8	%eax	$75
 SP_INC	$3
 SP_RD8	%ecx	$72
 SP_WR8	%ecx	$37
-.LINE	1555
+.LINE	1544
 SP_RD8	%ecx	$37
 CMP8	%ecx	$0
 JZ	@IC358
 JNZ	@IC357
 @IC358:	
-.LINE	1556
+.LINE	1545
 SP_STORE	%ecx
 ADD16	%ecx	$73
 SP_STORE	%eax
@@ -15246,25 +15180,25 @@ ADD16	(%ecx)	(%eax)	%ebx
 SP_RD16	%ecx	$77
 LD8	(%ecx)	$1
 @IC357:	
-.LINE	1558
+.LINE	1547
 PUSH32	$1
 SP_RD16	%eax	$140
 PUSH16	%eax
 CALL	memset_bulk_header
 SP_INC	$6
-.LINE	1559
+.LINE	1548
 PUSH32	$2
 SP_RD16	%eax	$140
 PUSH16	%eax
 CALL	memset_bulk_header
 SP_INC	$6
-.LINE	1561
+.LINE	1550
 SP_STORE	%ecx
 ADD16	%ecx	$79
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$81
-LD32	(%ecx)	$Str@24
+LD32	(%ecx)	$Str@25
 PUSH16	$27
 SP_RD16	%eax	$83
 PUSH16	%eax
@@ -15275,7 +15209,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$91
 SP_INC	$6
-.LINE	1562
+.LINE	1551
 SP_STORE	%ecx
 ADD16	%ecx	$87
 LD16	(%ecx)	$mark_array
@@ -15288,7 +15222,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$95
 SP_INC	$6
-.LINE	1563
+.LINE	1552
 SP_STORE	%ecx
 ADD16	%ecx	$91
 LD16	(%ecx)	$mark_array
@@ -15301,7 +15235,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$101
 SP_INC	$8
-.LINE	1564
+.LINE	1553
 SP_STORE	%ecx
 ADD16	%ecx	$95
 SP_STORE	%eax
@@ -15316,7 +15250,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$103
 SP_INC	$6
-.LINE	1565
+.LINE	1554
 SP_STORE	%ecx
 ADD16	%ecx	$99
 SP_STORE	%eax
@@ -15341,13 +15275,13 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$111
 SP_INC	$6
-.LINE	1567
+.LINE	1556
 SP_STORE	%ecx
 ADD16	%ecx	$107
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$109
-LD32	(%ecx)	$Str@25
+LD32	(%ecx)	$Str@26
 PUSH16	$14
 SP_RD16	%eax	$111
 PUSH16	%eax
@@ -15358,7 +15292,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$119
 SP_INC	$6
-.LINE	1568
+.LINE	1557
 SP_STORE	%ecx
 ADD16	%ecx	$115
 LD16	(%ecx)	$mark_array
@@ -15371,7 +15305,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$123
 SP_INC	$6
-.LINE	1569
+.LINE	1558
 SP_STORE	%ecx
 ADD16	%ecx	$119
 LD16	(%ecx)	$mark_array
@@ -15384,7 +15318,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$129
 SP_INC	$8
-.LINE	1570
+.LINE	1559
 SP_STORE	%ecx
 ADD16	%ecx	$123
 SP_STORE	%eax
@@ -15410,21 +15344,21 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$135
 SP_INC	$6
-.LINE	1570
+.LINE	1559
 SP_INC	$133
 RTS	
 .FUNC_END	"class_requests_initiate_clear"
 
-.LINE	1574
+.LINE	1563
 class_requests_check_clear_statue:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_check_clear_statue"
 
-.VARIABLE	"tmp"	8	"char"	0	0	1	0	0	0	1581	
+.VARIABLE	"tmp"	8	"char"	0	0	1	0	0	0	1570	
 .FUNCTION	"class_requests_check_clear_statue"	
 .RETURN "void"	0	0	0	119	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	119	0	0	1	1574	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	119	0	0	1	1563	
 SP_DEC	$116
-.LINE	1581
+.LINE	1570
 PUSH8	$1
 SP_RD16	%eax	$120
 PUSH16	%eax
@@ -15436,7 +15370,7 @@ SP_INC	$3
 SP_STORE	%eax
 CPY8	%ecx	(%eax)
 SP_WR8	%ecx	$1
-.LINE	1583
+.LINE	1572
 SP_STORE	%ecx
 ADD16	%ecx	$2
 SP_STORE	%eax
@@ -15490,7 +15424,7 @@ CMP8	%ecx	$0
 JNZ	@IC362
 JZ	@IC361
 @IC362:	
-.LINE	1585
+.LINE	1574
 SP_STORE	%ecx
 ADD16	%ecx	$16
 SP_STORE	%eax
@@ -15520,13 +15454,13 @@ ADD16	%ebx	$22
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$26
 LD8	(%ecx)	$2
-.LINE	1586
+.LINE	1575
 SP_RD8	%ecx	$1
 CMP8	%ecx	$0
 JZ	@IC373
 JNZ	@IC372
 @IC373:	
-.LINE	1587
+.LINE	1576
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -15558,7 +15492,7 @@ SP_RD16	%ecx	$38
 LD8	(%ecx)	$0
 JUMP	@IC371
 @IC372:	
-.LINE	1589
+.LINE	1578
 SP_STORE	%ecx
 ADD16	%ecx	$40
 SP_STORE	%eax
@@ -15590,7 +15524,7 @@ SP_RD16	%ecx	$50
 LD8	(%ecx)	$1
 @IC371:	
 @IC361:	
-.LINE	1592
+.LINE	1581
 SP_STORE	%ecx
 ADD16	%ecx	$52
 SP_STORE	%eax
@@ -15644,7 +15578,7 @@ CMP8	%ecx	$0
 JZ	@IC377
 JNZ	@IC376
 @IC377:	
-.LINE	1594
+.LINE	1583
 SP_STORE	%ecx
 ADD16	%ecx	$66
 SP_STORE	%eax
@@ -15674,7 +15608,7 @@ ADD16	%ebx	$72
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$76
 LD8	(%ecx)	$1
-.LINE	1595
+.LINE	1584
 SP_STORE	%ecx
 ADD16	%ecx	$78
 SP_STORE	%eax
@@ -15705,13 +15639,13 @@ ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$88
 LD8	(%ecx)	$0
 @IC376:	
-.LINE	1600
+.LINE	1589
 SP_STORE	%ecx
 ADD16	%ecx	$90
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$92
-LD32	(%ecx)	$Str@26
+LD32	(%ecx)	$Str@27
 PUSH16	$18
 SP_RD16	%eax	$94
 PUSH16	%eax
@@ -15722,7 +15656,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$102
 SP_INC	$6
-.LINE	1601
+.LINE	1590
 SP_STORE	%ecx
 ADD16	%ecx	$98
 LD16	(%ecx)	$mark_array
@@ -15735,7 +15669,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$106
 SP_INC	$6
-.LINE	1602
+.LINE	1591
 SP_STORE	%ecx
 ADD16	%ecx	$102
 LD16	(%ecx)	$mark_array
@@ -15748,7 +15682,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$112
 SP_INC	$8
-.LINE	1603
+.LINE	1592
 SP_STORE	%ecx
 ADD16	%ecx	$106
 SP_STORE	%eax
@@ -15774,21 +15708,21 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$118
 SP_INC	$6
-.LINE	1603
+.LINE	1592
 SP_INC	$116
 RTS	
 .FUNC_END	"class_requests_check_clear_statue"
 
-.LINE	1607
+.LINE	1596
 class_requests_get_capablities:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_get_capablities"
 
 .FUNCTION	"class_requests_get_capablities"	
 .RETURN "void"	0	0	0	269	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	269	0	0	1	1607	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	269	0	0	1	1596	
 SP_DEC	$255
 SP_DEC	$11
-.LINE	1615
+.LINE	1604
 SP_STORE	%ecx
 SP_STORE	%eax
 ADD16	%eax	$269
@@ -15817,7 +15751,7 @@ ADD16	%ebx	$6
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$10
 LD8	(%ecx)	$1
-.LINE	1616
+.LINE	1605
 SP_STORE	%ecx
 ADD16	%ecx	$12
 SP_STORE	%eax
@@ -15847,7 +15781,7 @@ ADD16	%ebx	$18
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$22
 LD8	(%ecx)	$0
-.LINE	1618
+.LINE	1607
 SP_STORE	%ecx
 ADD16	%ecx	$24
 SP_STORE	%eax
@@ -15898,7 +15832,7 @@ SP_RD16	%ecx	$34
 SP_STORE	%eax
 ADD16	%eax	$42
 CPY8	(%ecx)	(%eax)
-.LINE	1619
+.LINE	1608
 SP_STORE	%ecx
 ADD16	%ecx	$46
 SP_STORE	%eax
@@ -15955,7 +15889,7 @@ SP_RD16	%ecx	$56
 SP_STORE	%eax
 ADD16	%eax	$68
 CPY8	(%ecx)	(%eax)
-.LINE	1621
+.LINE	1610
 SP_STORE	%ecx
 ADD16	%ecx	$72
 SP_STORE	%eax
@@ -15985,7 +15919,7 @@ ADD16	%ebx	$78
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$82
 LD8	(%ecx)	$4
-.LINE	1622
+.LINE	1611
 SP_STORE	%ecx
 ADD16	%ecx	$84
 SP_STORE	%eax
@@ -16015,7 +15949,7 @@ ADD16	%ebx	$90
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$94
 LD8	(%ecx)	$1
-.LINE	1624
+.LINE	1613
 SP_STORE	%ecx
 ADD16	%ecx	$96
 SP_STORE	%eax
@@ -16045,7 +15979,7 @@ ADD16	%ebx	$102
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$106
 LD8	(%ecx)	$0
-.LINE	1625
+.LINE	1614
 SP_STORE	%ecx
 ADD16	%ecx	$108
 SP_STORE	%eax
@@ -16075,7 +16009,7 @@ ADD16	%ebx	$114
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$118
 LD8	(%ecx)	$0
-.LINE	1626
+.LINE	1615
 SP_STORE	%ecx
 ADD16	%ecx	$120
 SP_STORE	%eax
@@ -16105,7 +16039,7 @@ ADD16	%ebx	$126
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$130
 LD8	(%ecx)	$0
-.LINE	1627
+.LINE	1616
 SP_STORE	%ecx
 ADD16	%ecx	$132
 SP_STORE	%eax
@@ -16135,7 +16069,7 @@ ADD16	%ebx	$138
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$142
 LD8	(%ecx)	$0
-.LINE	1628
+.LINE	1617
 SP_STORE	%ecx
 ADD16	%ecx	$144
 SP_STORE	%eax
@@ -16165,7 +16099,7 @@ ADD16	%ebx	$150
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$154
 LD8	(%ecx)	$0
-.LINE	1629
+.LINE	1618
 SP_STORE	%ecx
 ADD16	%ecx	$156
 SP_STORE	%eax
@@ -16195,7 +16129,7 @@ ADD16	%ebx	$162
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$166
 LD8	(%ecx)	$0
-.LINE	1630
+.LINE	1619
 SP_STORE	%ecx
 ADD16	%ecx	$168
 SP_STORE	%eax
@@ -16225,7 +16159,7 @@ ADD16	%ebx	$174
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$178
 LD8	(%ecx)	$0
-.LINE	1631
+.LINE	1620
 SP_STORE	%ecx
 ADD16	%ecx	$180
 SP_STORE	%eax
@@ -16255,7 +16189,7 @@ ADD16	%ebx	$186
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$190
 LD8	(%ecx)	$0
-.LINE	1632
+.LINE	1621
 SP_STORE	%ecx
 ADD16	%ecx	$192
 SP_STORE	%eax
@@ -16285,7 +16219,7 @@ ADD16	%ebx	$198
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$202
 LD8	(%ecx)	$0
-.LINE	1633
+.LINE	1622
 SP_STORE	%ecx
 ADD16	%ecx	$204
 SP_STORE	%eax
@@ -16315,7 +16249,7 @@ ADD16	%ebx	$210
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$214
 LD8	(%ecx)	$0
-.LINE	1634
+.LINE	1623
 SP_STORE	%ecx
 ADD16	%ecx	$216
 SP_STORE	%eax
@@ -16345,7 +16279,7 @@ ADD16	%ebx	$222
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$226
 LD8	(%ecx)	$0
-.LINE	1635
+.LINE	1624
 SP_STORE	%ecx
 ADD16	%ecx	$228
 SP_STORE	%eax
@@ -16375,13 +16309,13 @@ ADD16	%ebx	$234
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$238
 LD8	(%ecx)	$0
-.LINE	1638
+.LINE	1627
 SP_STORE	%ecx
 ADD16	%ecx	$240
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$242
-LD32	(%ecx)	$Str@27
+LD32	(%ecx)	$Str@28
 PUSH16	$14
 SP_RD16	%eax	$244
 PUSH16	%eax
@@ -16392,7 +16326,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$252
 SP_INC	$6
-.LINE	1639
+.LINE	1628
 SP_STORE	%ecx
 ADD16	%ecx	$248
 LD16	(%ecx)	$mark_array
@@ -16406,7 +16340,7 @@ SP_STORE	%eax
 ADD16	%eax	$258
 POP16	(%eax)
 SP_INC	$6
-.LINE	1640
+.LINE	1629
 SP_STORE	%ecx
 ADD16	%ecx	$252
 LD16	(%ecx)	$mark_array
@@ -16421,7 +16355,7 @@ SP_STORE	%eax
 ADD16	%eax	$264
 POP16	(%eax)
 SP_INC	$8
-.LINE	1641
+.LINE	1630
 SP_STORE	%ecx
 ADD16	%ecx	$256
 SP_STORE	%eax
@@ -16452,21 +16386,21 @@ SP_STORE	%eax
 ADD16	%eax	$272
 POP32	(%eax)
 SP_INC	$6
-.LINE	1641
+.LINE	1630
 SP_INC	$255
 SP_INC	$11
 RTS	
 .FUNC_END	"class_requests_get_capablities"
 
-.LINE	1645
+.LINE	1634
 class_requests_indicator_pulse:	
 .GLOBAL	 DO_NOT_EXPORT  "class_requests_indicator_pulse"
 
 .FUNCTION	"class_requests_indicator_pulse"	
 .RETURN "void"	0	0	0	41	0	0	0	
-.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	41	0	0	1	1645	
+.PARAMETER	"ctx"	16 "_USBTMC_context"	0	1	41	0	0	1	1634	
 SP_DEC	$38
-.LINE	1653
+.LINE	1642
 SP_STORE	%ecx
 ADD16	%ecx	$0
 SP_STORE	%eax
@@ -16496,13 +16430,13 @@ ADD16	%ebx	$6
 ADD16	(%ecx)	(%eax)	(%ebx)
 SP_RD16	%ecx	$10
 LD8	(%ecx)	$1
-.LINE	1655
+.LINE	1644
 SP_STORE	%ecx
 ADD16	%ecx	$12
 LD16	(%ecx)	$mark_array
 SP_STORE	%ecx
 ADD16	%ecx	$14
-LD32	(%ecx)	$Str@28
+LD32	(%ecx)	$Str@29
 PUSH16	$15
 SP_RD16	%eax	$16
 PUSH16	%eax
@@ -16513,7 +16447,7 @@ CALL	vos_memcpy
 POP16	%eax
 SP_WR16	%eax	$24
 SP_INC	$6
-.LINE	1656
+.LINE	1645
 SP_STORE	%ecx
 ADD16	%ecx	$20
 LD16	(%ecx)	$mark_array
@@ -16526,7 +16460,7 @@ CALL	write_uart
 POP16	%eax
 SP_WR16	%eax	$28
 SP_INC	$6
-.LINE	1657
+.LINE	1646
 SP_STORE	%ecx
 ADD16	%ecx	$24
 LD16	(%ecx)	$mark_array
@@ -16539,7 +16473,7 @@ CALL	vos_memset
 POP16	%eax
 SP_WR16	%eax	$34
 SP_INC	$8
-.LINE	1658
+.LINE	1647
 SP_STORE	%ecx
 ADD16	%ecx	$28
 SP_STORE	%eax
@@ -16565,7 +16499,7 @@ CALL	controul_transfer_in
 POP32	%eax
 SP_WR32	%eax	$40
 SP_INC	$6
-.LINE	1658
+.LINE	1647
 SP_INC	$38
 RTS	
 .FUNC_END	"class_requests_indicator_pulse"
